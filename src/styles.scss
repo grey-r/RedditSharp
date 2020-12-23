@@ -5,3 +5,39 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-sidenav.is-desktop {
     width: 20vw;
 }
+
+@import "~@angular/material/theming";
+@include mat-core();
+
+$angular-warn: mat-palette($mat-deep-orange);
+
+// Light theme
+$light-primary: mat-palette($mat-indigo);
+$light-accent:  mat-palette($mat-pink, A200, A100, A400);
+$light-theme:   mat-light-theme($light-primary, $light-accent, $angular-warn);
+// Dark theme
+$dark-primary: mat-palette($mat-deep-purple);
+$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $angular-warn);
+
+// Import mixin of sidenav component
+@import "app/sidenav/sidenav.component";
+
+// Custom themable components
+@mixin custom-components-theme($theme) {
+  @include sidenav-theme($theme);
+  // Include other custom component mixins here...
+}
+
+@include angular-material-theme($dark-theme);
+@include custom-components-theme($dark-theme);
+
+@media (prefers-color-scheme: light) {
+    @include angular-material-theme($light-theme);
+    @include custom-components-theme($light-theme);
+}
+
+@media (prefers-color-scheme: dark) {
+    @include angular-material-theme($dark-theme);
+    @include custom-components-theme($dark-theme);
+}

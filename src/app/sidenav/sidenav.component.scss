@@ -1,0 +1,9 @@
+@mixin sidenav-theme($theme) {
+    $primary: map-get($theme, primary);
+    $warn: map-get($theme, warn);
+
+    .sidenav-header {
+        background: mat-color($primary, darker);
+        color: mat-color($primary, default-contrast);
+    }
+}
