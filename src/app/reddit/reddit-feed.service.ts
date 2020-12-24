@@ -16,7 +16,7 @@ export class RedditFeedService {
 
   public getRedditSchema(subreddit:String|null=null, after:String|null=null): Observable<Post[]> {
     let subject: Subject<Post[]> = new Subject();
-    this.httpClient.jsonp(`https://reddit.com/${subreddit?subreddit+"/":""}.json?${after?"after="+after:""}`,"jsonp").toPromise().then((results: any) => {
+    this.httpClient.jsonp(`https://reddit.com/${subreddit?subreddit+"/":""}.json?${after?"after="+after:""}`,"jsonp").subscribe((results: any) => {
       subject.next(results.data.children.map((child:any) => {
         console.log(child.data);
         let post:Post = new Post(child.data.id,child.kind);

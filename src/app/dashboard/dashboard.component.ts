@@ -14,7 +14,14 @@ export class DashboardComponent implements OnInit {
   ];
 
   constructor(private redditFeedService: RedditFeedService) {
-    redditFeedService.getRedditSchema().subscribe((results: Post[]) => { this.samplePosts=results;  });
+    redditFeedService.getRedditSchema().subscribe((results: Post[]) => {
+        let newPosts = results.filter( (p:Post) => {
+          return !this.samplePosts.find( inner=> {
+            return inner.id==p.id;
+          });
+        });
+        this.samplePosts = this.samplePosts.concat(newPosts);
+    });
   }
 
   ngOnInit(): void {
