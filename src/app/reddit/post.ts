@@ -31,6 +31,9 @@ export class Post {
     public get id():string {
         return this._id;
     }
+    public get type():string {
+        return this._type;
+    }
     public get author():User|null {
         return this._author;
     }

@@ -1,6 +1,7 @@
 import {MediaMatcher} from '@angular/cdk/layout';
-import {ChangeDetectorRef, Component, OnDestroy, ViewChild} from '@angular/core';
-import {ScrollDispatcher, CdkScrollable} from '@angular/cdk/scrolling'
+import {ChangeDetectorRef, Component, OnDestroy, ViewChild, ViewChildren, ElementRef, AfterViewInit} from '@angular/core';
+import { MatSidenavContent } from '@angular/material/sidenav';
+import { DashboardComponent } from './dashboard/dashboard.component';
 /** @title Responsive sidenav */
 @Component({
   selector: 'app-root',
@@ -21,19 +22,10 @@ export class AppComponent implements OnDestroy {
   ]
   private _mobileQueryListener: () => void;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private scroll:ScrollDispatcher) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-    this.scroll.scrolled().subscribe( (e:CdkScrollable|void) => {
-      let y:number;
-      if (e instanceof CdkScrollable) {
-        y=e.getElementRef().nativeElement.scrollTop;
-      } else {
-        y=window.scrollY;
-      }
-      //console.log(y);
-    });
   }
 
   ngOnDestroy(): void {

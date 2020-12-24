@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {Post, PostType} from '../reddit/post'
-import {RedditFeedService} from '../reddit/reddit-feed.service'
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { RedditFeed } from '../reddit/reddit-feed';
+import { RedditFeedService } from '../reddit/reddit-feed.service';
+import { ScrollDispatcher } from '@angular/cdk/overlay';
+import { debounceTime } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,24 +11,38 @@ import {RedditFeedService} from '../reddit/reddit-feed.service'
   styleUrls: ['./dashboard.component.scss']
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent extends RedditFeed implements OnInit,AfterViewInit,OnDestroy {
+  @ViewChild("dashboardroot") content!:ElementRef;
+  s!:Subscription;
 
-  samplePosts:Post[] = [
-  ];
-
-  constructor(private redditFeedService: RedditFeedService) {
-    redditFeedService.getRedditSchema().subscribe((results: Post[]) => {
-        let newPosts = results.filter( (p:Post) => {
-          return !this.samplePosts.find( inner=> {
-            return inner.id==p.id;
-          });
-        });
-        this.samplePosts = this.samplePosts.concat(newPosts);
+  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd:ChangeDetectorRef) {
+    super(rs);
+    this.subreddit="";
+    this.fetchMore();
+  }
+  
+  ngAfterViewInit(): void {
+    this.s=this.scroll.scrolled().subscribe( (e) => {
+      let y:number = Math.max(window.scrollY,this.content.nativeElement.parentNode.parentNode.scrollTop);
+      if (y>this.content.nativeElement.scrollHeight-window.innerHeight*2) {
+        //grab more posts
+        debounceTime(100);
+        if (!this.loading) {
+          this.fetchMore();
+          this.cd.detectChanges();
+        } else {
+          //console.log("busy");
+        }
+      }
     });
   }
 
   ngOnInit(): void {
 
+  }
+
+  ngOnDestroy():void {
+    this.s.unsubscribe();
   }
 
 }
