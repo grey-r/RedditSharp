@@ -1,8 +1,27 @@
-.example-card {
+.post-card {
     margin: 5vw;
 }
 
-.example-header-image {
-    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+.post-header-image {
     background-size: cover;
+}
+
+.post-card img {
+    width:100%;
+    margin:0%;
+}
+
+.mat-card-content {
+    max-height:  10rem;
+    overflow: hidden;
+}
+
+.mat-card-content .fadeout-container {
+    position:relative;
+}
+.mat-card-content .fadeout-inner {
+    position:absolute;
+    height:10rem;
+    width:100%;
+    z-index: 1;
 }

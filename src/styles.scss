@@ -22,10 +22,20 @@ $dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $angular-warn);
 
 // Import mixin of sidenav component
 @import "app/sidenav/sidenav.component";
+@import "app/dashboard/dashcard.mixin";
+
+//Gradients
+@mixin gradient($direction, $list) { 
+    background: -webkit-linear-gradient($direction, $list);
+    background: -moz-linear-gradient($direction, $list);
+    background: -o-linear-gradient($direction, $list);
+    background: linear-gradient($direction, $list);  
+}
 
 // Custom themable components
 @mixin custom-components-theme($theme) {
   @include sidenav-theme($theme);
+  @include dashcard-theme($theme);
   // Include other custom component mixins here...
 }
 

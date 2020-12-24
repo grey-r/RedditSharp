@@ -1,0 +1,11 @@
+@mixin dashcard-theme($theme) {
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+    $card-color: mat-color($background, card);
+    $gradientList: rgba($card-color,0),rgba($card-color,0),rgba($card-color,0),rgba($card-color,1);
+
+
+    .mat-card-content .fadeout-inner {
+        @include gradient(to bottom, $gradientList);
+    }
+}
