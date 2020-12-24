@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Post, PostType} from '../reddit/post'
+import {RedditFeedService} from '../reddit/reddit-feed.service'
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +10,9 @@ import {Post, PostType} from '../reddit/post'
 
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private redditFeedService: RedditFeedService) {
+    redditFeedService.getRedditSchema().subscribe((results: any) => { console.log(results); });
+  }
 
   samplePosts = [
     new Post("0", PostType.Link, null, "Sample Image", "https://i.redd.it/4r4owza1yz661.jpg", "https://b.thumbs.redditmedia.com/CyV8swMQlLF5_y-lrEBfZbMOJ2L5Y71Gc4Ak8BVyMAU.jpg", "https://i.redd.it/4r4owza1yz661.jpg"),
@@ -26,6 +29,7 @@ export class DashboardComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+
   }
 
 }
