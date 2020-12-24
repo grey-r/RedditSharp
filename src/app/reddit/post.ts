@@ -28,6 +28,18 @@ export class Post {
         this.previewUrl = previewUrl;
         this.text=null;
     }
+    setTitle( title:string ):this {
+        this.title=title;
+        return this;
+    }
+    setAuthor( author:User ):this {
+        this.author=author;
+        return this;
+    }
+    setUrl( url:string ):this {
+        this.url=url;
+        return this;
+    }
     setPreviews( thumbnailUrl:string|null=null, previewUrl:string|null=null ):this {
         this.thumbnailUrl=thumbnailUrl;
         this.previewUrl=previewUrl;

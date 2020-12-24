@@ -10,11 +10,7 @@ import {RedditFeedService} from '../reddit/reddit-feed.service'
 
 export class DashboardComponent implements OnInit {
 
-  constructor(private redditFeedService: RedditFeedService) {
-    redditFeedService.getRedditSchema().subscribe((results: any) => { console.log(results); });
-  }
-
-  samplePosts = [
+  samplePosts:Post[] = [
     new Post("0", PostType.Link, null, "Sample Image", "https://i.redd.it/4r4owza1yz661.jpg", "https://b.thumbs.redditmedia.com/CyV8swMQlLF5_y-lrEBfZbMOJ2L5Y71Gc4Ak8BVyMAU.jpg", "https://i.redd.it/4r4owza1yz661.jpg"),
     new Post("1", PostType.Link, null, "Sample Text").setText(`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a eros euismod, dignissim est a, interdum ex. Proin congue ligula nec pharetra accumsan. Morbi nec diam mi. Proin vel nisi nec sapien imperdiet viverra quis nec ligula. Nullam eget laoreet lorem. Maecenas dignissim ultrices ligula, vitae imperdiet massa auctor nec. Donec at quam sit amet neque placerat fermentum. Pellentesque quis dapibus arcu, et condimentum neque. Nam sollicitudin ante diam, porta finibus diam bibendum non. Nam lacinia eleifend nulla in feugiat. Cras et ipsum commodo, bibendum nulla in, iaculis mauris. Sed imperdiet pharetra sapien at euismod.
 
@@ -27,6 +23,10 @@ export class DashboardComponent implements OnInit {
     Sed consequat, diam nec finibus congue, lacus leo pretium nisi, sit amet vehicula purus sapien sed urna. Integer nec nulla massa. Cras semper venenatis risus nec blandit. Sed tristique est in euismod auctor. Nam ante justo, tristique a ante sed, elementum egestas odio. Maecenas pulvinar lacus ex, a elementum leo accumsan ut. Suspendisse pharetra gravida metus in lacinia. In hac habitasse platea dictumst. Aenean sit amet libero elementum, condimentum lacus non, cursus leo. Donec et finibus libero. Sed facilisis mollis feugiat. Sed eu sapien egestas, suscipit urna et, tincidunt lectus. Aenean vehicula feugiat orci eu semper.`),
     new Post("2",PostType.Link,null,"Link Post","https://google.com/")
   ];
+
+  constructor(private redditFeedService: RedditFeedService) {
+    redditFeedService.getRedditSchema().subscribe((results: Post[]) => { this.samplePosts=results; });
+  }
 
   ngOnInit(): void {
 
