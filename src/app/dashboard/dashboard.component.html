@@ -6,7 +6,7 @@
   </mat-card-header>
   <mat-card-content *ngIf="post.text || post.previewUrl">
     <div class="fadeout-container"><div class="fadeout-inner"></div></div>
-    <img *ngIf="post.previewUrl" mat-card-image src="{{post.previewUrl}}" alt="{{post.title}}" >
+    <img *ngIf="post.previewUrl" mat-card-image src="{{post.getPreviewUrl}}" alt="{{post.title}}" >
     <p>
       {{post.text}}
     </p>

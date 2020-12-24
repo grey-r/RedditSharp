@@ -1,10 +1,16 @@
 export class User {
-    id: string; //author_fullname e.g. t2_729skja7
-    name: string | null;
-    avatarUrl: string | null;
-    constructor (id:string,name:string|null=null,avatarUrl:string|null=null) {
-        this.id=id;
-        this.name=name;
-        this.avatarUrl=avatarUrl;
+    private _name: string;
+    private _avatarUrl: string | null = null;
+    constructor (name:string) {
+        this._name=name;
+    }
+    public get name():string {
+        return this._name;
+    }
+    public get avatarUrl(): string | null {
+        return this._avatarUrl;
+    }
+    public set avatarUrl(value: string | null) {
+        this._avatarUrl = value;
     }
 }
