@@ -4,9 +4,9 @@
     <mat-card-title> {{post.title}} </mat-card-title>
     <mat-card-subtitle *ngIf="post.author && post.author.name">{{post.author.name}}</mat-card-subtitle>
   </mat-card-header>
-  <img *ngIf="post.previewUrl" mat-card-image src="{{post.previewUrl}}" alt="{{post.title}}" >
-  <mat-card-content *ngIf="post.text">
+  <mat-card-content *ngIf="post.text || post.previewUrl">
     <div class="fadeout-container"><div class="fadeout-inner"></div></div>
+    <img *ngIf="post.previewUrl" mat-card-image src="{{post.previewUrl}}" alt="{{post.title}}" >
     <p>
       {{post.text}}
     </p>

@@ -12,16 +12,25 @@
 }
 
 .mat-card-content {
-    max-height:  10rem;
     overflow: hidden;
+    max-height:  60vmin;
 }
 
 .mat-card-content .fadeout-container {
     position:relative;
 }
+
 .mat-card-content .fadeout-inner {
     position:absolute;
-    height:10rem;
+    height:60vmin;
     width:100%;
     z-index: 1;
+}
+
+.is-text > .mat-card-content {
+    max-height:  10rem;
+}
+
+.is-text > .mat-card-content .fadeout-inner {
+    height: 10rem;
 }
