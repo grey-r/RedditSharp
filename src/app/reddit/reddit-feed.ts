@@ -1,21 +1,21 @@
 import { Post } from './post';
 import { RedditFeedService } from './reddit-feed.service';
 import { first } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 
 export class RedditFeed {
-    private _posts:Post[] = [];
+    private _postAr:Post[] = [];
+    private _post$:Subject<Post[]> = new Subject();
     private _subreddit:string|null=null;
     private _loading:boolean=false;
+    private _lastID:string|null=null;
+    private _lastType:string|null=null;
 
     constructor(private redditFeedService: RedditFeedService) {
     }
 
-    public get posts():Post[] {
-        return this._posts;
-    }
-
-    public set posts(ps:Post[]) {
-        this._posts = ps;
+    public get post$():Observable<Post[]> {
+        return this._post$;
     }
 
     public get subreddit():string|null {
@@ -27,24 +27,21 @@ export class RedditFeed {
     }
 
     public set subreddit( s:string|null ) {
-        this._posts = [];
         this._subreddit=s;
     }
 
     fetchMore():void {
         this._loading=true;
         let after:string|null=null;
-        if (this.posts.length>0) {
-            let post = this.posts[this.posts.length-1]
-            after=post.type+"_"+post.id;
+        if (this._lastType && this._lastID) {
+            after=this._lastType+"_"+this._lastID;
         }
         //console.log(after);
         this.redditFeedService.getRedditSchema(this.subreddit,after).pipe(first()).subscribe((results: Post[]) => {
-            let newPosts = results.filter( (p:Post) => {
-              return !this.posts.includes(p);
-            });
-            //console.log(newPosts);
-            this.posts = this.posts.concat(newPosts);
+            this._lastID = results[results.length-1].id;
+            this._lastType = results[results.length-1].type;
+            this._postAr = this._postAr.concat(results)
+            this._post$.next(this._postAr);
             this._loading=false;
         });
     }

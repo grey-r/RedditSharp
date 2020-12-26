@@ -4,6 +4,9 @@ import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
 import { debounceTime } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { PostModalComponent } from '../view/post-modal/post-modal.component';
+import { Post } from '../reddit/post';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,8 +18,13 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
   @ViewChild("dashboardroot") content!:ElementRef;
   s!:Subscription;
 
-  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd:ChangeDetectorRef) {
+  currentPosts:Post[] = [];
+
+  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd:ChangeDetectorRef, private dialog: MatDialog) {
     super(rs);
+    this.post$.subscribe( (x) => {
+      this.currentPosts=x;
+    });
     this.subreddit="";
     this.fetchMore();
   }
@@ -45,7 +53,12 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
     this.s.unsubscribe();
   }
 
-  openPost(id: string) {
-    alert(id);
+  openPost(post_id: number) {
+    let dialogRef = this.dialog.open(PostModalComponent, {
+      width: Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1)/window.innerWidth*100).toString() + "%",
+      height:  "80%",
+      data: { post: this.currentPosts[post_id] }
+    });
+    alert(Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1.5)/window.innerWidth*100).toString() + "%");
   }
 }
