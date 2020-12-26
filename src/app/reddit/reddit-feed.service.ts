@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import {Post, PostType} from '../reddit/post';
@@ -10,9 +10,9 @@ import { first } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class RedditFeedService {
-  authorInfo:UserInfoService = new UserInfoService(this.httpClient);
+  authorInfo:UserInfoService = new UserInfoService(this.httpClient, this.ngZone);
   //client: HttpClient;
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private ngZone:NgZone) {
   }
 
   public getRedditSchema(subreddit:String|null=null, after:String|null=null, limit=25): Observable<Post[]> {
