@@ -2,11 +2,13 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetector
 import { RedditFeed } from '../reddit/reddit-feed';
 import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, debounce } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PostModalComponent } from '../view/post-modal/post-modal.component';
 import { Post } from '../reddit/post';
+
+const scrollDelay:number = 100;
 
 @Component({
   selector: 'app-dashboard',
@@ -30,11 +32,10 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
   }
   
   ngAfterViewInit(): void {
-    this.s=this.scroll.scrolled().subscribe( (e) => {
+    this.s=this.scroll.scrolled().pipe(debounceTime(scrollDelay)).subscribe( (e) => {
       let y:number = Math.max(window.scrollY,this.content.nativeElement.parentNode.parentNode.scrollTop);
       if (y>this.content.nativeElement.scrollHeight-window.innerHeight*2) {
         //grab more posts
-        debounceTime(100);
         if (!this.loading) {
           this.fetchMore();
           this.cd.detectChanges();
