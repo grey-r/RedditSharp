@@ -1,7 +1,6 @@
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ChangeDetectorRef, Component, OnDestroy, ViewChild, ViewChildren, ElementRef, AfterViewInit} from '@angular/core';
-import { MatSidenavContent } from '@angular/material/sidenav';
-import { DashboardComponent } from './dashboard/dashboard.component';
+
 /** @title Responsive sidenav */
 @Component({
   selector: 'app-root',

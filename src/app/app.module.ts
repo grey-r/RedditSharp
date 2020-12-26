@@ -42,13 +42,15 @@ import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { LogoutComponent } from './logout/logout.component';
+import { PostModalComponent } from './view/post-modal/post-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    LogoutComponent
+    LogoutComponent,
+    PostModalComponent
   ],
   imports: [
     BrowserModule,
