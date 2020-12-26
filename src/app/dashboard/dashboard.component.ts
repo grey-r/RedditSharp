@@ -59,6 +59,5 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
       height:  "80%",
       data: { post: this.currentPosts[post_id] }
     });
-    alert(Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1.5)/window.innerWidth*100).toString() + "%");
   }
 }
