@@ -27,6 +27,8 @@ export class UserInfoService {
         this.ngZone.run( () => {
           if (results.data.snoovatar_size)
             u.avatarUrl=results.data.snoovatar_img;
+          else
+            u.avatarUrl="https://www.redditinc.com/assets/images/site/reddit-logo.png"
         });
         if (this.userQueue.length>0)
           this.performNextRequest()
