@@ -30,6 +30,14 @@ export class RedditFeedService {
           this.authorInfo.populateInfo(author);
           post.author=author;
         }
+        if (child.data.ups) {
+          if (child.data.upvote_ratio) {
+            post.setVotes(child.data.ups,child.data.upvote_ratio);
+          } else {
+            post.upvotes = child.data.ups;
+            post.downvotes = child.data.downs;
+          }
+        }
         return post;
       }));
     })

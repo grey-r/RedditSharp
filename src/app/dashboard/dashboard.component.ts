@@ -45,4 +45,7 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
     this.s.unsubscribe();
   }
 
+  openPost(id: string) {
+    alert(id);
+  }
 }

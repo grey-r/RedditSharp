@@ -1,11 +1,11 @@
 <div #dashboardroot>
   <mat-card class="post-card" *ngFor="let post of posts" [class.is-text]="post.text || !(post.url)">
-    <mat-card-header>
+    <mat-card-header (click)="openPost(post.id)">
       <div *ngIf="post.author && post.author.avatarUrl" mat-card-avatar class="post-header-image" [ngStyle]="{ 'background-image': 'url(' + post.author.avatarUrl + ')'}"></div>
       <mat-card-title> {{post.title}} </mat-card-title>
       <mat-card-subtitle *ngIf="post.author && post.author.name">{{post.author.name}}</mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content *ngIf="post.text || post.previewUrl">
+    <mat-card-content *ngIf="post.text || post.previewUrl" (click)="openPost(post.id)">
       <div class="fadeout-container"><div class="fadeout-inner"></div></div>
       <img *ngIf="post.previewUrl" mat-card-image src="{{post.previewUrl}}" alt="{{post.title}}" >
       <p>
@@ -13,8 +13,8 @@
       </p>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button><mat-icon>arrow_upward</mat-icon></button>
-      <button mat-button><mat-icon>arrow_downward</mat-icon></button>
+      <button mat-button><mat-icon>arrow_upward</mat-icon></button><span>{{post.upvotes}}</span>
+      <button mat-button><mat-icon>arrow_downward</mat-icon>{{post.downvotes}}</button>
       <button mat-button><mat-icon>share</mat-icon></button>
     </mat-card-actions>
   </mat-card>

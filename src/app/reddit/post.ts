@@ -18,6 +18,8 @@ export class Post {
     private _text: string | null;
     private _thumbnailUrl: string | null;
     private _previewUrl: string | null;
+    private _upvotes: number | null;
+    private _downvotes: number | null;
     constructor ( id: string, type:PostType, author:User|null=null, title:string|null=null, url:string|null=null, thumbnailUrl:string|null=null, previewUrl:string|null=null) {
         this._id = id;
         this._type = type;
@@ -27,6 +29,12 @@ export class Post {
         this._thumbnailUrl = thumbnailUrl;
         this._previewUrl = previewUrl;
         this._text=null;
+        this._upvotes=null;
+        this._downvotes=null;
+    }
+    public setVotes(upvotes: number, ratio: number) {
+        this._upvotes = upvotes;
+        this._downvotes = Math.round(upvotes/ratio-upvotes);
     }
     public get id():string {
         return this._id;
@@ -52,6 +60,12 @@ export class Post {
     public get previewUrl():string|null {
         return this._previewUrl;
     }
+    public get upvotes():number|null {
+        return this._upvotes;
+    }
+    public get downvotes():number|null {
+        return this._downvotes;
+    }
     public set title( title:string|null ) {
         this._title=title;
     }
@@ -69,5 +83,11 @@ export class Post {
     }
     public set text( text:string|null ) {
         this._text=text;
+    }
+    public set upvotes(num:number|null) {
+        this._upvotes=num;
+    }
+    public set downvotes(num:number|null) {
+        this._downvotes=num;
     }
 }
