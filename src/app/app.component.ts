@@ -38,12 +38,12 @@ export class AppComponent implements OnDestroy, OnInit {
     if (this.oauth.getLoggedIn() && this.oauth.shouldRefresh())
       this.oauth.refresh();
     this.me.getSubreddits().subscribe ( (data:Subreddit) => {
-      console.log(data);
       let x = {
         text:data.name,
         url:data.name.toLowerCase()
       };
       this.navSubreddits.push(x);
+      this.navSubreddits.sort((a, b) => a.text.localeCompare(b.text));
     });
   }
 

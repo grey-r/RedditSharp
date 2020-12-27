@@ -45,7 +45,7 @@ export class MeService {
     this.http.get(`https://oauth.reddit.com/subreddits/mine/subscriber?limit=${environment.subredditLimit}${after?"&after="+after:""}`, httpOptions).subscribe( (res:any) => {
       //console.log(res.data.children);
       res.data.children.forEach( (child:any) => {
-        console.log(child);
+        //console.log(child);
         this.subredditSubject.next( new Subreddit(child.data.id, child.kind, child.data.display_name));
       });
       if (res.data.after) {

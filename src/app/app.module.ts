@@ -46,6 +46,7 @@ import { PostModalComponent } from './view/post-modal/post-modal.component';
 import { SafeHTMLPipe } from './safe-html.pipe';
 import { AuthenticateComponent } from './authenticate/authenticate.component';
 import { CallbackPipePipe } from './callback-pipe.pipe';
+import { SortPipePipe } from './sort-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { CallbackPipePipe } from './callback-pipe.pipe';
     PostModalComponent,
     SafeHTMLPipe,
     AuthenticateComponent,
-    CallbackPipePipe
+    CallbackPipePipe,
+    SortPipePipe
   ],
   imports: [
     BrowserModule,
