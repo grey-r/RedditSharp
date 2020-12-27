@@ -1,1 +1,3 @@
-<div class="loading"><div class="thing"></div></div>
+<div class="loading" *ngIf="!error"><div class="thing"></div></div>
+<h1 *ngIf="error">Encountered Error: {{error}}</h1>
+<h2 *ngIf="error">Please return to one of the other pages</h2>

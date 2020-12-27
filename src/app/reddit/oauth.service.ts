@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-export const EXPIRATION_DELAY:number = 60*60; //one hour
+export const EXPIRATION_DELAY:number = 60*60; //one hour = 60 seconds * 60 minutes
 export const EXPIRATION_PADDING:number = 60*5;
 
 @Injectable({
@@ -10,7 +13,9 @@ export const EXPIRATION_PADDING:number = 60*5;
 
 export class OauthService {
 
-  constructor() { }
+  constructor(private http:HttpClient) {
+    //window['oauth']=this;
+  }
 
   logIn(perm:boolean = true):void {
     let state:string = Math.random().toString().replace(".","");
@@ -24,7 +29,7 @@ export class OauthService {
       window.location.href=redirect;
   }
   
-  validateLogIn(state:string|null, token:string|null, redirect:string|null="/") {
+  validateLogIn(state:string|null, code:string|null, callback: ( (x:string)=>void ) | null = null) {
     if (!state) {
       alert("no state");
       return;//We also need to display an error, probably. Later though. Somebody tried to MITM
@@ -33,16 +38,15 @@ export class OauthService {
       alert("state mismatch");
       return;//We also need to display an error, probably. Later though. Somebody tried to MITM
     }
-    if (token) {
-      this.setToken(token);
-      if (redirect)
-        window.location.href=redirect;
+    if (code) {
+      if (callback)
+        callback(code);
     }
   }
 
-  setToken(token:string) {
+  setToken(token:string, delay:number=EXPIRATION_DELAY) {
     localStorage.setItem("token",token);
-    localStorage.setItem("tokenExpiration", ( Date.now() + EXPIRATION_DELAY ).toString() );
+    localStorage.setItem("tokenExpiration", ( Date.now() + delay*1000 ).toString() );
   }
 
   setRefreshToken(token:string) {
@@ -78,4 +82,46 @@ export class OauthService {
       return false;
     return Date.now() > parseInt( exp ) - EXPIRATION_PADDING;
   }
+
+  public fetchToken(code:string):Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + btoa(environment.clientId + ':'),
+      }),
+    };
+  
+    const grantType = environment.authorizationType;
+    const redirectUri = environment.redirectUrl;
+    const postdata = `grant_type=${grantType}&code=${code}&redirect_uri=${redirectUri}`;
+  
+    return this.http.post(environment.tokenEndpoint, postdata, httpOptions).pipe(map( (res:any) => {
+      if (res.error)
+        return <AuthenticationError> res;
+      else
+        return <AuthenticationResult> res;
+    }));
+  }
+
+  refresh():void {
+    /*
+    let body = JSON.stringify({grant_type:"refresh_token",refresh_token:this.getRefreshToken()});
+    this.httpOptions.headers.set("Authorization", "Bearer " + this.getToken());
+    this.http.post(`/api/access_token`,body,this.httpOptions).toPromise().then( (o) => {
+      console.log(o); //test via ng.getComponent(document.querySelector('app-root')).oauth.refresh();
+    })
+    */
+  }
+}
+
+export interface AuthenticationError {
+  error: string;
+}
+
+export interface AuthenticationResult {
+  access_token: string;
+  refresh_token: string | null;
+  expires_in: number;
+  scope: string;
+  token_type: string;
 }
