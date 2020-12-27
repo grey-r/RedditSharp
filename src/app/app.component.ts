@@ -1,5 +1,5 @@
 import {MediaMatcher} from '@angular/cdk/layout';
-import {ChangeDetectorRef, Component, OnDestroy, ViewChild, ViewChildren, ElementRef, AfterViewInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, ViewChild, ViewChildren, ElementRef, AfterViewInit, OnInit} from '@angular/core';
 import { OauthService } from './reddit/oauth.service';
 
 /** @title Responsive sidenav */
@@ -9,7 +9,7 @@ import { OauthService } from './reddit/oauth.service';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnDestroy, OnInit {
   mobileQuery: MediaQueryList;
 
   passCheck(c:Checkable):boolean {
@@ -23,15 +23,18 @@ export class AppComponent implements OnDestroy {
     {text:"Log Out",url:"logout", check: ()=>{return this.oauth.getLoggedIn();}}
   ]
 
-  navSubreddits = [
-    {text:"AskReddit",url:"askreddit"}
-  ]
+  navSubreddits:Link[] = [];
   private _mobileQueryListener: () => void;
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+  }
+
+  ngOnInit(): void {
+    if (this.oauth.getLoggedIn() && this.oauth.shouldRefresh())
+      this.oauth.refresh();
   }
 
   ngOnDestroy(): void {
@@ -41,6 +44,10 @@ export class AppComponent implements OnDestroy {
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
 }
 
+interface Link {
+  text: string;
+  url: string;
+}
 interface Checkable {
   check():boolean;
 }

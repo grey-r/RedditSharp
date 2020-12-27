@@ -12,6 +12,7 @@
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="!mobileQuery.matches" [disableClose]="!mobileQuery.matches" [class.is-desktop]="!mobileQuery.matches">
       <mat-nav-list>
         <a mat-list-item routerLink="/{{nav.url}}" *ngFor="let nav of navOptions | callbackPipe:passCheck">{{nav.text}}</a>
+        <!--<a mat-list-item (click)="oauth.refresh()" >aaa</a> test refresh -->
         <mat-divider></mat-divider>
         <a mat-list-item routerLink="/view/{{nav.url}}" *ngFor="let nav of navSubreddits">{{nav.text}}</a>
       </mat-nav-list>

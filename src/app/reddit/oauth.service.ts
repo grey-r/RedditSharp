@@ -13,6 +13,8 @@ export const EXPIRATION_PADDING:number = 60*5;
 
 export class OauthService {
 
+  private _autoRefresh: number | null = null;
+
   constructor(private http:HttpClient) {
     //window['oauth']=this;
   }
@@ -46,7 +48,11 @@ export class OauthService {
 
   setToken(token:string, delay:number=EXPIRATION_DELAY) {
     localStorage.setItem("token",token);
-    localStorage.setItem("tokenExpiration", ( Date.now() + delay*1000 ).toString() );
+    let exp =  Date.now() + delay*1000;
+    localStorage.setItem("tokenExpiration", (exp).toString() );
+    if (this._autoRefresh)
+      window.clearTimeout(this._autoRefresh);
+    this._autoRefresh = window.setTimeout(this.refresh, (exp-EXPIRATION_PADDING*1000) - Date.now() );
   }
 
   setRefreshToken(token:string) {
@@ -65,8 +71,11 @@ export class OauthService {
     return localStorage.getItem("refreshToken");
   }
 
-  getTokenExpiration():string|null {
-    return localStorage.getItem("tokenExpiration");
+  getTokenExpiration():number|null {
+    let s = localStorage.getItem("tokenExpiration");
+    if (!s)
+      return null;
+    return parseInt(s);
   }
 
   getLoggedIn():boolean {
@@ -77,10 +86,10 @@ export class OauthService {
   }
 
   shouldRefresh():boolean {
-    let exp:string|null = this.getTokenExpiration();
+    let exp:number|null = this.getTokenExpiration();
     if (!exp)
       return false;
-    return Date.now() > parseInt( exp ) - EXPIRATION_PADDING;
+    return Date.now() > exp - EXPIRATION_PADDING;
   }
 
   public fetchToken(code:string):Observable<any> {
@@ -104,13 +113,32 @@ export class OauthService {
   }
 
   refresh():void {
-    /*
-    let body = JSON.stringify({grant_type:"refresh_token",refresh_token:this.getRefreshToken()});
-    this.httpOptions.headers.set("Authorization", "Bearer " + this.getToken());
-    this.http.post(`/api/access_token`,body,this.httpOptions).toPromise().then( (o) => {
-      console.log(o); //test via ng.getComponent(document.querySelector('app-root')).oauth.refresh();
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + btoa(environment.clientId + ':'),
+      }),
+    };
+  
+    const grantType = environment.refreshType;
+    const redirectUri = environment.redirectUrl;
+    const code = this.getRefreshToken();
+    
+    const postdata = `grant_type=${grantType}&refresh_token=${code}&redirect_uri=${redirectUri}`;
+  
+    this.http.post(environment.tokenEndpoint, postdata, httpOptions).pipe(map( (res:any) => {
+      if (res.error)
+        return <AuthenticationError> res;
+      else
+        return <AuthenticationResult> res;
+    })).subscribe( (res:AuthenticationResult|AuthenticationError) => {
+      if ("error" in res) {
+        alert(res.error);
+      } else {
+        res = <AuthenticationResult> res;
+        alert(res.access_token);
+      }
     })
-    */
   }
 }
 
