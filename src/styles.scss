@@ -5,6 +5,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-sidenav.is-desktop {
     width: 20vw;
 }
+@media screen and (min-width: 600px) {
+    .post-modal {
+        margin-left: 10vw;
+    }
+}
 
 @import "~@angular/material/theming";
 @include mat-core();

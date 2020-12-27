@@ -44,6 +44,9 @@ export class RedditFeedService {
             post.downvotes = child.data.downs;
           }
         }
+        if (child.data.url && child.data.url.length>0) {
+          post.url = this.htmlDecode(child.data.url);
+        }
         if (child.data.post_hint==="image" && child.data.url) {
           post.imageUrl = this.htmlDecode(child.data.url);
         }

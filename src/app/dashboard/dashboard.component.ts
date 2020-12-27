@@ -57,8 +57,9 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
   openPost(post_id: number) {
     let dialogRef = this.dialog.open(PostModalComponent, {
       width: Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1)/window.innerWidth*100).toString() + "%",
-      //height:  "80%",
+      //height:  "90%",
       autoFocus: false,
+      panelClass: "post-modal",
       data: { post: this.currentPosts[post_id] }
     });
   }

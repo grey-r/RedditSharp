@@ -7,6 +7,11 @@
     </div>
   </div>
   <mat-divider></mat-divider>
+  <img *ngIf="post.imageUrl" class="full-image" [src]="post.imageUrl" >
+  <!--
+    Bruteforces image if it can display at all
+    <img #fimg *ngIf="!this.hidden" class="full-image" [src]="post.url" (error)="this.hidden = true" >
+  -->
   <p class="selftext">{{post.text}}</p>
 </div>
 <div mat-dialog-actions class="dialog-footer">
