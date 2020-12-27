@@ -1,9 +1,3 @@
-<div mat-dialog-title class="dialog-title">
-  <h1 class="post-title">{{post.title}}</h1>
-  <mat-divider></mat-divider>
-  <!--<div *ngIf="post.author && post.author.avatarUrl" class="post-header-image" [ngStyle]="{ 'background-image': 'url(' + post.author.avatarUrl + ')'}"></div>
-  -->
-  </div>
 <div mat-dialog-content class="dialog-content">
   <div class="header" *ngIf="post.author">
     <div class="avatar" [ngStyle]="{ 'background-image': 'url(' + post.author.avatarUrl + ')'}"></div>
@@ -12,10 +6,12 @@
       <span>{{post.author.name}}</span>
     </div>
   </div>
-  <p>{{post.text}}</p>
+  <mat-divider></mat-divider>
+  <p class="selftext">{{post.text}}</p>
 </div>
 <div mat-dialog-actions class="dialog-footer">
-  <button mat-button><mat-icon>arrow_upward</mat-icon></button><span class="votes">{{post.upvotes}}</span>
-  <button mat-button><mat-icon>arrow_downward</mat-icon></button><span class="votes">{{post.downvotes}}</span>
-  <button mat-button><mat-icon>share</mat-icon></button>
+  <mat-divider></mat-divider>
+  <div class="button-group"><button mat-button><mat-icon>arrow_upward</mat-icon></button><span class="votes">{{post.upvotes}}</span></div>
+  <div class="button-group"><button mat-button><mat-icon>arrow_downward</mat-icon></button><span class="votes">{{post.downvotes}}</span></div>
+  <div class="button-group"><button mat-button><mat-icon>share</mat-icon></button><span class="votes">Share</span></div>
 </div>

@@ -22,7 +22,7 @@
 
 .dialog-content .header .aside-avatar {
     float: none;
-    padding-left: 3em;
+    padding-left: 4em;
 }
 
 .dialog-content .header .title {
@@ -33,4 +33,18 @@
     content: "";
     clear: both;
     display: table;
+}
+
+p.selftext {
+    overflow-wrap: break-word;
+}
+
+.dialog-content mat-divider {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.dialog-footer mat-divider {
+    width: 100%;
+    margin-bottom: 1em;
 }
