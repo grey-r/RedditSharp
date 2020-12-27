@@ -1,0 +1,36 @@
+.dialog-title h1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dialog-content .header {
+    height: 3em;
+}
+
+.dialog-content .header .column {
+    float: left;
+}
+
+.dialog-content .header .avatar {
+    width: 3em;
+    height: 3em;
+    background-size: 3em;
+    border-radius: 1.5em;
+    float:left;
+}
+
+.dialog-content .header .aside-avatar {
+    float: none;
+    padding-left: 3em;
+}
+
+.dialog-content .header .title {
+    font-size: 2em;
+}
+
+.dialog-content .header {
+    content: "";
+    clear: both;
+    display: table;
+}

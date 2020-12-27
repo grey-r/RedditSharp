@@ -13,9 +13,11 @@ export interface DialogData {
 })
 export class PostModalComponent implements OnInit {
 
+  post:Post;
+
   constructor(public dialogRef: MatDialogRef<PostModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
-      console.log(data.post);
+      this.post=data.post;
     }
 
   ngOnInit(): void {
