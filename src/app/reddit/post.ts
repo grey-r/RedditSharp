@@ -15,9 +15,10 @@ export class Post {
     private _author: User| null;
     private _title: string | null;
     private _url: string | null;
-    private _text: string | null;
     private _thumbnailUrl: string | null;
     private _previewUrl: string | null;
+    private _text: string | null = null;
+    private _imageUrl: string | null = null;
     private _upvotes: number | null = null;
     private _downvotes: number | null = null;
     private _replies: Post[] = [];
@@ -29,7 +30,6 @@ export class Post {
         this._url = url;
         this._thumbnailUrl = thumbnailUrl;
         this._previewUrl = previewUrl;
-        this._text=null;
     }
     public setVotes(upvotes: number, ratio: number) {
         this._upvotes = upvotes;
@@ -52,6 +52,9 @@ export class Post {
     }
     public get text():string|null {
         return this._text;
+    }
+    public get imageUrl():string|null {
+        return this._imageUrl;
     }
     public get thumbnailUrl():string|null {
         return this._thumbnailUrl;
@@ -76,6 +79,9 @@ export class Post {
     }
     public set url( url:string|null ) {
         this._url=url;
+    }
+    public set imageUrl( url:string|null ) {
+        this._imageUrl=url;
     }
     public set thumbnailUrl( thumbnailUrl:string|null) {
         this._thumbnailUrl=thumbnailUrl;
