@@ -1,6 +1,6 @@
 .post-card {
-    margin-left: 5vw;
-    margin-right: 5vw;
+    margin-left: 10vw;
+    margin-right: 10vw;
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
@@ -11,7 +11,9 @@
 
 .post-card img {
     width:100%;
-    margin:0%;
+    margin:0 auto;
+    max-width: 60vmin;
+    display: block;
 }
 
 .mat-card-content {
@@ -25,7 +27,7 @@
 
 .mat-card-content .fadeout-inner {
     position:absolute;
-    height:60vmin;
+    height:70vmin;
     width:100%;
     z-index: 1;
 }

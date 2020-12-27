@@ -1,5 +1,5 @@
 <div #dashboardroot>
-  <mat-card class="post-card" *ngFor="let post of post$ | async; index as i" [class.is-text]="post.text || !(post.url)">
+  <mat-card class="post-card" *ngFor="let post of post$ | async; index as i" [class.is-text]="(!post.previewUrl)">
     <mat-card-header (click)="openPost(i)">
       <div *ngIf="post.author && post.author.avatarUrl" mat-card-avatar class="post-header-image" [ngStyle]="{ 'background-image': 'url(' + post.author.avatarUrl + ')'}"></div>
       <mat-card-title> {{post.title}} </mat-card-title>
@@ -7,7 +7,7 @@
     </mat-card-header>
     <mat-card-content *ngIf="post.text || post.previewUrl" (click)="openPost(i)">
       <div class="fadeout-container"><div class="fadeout-inner"></div></div>
-      <img *ngIf="post.previewUrl" mat-card-image src="{{post.previewUrl}}" alt="{{post.title}}" >
+      <img *ngIf="post.previewUrl " mat-card-image src="{{post.previewUrl}}" alt="{{post.title}}" >
       <p>
         {{post.text}}
       </p>

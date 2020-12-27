@@ -28,7 +28,7 @@ export class RedditFeedService {
         console.log(child.data);
         let post:Post = new Post(child.data.id,child.kind);
         post.title=child.data.title;
-        if (child.data.selftext) {
+        if (child.data.selftext && child.data.selftext.length>0) {
           post.text=this.htmlDecode(child.data.selftext);
         }
         if (child.data.author) {
