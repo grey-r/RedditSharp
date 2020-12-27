@@ -59,6 +59,10 @@ export class RedditFeedService {
         }
         if (child.data.thumbnail)
           post.thumbnailUrl = this.htmlDecode(child.data.thumbnail);
+        //console.log(child.data.media_embed.content);
+        if (child.data.media_embed && child.data.media_embed.content)
+          post.mediaEmbed = this.htmlDecode(child.data.media_embed.content);
+        //Potentially use https://css-tricks.com/fluid-width-video/
         return post;
       }));
     })

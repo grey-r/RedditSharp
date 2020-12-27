@@ -22,6 +22,7 @@ export class Post {
     private _upvotes: number | null = null;
     private _downvotes: number | null = null;
     private _replies: Post[] = [];
+    private _mediaEmbed: string | null = null;
     constructor ( id: string, type:PostType, author:User|null=null, title:string|null=null, url:string|null=null, thumbnailUrl:string|null=null, previewUrl:string|null=null) {
         this._id = id;
         this._type = type;
@@ -71,6 +72,9 @@ export class Post {
     public get replies():Post[] {
         return this._replies;
     }
+    public get mediaEmbed():string|null {
+        return this._mediaEmbed;
+    }
     public set title( title:string|null ) {
         this._title=title;
     }
@@ -100,5 +104,8 @@ export class Post {
     }
     public set replies(posts:Post[]) {
         this._replies = posts;
+    }
+    public set mediaEmbed( str:string|null ) {
+        this._mediaEmbed=str;
     }
 }

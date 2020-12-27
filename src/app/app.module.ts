@@ -43,6 +43,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { LogoutComponent } from './logout/logout.component';
 import { PostModalComponent } from './view/post-modal/post-modal.component';
+import { SafeHTMLPipe } from './safe-html.pipe';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { PostModalComponent } from './view/post-modal/post-modal.component';
     LoginComponent,
     DashboardComponent,
     LogoutComponent,
-    PostModalComponent
+    PostModalComponent,
+    SafeHTMLPipe
   ],
   imports: [
     BrowserModule,
