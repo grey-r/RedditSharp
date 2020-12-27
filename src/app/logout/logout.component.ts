@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { OauthService } from '../reddit/oauth.service';
 
 @Component({
   selector: 'app-logout',
@@ -7,11 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LogoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(private oauth:OauthService) { }
 
   ngOnInit(): void {
-    localStorage.removeItem("token");
-    window.location.href="/";
+    this.oauth.logOut();
   }
 
 }

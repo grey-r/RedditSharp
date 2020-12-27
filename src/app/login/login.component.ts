@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { OauthService } from '../reddit/oauth.service';
 
 @Component({
   selector: 'app-login',
@@ -8,12 +9,10 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(private oauth:OauthService) { }
 
   ngOnInit(): void {
-    let state:string = Math.random().toString().replace(".","");
-    localStorage.setItem('state', state);
-    window.location.href = `https://www.reddit.com/api/v1/authorize?client_id=${environment.clientId}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(environment.redirectUrl)}&scope=${encodeURIComponent(environment.scope)}&duration=permanent`;
+    this.oauth.logIn();
   }
 
 }
