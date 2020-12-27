@@ -1,6 +1,8 @@
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ChangeDetectorRef, Component, OnDestroy, ViewChild, ViewChildren, ElementRef, AfterViewInit, OnInit} from '@angular/core';
 import { OauthService } from './reddit/oauth.service';
+import { MeService } from './reddit/me.service';
+import { Subreddit } from './reddit/subreddit';
 
 /** @title Responsive sidenav */
 @Component({
@@ -26,7 +28,7 @@ export class AppComponent implements OnDestroy, OnInit {
   navSubreddits:Link[] = [];
   private _mobileQueryListener: () => void;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -35,6 +37,14 @@ export class AppComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     if (this.oauth.getLoggedIn() && this.oauth.shouldRefresh())
       this.oauth.refresh();
+    this.me.getSubreddits().subscribe ( (data:Subreddit) => {
+      console.log(data);
+      let x = {
+        text:data.name,
+        url:data.name.toLowerCase()
+      };
+      this.navSubreddits.push(x);
+    });
   }
 
   ngOnDestroy(): void {

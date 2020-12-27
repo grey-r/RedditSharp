@@ -33,3 +33,9 @@ h1.app-name {
       `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
 }
+
+a.subreddit {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
