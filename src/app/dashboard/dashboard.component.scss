@@ -48,21 +48,3 @@ span.votes {
 div.button-group {
     display:inline-block;
 }
-
-div.loading {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border: none;
-}
-
-div.loading .thing {
-    border-radius: 100px;
-    width: 200px;
-    height: 200px;
-    border: none;
-    background: url("/assets/img/load.svg");
-}

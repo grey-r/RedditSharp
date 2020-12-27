@@ -44,6 +44,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { LogoutComponent } from './logout/logout.component';
 import { PostModalComponent } from './view/post-modal/post-modal.component';
 import { SafeHTMLPipe } from './safe-html.pipe';
+import { AuthenticateComponent } from './authenticate/authenticate.component';
+import { CallbackPipePipe } from './callback-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { SafeHTMLPipe } from './safe-html.pipe';
     DashboardComponent,
     LogoutComponent,
     PostModalComponent,
-    SafeHTMLPipe
+    SafeHTMLPipe,
+    AuthenticateComponent,
+    CallbackPipePipe
   ],
   imports: [
     BrowserModule,
