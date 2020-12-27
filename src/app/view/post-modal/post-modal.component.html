@@ -9,6 +9,9 @@
   <mat-divider></mat-divider>
   <img *ngIf="post.imageUrl" class="full-image" [src]="post.imageUrl" >
   <div *ngIf="post.mediaEmbed" [innerHTML]="post.mediaEmbed | safeHTML" class="embed-fluid"></div>
+  <video *ngIf="post.videoUrl" class="fluid-embed" controls>
+    <source [src]="post.videoUrl" type="video/mp4">
+  </video>
   <!--
     Bruteforces image if it can display at all
     <img #fimg *ngIf="!this.hidden" class="full-image" [src]="post.url" (error)="this.hidden = true" >

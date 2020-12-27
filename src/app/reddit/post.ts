@@ -19,6 +19,7 @@ export class Post {
     private _previewUrl: string | null;
     private _text: string | null = null;
     private _imageUrl: string | null = null;
+    private _videoUrl: string | null = null;
     private _upvotes: number | null = null;
     private _downvotes: number | null = null;
     private _replies: Post[] = [];
@@ -57,6 +58,9 @@ export class Post {
     public get imageUrl():string|null {
         return this._imageUrl;
     }
+    public get videoUrl():string|null {
+        return this._videoUrl;
+    }
     public get thumbnailUrl():string|null {
         return this._thumbnailUrl;
     }
@@ -86,6 +90,9 @@ export class Post {
     }
     public set imageUrl( url:string|null ) {
         this._imageUrl=url;
+    }
+    public set videoUrl( url:string|null ) {
+        this._videoUrl=url;
     }
     public set thumbnailUrl( thumbnailUrl:string|null) {
         this._thumbnailUrl=thumbnailUrl;
