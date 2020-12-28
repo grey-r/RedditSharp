@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, OnDestroy, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { RedditFeed } from '../reddit/reddit-feed';
 import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
 
   ngUnsubscribe = new Subject<void>();
 
-  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute, private oauth:OauthService, private ui:UserInfoService) { }
+  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute, private oauth:OauthService, private ui:UserInfoService, private ngZone: NgZone) { }
   
   ngAfterViewInit(): void {
     this.ui.clearQueue();
@@ -111,14 +111,17 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   openPost(post_id: number) {
-    console.log(post_id);
-    let dialogRef = this.dialog.open(PostModalComponent, {
-      width: Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1)/window.innerWidth*100).toString() + "%",
-      //height:  "90%",
-      autoFocus: false,
-      panelClass: "post-modal",
-      data: { post: this.posts[post_id] }
-    });
+    this.ngZone.run( () => {
+      console.log(post_id);
+      console.log(this.posts[post_id]);
+      let dialogRef = this.dialog.open(PostModalComponent, {
+        width: Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1)/window.innerWidth*100).toString() + "%",
+        //height:  "90%",
+        autoFocus: false,
+        panelClass: "post-modal",
+        data: { post: this.posts[post_id] }
+      });
+    })
   }
 
   fetchPosts():void {
