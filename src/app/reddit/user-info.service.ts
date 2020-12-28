@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
-import { map } from "rxjs/operators";
-import {HttpClient} from '@angular/common/http';
+import { map, catchError } from "rxjs/operators";
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import { User } from './user';
 
@@ -22,7 +22,7 @@ export class UserInfoService {
   private async performNextRequest() {
     this._loading=true;
     let u:User = <User>this.userQueue.shift();
-    this.http.jsonp(`https://reddit.com/user/${u.name}/about.json?`,"jsonp").toPromise().then((results: any) => {
+    this.http.jsonp(`https://reddit.com/user/${u.name}/about.json?`,"jsonp").subscribe( (results: any) => {
         console.log(results);
         this.ngZone.run( () => {
           if (results.data.snoovatar_size)
@@ -34,6 +34,10 @@ export class UserInfoService {
           this.performNextRequest()
         else
           this._loading=false;
+    }, (err: any) => {
+      if (this.userQueue.length>0)
+        this.performNextRequest()
+      u.avatarUrl="https://www.redditinc.com/assets/images/site/reddit-logo.png"
     });
   }
 }
