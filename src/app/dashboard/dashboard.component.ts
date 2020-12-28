@@ -42,8 +42,6 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
 
   ngUnsubscribe = new Subject<void>();
 
-  currentPosts:Post[] = [];
-
   constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute, private oauth:OauthService) { }
   
   ngAfterViewInit(): void {
@@ -95,7 +93,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
       //height:  "90%",
       autoFocus: false,
       panelClass: "post-modal",
-      data: { post: this.currentPosts[post_id] }
+      data: { post: this.posts[post_id] }
     });
   }
 
