@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ChangeDetectorRef, OnDestroy } from '
 import { RedditFeed } from '../reddit/reddit-feed';
 import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil, first, filter } from 'rxjs/operators';
 import { Subscription, Observable, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PostModalComponent } from '../view/post-modal/post-modal.component';
@@ -103,15 +103,16 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     this.cd.detectChanges();
     if (this.oauth.getLoggedIn()) { //if logged in 
       this.oauth.isReady()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        filter( (res:boolean) => {return res;}),
+        first()
+      )
       .subscribe( (ready:boolean) => { //wait until ready
         //fetch posts if ready
-        if (ready) {
-          this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null,10)
-          .subscribe( (p:Post) => {
-            this.addPost(p);
-          });
-        }
+        this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null,10)
+        .subscribe( (p:Post) => {
+          this.addPost(p);
+        });
       });
     } else {
       this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null,10)
