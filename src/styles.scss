@@ -81,6 +81,9 @@ $dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $angular-warn);
     @include sidenav-theme($theme);
     @include dashcard-theme($theme);
     @include scrollbar-theme($theme);
+    a {
+        color: mat-color(map-get($theme, accent));
+    }
   // Include other custom component mixins here...
 }
 
