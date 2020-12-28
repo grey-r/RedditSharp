@@ -13,10 +13,11 @@ const routes: Routes = [
   { path:'logout', component: LogoutComponent, canActivate: [ LoggedInGuard ]  },
   { path:'dashboard', component: DashboardComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path:'view/:subreddit', component: DashboardComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{ scrollOffset: [0, 0], scrollPositionRestoration: 'top' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

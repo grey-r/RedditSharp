@@ -3,6 +3,9 @@ import {ChangeDetectorRef, Component, OnDestroy, ViewChild, ViewChildren, Elemen
 import { OauthService } from './reddit/oauth.service';
 import { MeService } from './reddit/me.service';
 import { Subreddit } from './reddit/subreddit';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import {Event as RouterEvent} from '@angular/router';
 
 /** @title Responsive sidenav */
 @Component({
@@ -11,7 +14,9 @@ import { Subreddit } from './reddit/subreddit';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnDestroy, OnInit {
+export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
+  @ViewChild("scrollme") content!:ElementRef;
+
   mobileQuery: MediaQueryList;
 
   passCheck(c:Checkable):boolean {
@@ -28,10 +33,20 @@ export class AppComponent implements OnDestroy, OnInit {
   navSubreddits:Link[] = [];
   private _mobileQueryListener: () => void;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+  }
+
+  ngAfterViewInit(): void {
+    this.router.events
+          .pipe(filter(  (e:RouterEvent) => {return e instanceof NavigationEnd} ))
+          .subscribe(() => {
+            const content = document.querySelector('.mat-sidenav-content'); 
+            if (content)
+              content.scrollTop=0;
+          });
   }
 
   ngOnInit(): void {

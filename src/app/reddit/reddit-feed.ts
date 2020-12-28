@@ -28,6 +28,9 @@ export class RedditFeed {
 
     public set subreddit( s:string|null ) {
         this._subreddit=s;
+        this._postAr=[];
+        this._lastID=null;
+        this._lastType=null;
     }
 
     fetchMore():void {
@@ -38,6 +41,10 @@ export class RedditFeed {
         }
         //console.log(after);
         this.redditFeedService.getRedditSchema(this.subreddit,after).pipe(first()).subscribe((results: Post[]) => {
+            if (results.length==0) {
+                this._loading=false;
+                return;
+            }
             this._lastID = results[results.length-1].id;
             this._lastType = results[results.length-1].type;
             this._postAr = this._postAr.concat(results)
