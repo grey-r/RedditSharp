@@ -1,4 +1,4 @@
-import {MediaMatcher} from '@angular/cdk/layout';
+import {MediaMatcher, BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {ChangeDetectorRef, Component, OnDestroy, ViewChild, ViewChildren, ElementRef, AfterViewInit, OnInit} from '@angular/core';
 import { OauthService } from './reddit/oauth.service';
 import { MeService } from './reddit/me.service';
@@ -6,7 +6,8 @@ import { Subreddit } from './reddit/subreddit';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
 import {Event as RouterEvent} from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
+import { DarkModeService } from './dark-mode.service';
 
 /** @title Responsive sidenav */
 @Component({
@@ -18,8 +19,16 @@ import { Subject } from 'rxjs';
 export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild("scrollme") content!:ElementRef;
 
-  mobileQuery: MediaQueryList;
+  mobileQuery: Observable<BreakpointState>;
   ngUnsubscribe = new Subject<void>();
+
+  public get darkMode$() {
+    return this.dark.darkMode$;
+  }
+
+  public toggleDark():void {
+    this.dark.toggleDark();
+  }
 
   passCheck(c:Checkable):boolean {
     console.log(c);
@@ -33,12 +42,9 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   ]
 
   navSubreddits:Link[] = [];
-  private _mobileQueryListener: () => void;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+  constructor(breakpointObserver: BreakpointObserver, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router, private dark: DarkModeService) {
+    this.mobileQuery = breakpointObserver.observe(['(max-width: 600px)']);
   }
 
   ngAfterViewInit(): void {
@@ -77,7 +83,6 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));

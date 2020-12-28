@@ -1,4 +1,4 @@
-<div mat-dialog-content class="dialog-content">
+<div mat-dialog-content class="dialog-content" [class.dark-theme]="darkMode$ | async">
   <div class="header" *ngIf="post.author">
     <div class="avatar" [ngStyle]="{ 'background-image': 'url(' + post.author.avatarUrl + ')'}"></div>
     <div class="aside-avatar">

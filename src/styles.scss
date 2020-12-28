@@ -82,15 +82,11 @@ $dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $angular-warn);
   // Include other custom component mixins here...
 }
 
-@include angular-material-theme($dark-theme);
-@include custom-components-theme($dark-theme);
+@include angular-material-theme($light-theme);
+@include custom-components-theme($light-theme);
 
-@media (prefers-color-scheme: light) {
-    @include angular-material-theme($light-theme);
-    @include custom-components-theme($light-theme);
-}
-
-@media (prefers-color-scheme: dark) {
+.dark-theme {
     @include angular-material-theme($dark-theme);
+    @include custom-components-theme($dark-theme);
     @include custom-components-theme($dark-theme);
 }
