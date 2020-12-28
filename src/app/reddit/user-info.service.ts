@@ -40,4 +40,8 @@ export class UserInfoService {
       u.avatarUrl="https://www.redditinc.com/assets/images/site/reddit-logo.png"
     });
   }
+  public clearQueue() {
+    this._loading = false;
+    this.userQueue = [];
+  }
 }

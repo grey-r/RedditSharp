@@ -9,6 +9,7 @@ import { PostModalComponent } from '../view/post-modal/post-modal.component';
 import { Post } from '../reddit/post';
 import { ActivatedRoute } from '@angular/router';
 import { OauthService } from '../reddit/oauth.service';
+import { UserInfoService } from '../reddit/user-info.service';
 
 const scrollDelay:number = 100;
 
@@ -21,11 +22,13 @@ const scrollDelay:number = 100;
 export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   private _subreddit:string|null=null;
   private _posts:Post[] = [];
+  private _loading=false;
 
   public set subreddit(sub:string|null) {
     this._subreddit = sub;
     this.clearPosts();
     this.fetchPosts();
+    this.ui.clearQueue();
   }
 
   public get posts():Post[] {
@@ -37,14 +40,15 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   public get loading():boolean {
-    return this.rs.loading;
+    return this._loading;
   }
 
   ngUnsubscribe = new Subject<void>();
 
-  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute, private oauth:OauthService) { }
+  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute, private oauth:OauthService, private ui:UserInfoService) { }
   
   ngAfterViewInit(): void {
+    this.ui.clearQueue();
     const content = document.querySelector('.mat-sidenav-content'); 
     this.scroll.scrolled()
     .pipe(debounceTime(scrollDelay))
@@ -53,7 +57,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
       let y:number = Math.max(window.scrollY,content?content.scrollTop:0);
       if (content && y>content.scrollHeight-window.innerHeight*2) {
         //grab more posts
-        if (!this.rs.loading) {
+        if (!this.loading) {
           this.fetchPosts();
         } else {
           //console.log("busy");
@@ -67,7 +71,6 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( (routeParams:any) => {
       this.subreddit = routeParams.subreddit;
-      this.fetchPosts();
       window.scrollTo(0,0);
     });
   }
@@ -98,7 +101,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   fetchPosts():void {
-    this.cd.detectChanges();
+    this._loading=true;
     if (this.oauth.getLoggedIn()) { //if logged in 
       this.oauth.isReady()
       .pipe(
@@ -107,16 +110,18 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
       )
       .subscribe( (ready:boolean) => { //wait until ready
         //fetch posts if ready
-        this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null,10)
-        .subscribe( (p:Post) => {
-          this.addPost(p);
-        });
+        this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
+        .subscribe(
+          (p:Post) => { this.addPost(p); },
+          e => { alert(e); },
+          () => {this._loading=false;} );
       });
     } else {
-      this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null,10)
-      .subscribe( (p:Post) => {
-        this.addPost(p);
-      });
+      this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
+      .subscribe(
+        (p:Post) => { this.addPost(p); },
+        e => { alert(e); },
+        () => {this._loading=false;} );
     }
   }
 

@@ -25,7 +25,6 @@ export class RedditFeedService {
   }
 
   fetchPosts(subreddit:String|null=null, after:String|null=null, limit=25): Observable<Post> {
-    this._loading = true;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -94,14 +93,7 @@ export class RedditFeedService {
         map(dataToPost)
       );
     }
-    ref.subscribe( (x) => {
-      this._loading = false;
-    })
 
     return ref;
-  }
-
-  public get loading():boolean {
-    return this._loading;
   }
 }
