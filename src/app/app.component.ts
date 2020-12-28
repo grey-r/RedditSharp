@@ -8,6 +8,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import {Event as RouterEvent} from '@angular/router';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { DarkModeService } from './dark-mode.service';
+import { MatSidenav } from '@angular/material/sidenav';
 
 /** @title Responsive sidenav */
 @Component({
@@ -18,6 +19,7 @@ import { DarkModeService } from './dark-mode.service';
 
 export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild("scrollme") content!:ElementRef;
+  @ViewChild("snav") snav!:MatSidenav;
 
   mobileQuery: Observable<BreakpointState>;
   ngUnsubscribe = new Subject<void>();
@@ -52,6 +54,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
           .pipe(filter(  (e:RouterEvent) => {return e instanceof NavigationEnd} ))
           .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe(() => {
+            if (this.snav)
+              this.snav.close();
             const content = document.querySelector('.mat-sidenav-content'); 
             if (content)
               content.scrollTop=0;
