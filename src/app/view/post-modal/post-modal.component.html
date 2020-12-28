@@ -16,7 +16,7 @@
     Bruteforces image if it can display at all
     <img #fimg *ngIf="!this.hidden" class="full-image" [src]="post.url" (error)="this.hidden = true" >
   -->
-  <p class="selftext">{{post.text}}</p>
+  <div class="selftext" [innerHTML]="post.html"></div>
 </div>
 <div mat-dialog-actions class="dialog-footer">
   <mat-divider></mat-divider>

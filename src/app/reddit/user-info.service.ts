@@ -1,7 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
-import { map, catchError, first } from "rxjs/operators";
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable, Subject} from 'rxjs';
+import { first } from "rxjs/operators";
+import {HttpClient} from '@angular/common/http';
 import { User } from './user';
 
 @Injectable({

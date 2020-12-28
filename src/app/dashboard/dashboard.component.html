@@ -10,9 +10,11 @@
       <div class="image-container" [class.is-video]="post.videoUrl">
         <img *ngIf="post.previewUrl " mat-card-image src="{{post.previewUrl}}" alt="{{post.title}}"  >
       </div>
+      <div [innerHTML]="post.html"></div>
+      <!--
       <p>
         {{post.text}}
-      </p>
+      </p>-->
     </mat-card-content>
     <mat-card-actions>
       <div class="button-group"><button mat-button><mat-icon>arrow_upward</mat-icon></button><span class="votes">{{post.upvotes}}</span></div>

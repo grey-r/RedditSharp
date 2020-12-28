@@ -1,4 +1,4 @@
-import {User} from './user'
+import { User } from './user';
 
 export const enum PostType {
     Comment = "t1", //taken from "kind parameter"
@@ -6,32 +6,31 @@ export const enum PostType {
     Link = "t3",
     Message = "t4",
     Subreddit = "t5",
-    Award = "t6"
+    Award = "t6",
+    MoreChildren = "more",
+    Listing = "Listing" //ask reddit why this is capitalised
 }
 
 export class Post {
     private _id: string;
     private _type: PostType;
-    private _author: User| null;
-    private _title: string | null;
-    private _url: string | null;
-    private _thumbnailUrl: string | null;
-    private _previewUrl: string | null;
+    private _subreddit: string | null = null;
+    private _author: User| null = null;
+    private _title: string | null = null;
+    private _url: string | null = null;
+    private _thumbnailUrl: string | null=  null;
+    private _previewUrl: string | null = null;
     private _text: string | null = null;
+    private _html: string | null = null;
     private _imageUrl: string | null = null;
     private _videoUrl: string | null = null;
     private _upvotes: number | null = null;
     private _downvotes: number | null = null;
     private _replies: Post[] = [];
     private _mediaEmbed: string | null = null;
-    constructor ( id: string, type:PostType, author:User|null=null, title:string|null=null, url:string|null=null, thumbnailUrl:string|null=null, previewUrl:string|null=null) {
+    constructor ( id: string, type:PostType) {
         this._id = id;
         this._type = type;
-        this._author=author;
-        this._title=title;
-        this._url = url;
-        this._thumbnailUrl = thumbnailUrl;
-        this._previewUrl = previewUrl;
     }
     public setVotes(upvotes: number, ratio: number) {
         this._upvotes = upvotes;
@@ -42,6 +41,9 @@ export class Post {
     }
     public get type():string {
         return this._type;
+    }
+    public get subreddit():string|null {
+        return this._subreddit;
     }
     public get author():User|null {
         return this._author;
@@ -54,6 +56,9 @@ export class Post {
     }
     public get text():string|null {
         return this._text;
+    }
+    public get html():string|null {
+        return this._html;
     }
     public get imageUrl():string|null {
         return this._imageUrl;
@@ -87,6 +92,9 @@ export class Post {
     public set title( title:string|null ) {
         this._title=title;
     }
+    public set subreddit( subreddit:string|null ) {
+        this._subreddit=subreddit;
+    }
     public set author( author:User|null ) {
         this._author=author;
     }
@@ -107,6 +115,9 @@ export class Post {
     }
     public set text( text:string|null ) {
         this._text=text;
+    }
+    public set html( html:string|null ) {
+        this._html=html;
     }
     public set upvotes(num:number|null) {
         this._upvotes=num;

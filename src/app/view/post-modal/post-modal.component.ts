@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Post } from 'src/app/reddit/post';
-import { DarkModeService } from 'src/app/dark-mode.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DarkModeService } from 'src/app/dark-mode.service';
+import { Post } from 'src/app/reddit/post';
+//import { PostInfoService } from 'src/app/reddit/post-info.service';
 
 export interface DialogData {
   post: Post;
@@ -24,7 +25,7 @@ export class PostModalComponent implements OnInit, OnDestroy {
     return this.dark.darkMode$;
   }
 
-  constructor(public dialogRef: MatDialogRef<PostModalComponent>, private dark:DarkModeService,
+  constructor(public dialogRef: MatDialogRef<PostModalComponent>, private dark:DarkModeService,// private pi:PostInfoService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
       this.post=data.post;
       this.dark.darkMode$
@@ -38,6 +39,7 @@ export class PostModalComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit(): void {
+    //this.pi.fetchComments(this.post);
   }
 
   ngOnDestroy(): void {

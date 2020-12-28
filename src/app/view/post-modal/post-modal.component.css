@@ -37,7 +37,7 @@
     display: table;
 }
 
-p.selftext {
+.selftext {
     overflow-wrap: break-word;
 }
 
