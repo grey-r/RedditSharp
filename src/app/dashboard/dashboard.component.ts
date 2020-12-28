@@ -8,28 +8,43 @@ import { MatDialog } from '@angular/material/dialog';
 import { PostModalComponent } from '../view/post-modal/post-modal.component';
 import { Post } from '../reddit/post';
 import { ActivatedRoute } from '@angular/router';
+import { OauthService } from '../reddit/oauth.service';
 
 const scrollDelay:number = 100;
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 
-export class DashboardComponent extends RedditFeed implements OnInit,AfterViewInit,OnDestroy {
+export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
+  private _subreddit:string|null=null;
+  private _posts:Post[] = [];
+
+  public set subreddit(sub:string|null) {
+    this._subreddit = sub;
+    this.clearPosts();
+    this.fetchPosts();
+  }
+
+  public get posts():Post[] {
+    return this._posts;
+  }
+
+  public get subreddit():string|null {
+    return this._subreddit;
+  }
+
+  public get loading():boolean {
+    return this.rs.loading;
+  }
+
   ngUnsubscribe = new Subject<void>();
 
   currentPosts:Post[] = [];
 
-  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd:ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute) {
-    super(rs);
-    this.post$.subscribe( (x) => {
-      this.currentPosts=x;
-    });
-    //this.subreddit="";
-    //this.fetchMore();
-  }
+  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute, private oauth:OauthService) { }
   
   ngAfterViewInit(): void {
     const content = document.querySelector('.mat-sidenav-content'); 
@@ -40,9 +55,8 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
       let y:number = Math.max(window.scrollY,content?content.scrollTop:0);
       if (content && y>content.scrollHeight-window.innerHeight*2) {
         //grab more posts
-        if (!this.loading) {
-          this.fetchMore();
-          this.cd.detectChanges();
+        if (!this.rs.loading) {
+          this.fetchPosts();
         } else {
           //console.log("busy");
         }
@@ -55,7 +69,7 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( (routeParams:any) => {
       this.subreddit = routeParams.subreddit;
-      this.fetchMore();
+      this.fetchPosts();
       window.scrollTo(0,0);
     });
   }
@@ -63,6 +77,16 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
   ngOnDestroy():void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+
+  clearPosts():void {
+    this._posts=[];
+  }
+
+  addPost(p:Post):void {
+    this.posts.push(p);
+    this.cd.detectChanges();
   }
 
   openPost(post_id: number) {
@@ -73,5 +97,31 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
       panelClass: "post-modal",
       data: { post: this.currentPosts[post_id] }
     });
+  }
+
+  fetchPosts():void {
+    this.cd.detectChanges();
+    if (this.oauth.getLoggedIn()) { //if logged in 
+      this.oauth.isReady()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe( (ready:boolean) => { //wait until ready
+        //fetch posts if ready
+        if (ready) {
+          this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null,10)
+          .subscribe( (p:Post) => {
+            this.addPost(p);
+          });
+        }
+      });
+    } else {
+      this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null,10)
+      .subscribe( (p:Post) => {
+        this.addPost(p);
+      });
+    }
+  }
+
+  trackById(index:number, post:Post) {
+    return post.id;
   }
 }

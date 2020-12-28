@@ -79,6 +79,11 @@ export class Post {
     public get mediaEmbed():string|null {
         return this._mediaEmbed;
     }
+
+    public get reference():string {
+        return this.type + "_" + this.id;
+    }
+
     public set title( title:string|null ) {
         this._title=title;
     }
