@@ -23,6 +23,7 @@ const scrollDelay:number = 100;
 export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   private _subreddit:string|null=null;
   private _posts:Post[] = [];
+  private _postSet: Set<string> = new Set<string>();
   private _loading=false;
 
   public set subreddit(sub:string|null) {
@@ -102,12 +103,16 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
 
 
   clearPosts():void {
+    this._postSet.clear();
     this._posts=[];
   }
 
   addPost(p:Post):void {
-    this.posts.push(p);
-    this.cd.detectChanges();
+    if (!this._postSet.has(p.id)) {
+      this._postSet.add(p.id);
+      this.posts.push(p);
+      this.cd.detectChanges();
+    }
   }
 
   openPost(post_id: number) {
