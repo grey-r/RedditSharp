@@ -30,6 +30,8 @@ export class OauthService {
 
   logOut(redirect:string|null = "/"):void {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("tokenExpiration");
     if (redirect)
       window.location.href=redirect;
   }
@@ -130,7 +132,7 @@ export class OauthService {
     }));
   }
 
-  refresh():Observable<any> {
+  refresh():void {    
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -160,7 +162,6 @@ export class OauthService {
         this.setToken(res.access_token);
       }
     });
-    return obs;
   }
 }
 

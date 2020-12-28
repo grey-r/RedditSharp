@@ -61,11 +61,9 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   ngOnInit(): void {
     this.oauth.isReady()
     .pipe(takeUntil(this.ngUnsubscribe))
+    .pipe(filter( (isReady:boolean) => { return isReady; }))
     .subscribe( (isReady:boolean) => {
-      if (isReady)
         this.fetchSubreddits();
-      else
-        this.oauth.refresh();
     });
   }
 
