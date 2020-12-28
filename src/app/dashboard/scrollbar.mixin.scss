@@ -1,0 +1,23 @@
+@mixin scrollbar-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $bg-color: mat-color($background, background);
+
+    *::-webkit-scrollbar-track
+    {
+        background-color: rgba(0.5,0.5,0.5,0.1);
+    }
+    
+    *::-webkit-scrollbar
+    {
+        width: 12px;
+        background-color: rgba(0,0,0,0);
+    }
+    
+    *::-webkit-scrollbar-thumb
+    {
+        background-color: mat-color($accent);
+    }
+}
