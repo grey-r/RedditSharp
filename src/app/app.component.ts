@@ -23,6 +23,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
 
   mobileQuery: Observable<BreakpointState>;
   ngUnsubscribe = new Subject<void>();
+  mobile:boolean = false;
 
   public get darkMode$() {
     return this.dark.darkMode$;
@@ -47,6 +48,11 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
 
   constructor(breakpointObserver: BreakpointObserver, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router, private dark: DarkModeService) {
     this.mobileQuery = breakpointObserver.observe(['(max-width: 600px)']);
+    this.mobileQuery
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( (x:BreakpointState) => {
+      this.mobile = x.matches;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -54,7 +60,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
           .pipe(filter(  (e:RouterEvent) => {return e instanceof NavigationEnd} ))
           .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe(() => {
-            if (this.snav)
+            if (this.snav && this.mobile)
               this.snav.close();
             const content = document.querySelector('.mat-sidenav-content'); 
             if (content)
