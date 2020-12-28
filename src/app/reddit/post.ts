@@ -14,6 +14,7 @@ export const enum PostType {
 export class Post {
     private _id: string;
     private _type: PostType;
+    private _utc:number|null = null;
     private _subreddit: string | null = null;
     private _author: User| null = null;
     private _title: string | null = null;
@@ -28,6 +29,7 @@ export class Post {
     private _downvotes: number | null = null;
     private _replies: Post[] = [];
     private _mediaEmbed: string | null = null;
+
     constructor ( id: string, type:PostType) {
         this._id = id;
         this._type = type;
@@ -41,6 +43,9 @@ export class Post {
     }
     public get type():string {
         return this._type;
+    }
+    public get utc():number|null {
+        return this._utc;
     }
     public get subreddit():string|null {
         return this._subreddit;
@@ -84,9 +89,28 @@ export class Post {
     public get mediaEmbed():string|null {
         return this._mediaEmbed;
     }
-
     public get reference():string {
         return this.type + "_" + this.id;
+    }
+    public get ago():string|null {
+        if (!this.utc)
+            return null;
+
+        let secs = Math.floor(Date.now()/1000 - this.utc);
+
+        if (secs<60)
+            return Math.floor(secs) + " seconds";
+        secs/=60;
+        if (secs<60)
+            return Math.floor(secs) + " minutes";
+        secs/=60;
+        if (secs<24)
+            return Math.floor(secs) + " hours";
+        secs/=24;
+        if (secs<365)
+            return Math.floor(secs) + " hours";
+        secs/=365;
+        return Math.floor(secs) + " years";
     }
 
     public set title( title:string|null ) {
@@ -94,6 +118,9 @@ export class Post {
     }
     public set subreddit( subreddit:string|null ) {
         this._subreddit=subreddit;
+    }
+    public set utc( utc:number|null ) {
+        this._utc=utc;
     }
     public set author( author:User|null ) {
         this._author=author;
