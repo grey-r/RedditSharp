@@ -1,10 +1,11 @@
 import { Injectable, NgZone } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import {Post, PostType} from '../reddit/post';
 import {User} from '../reddit/user';
 import { UserInfoService } from './user-info.service';
 import { first } from 'rxjs/operators';
+import { OauthService } from './oauth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { first } from 'rxjs/operators';
 export class RedditFeedService {
   authorInfo:UserInfoService = new UserInfoService(this.httpClient, this.ngZone);
   //client: HttpClient;
-  constructor(private httpClient: HttpClient, private ngZone:NgZone) {
+  constructor(private httpClient: HttpClient, private ngZone:NgZone, private oauth:OauthService) {
   }
 
   private htmlDecode(input:string) {
@@ -23,7 +24,15 @@ export class RedditFeedService {
 
   public getRedditSchema(subreddit:String|null=null, after:String|null=null, limit=25): Observable<Post[]> {
     let sub = new Subject<Post[]>();
-    this.httpClient.jsonp(`https://reddit.com/${subreddit?"r/"+subreddit+"/":""}.json?limit=${limit}${after?"&after="+after:""}`,"jsonp").pipe(first()).subscribe((results: any) => {
+    
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `bearer ${this.oauth.getToken()}`
+      }),
+    };
+
+    const parseFunc = (results:any) => {
       sub.next(results.data.children.map((child:any) => {
         console.log(child.data);
         let post:Post = new Post(child.data.id,child.kind);
@@ -68,8 +77,13 @@ export class RedditFeedService {
         }
         //Potentially use https://css-tricks.com/fluid-width-video/
         return post;
-      }));
-    })
+      }))
+    };
+
+    if (this.oauth.getLoggedIn())
+      this.httpClient.get(`https://oauth.reddit.com/${subreddit?"r/"+subreddit+"/":""}.json?limit=${limit}${after?"&after="+after:""}`, httpOptions).subscribe( parseFunc);
+    else
+      this.httpClient.jsonp(`https://reddit.com/${subreddit?"r/"+subreddit+"/":""}.json?limit=${limit}${after?"&after="+after:""}`,"jsonp").pipe(first()).subscribe( parseFunc );
     return sub;
   }
 }
