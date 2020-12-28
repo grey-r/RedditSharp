@@ -14,12 +14,12 @@ export class UserInfoService {
 
   constructor(private http:HttpClient, private ngZone: NgZone) { }
 
-  public async populateInfo(u:User) {
+  public populateInfo(u:User) {
     this.userQueue.push(u);
     if (this.userQueue.length==1 && !this._loading)
       this.performNextRequest();
   }
-  private async performNextRequest() {
+  private performNextRequest() {
     this._loading=true;
     let u:User = <User>this.userQueue.shift();
     this.http.jsonp(`https://reddit.com/user/${u.name}/about.json?`,"jsonp").subscribe( (results: any) => {

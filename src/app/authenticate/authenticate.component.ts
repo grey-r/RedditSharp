@@ -1,22 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { OauthService, AuthenticationResult, AuthenticationError } from '../reddit/oauth.service';
-import { Observer } from 'rxjs';
+import { Observer, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-authenticate',
   templateUrl: './authenticate.component.html',
   styleUrls: ['./authenticate.component.css']
 })
-export class AuthenticateComponent implements OnInit {
+export class AuthenticateComponent implements OnInit, OnDestroy {
 
+  ngUnsubscribe = new Subject<void>();
   error:string|null=null;
 
   constructor(private route:ActivatedRoute, private oauth:OauthService) {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe( (params:Params) => {
+    this.route.queryParams
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( (params:Params) => {
       let routeState:string|null = params.state;
       let token:string|null = params.code;
       let that = this;
@@ -37,6 +41,11 @@ export class AuthenticateComponent implements OnInit {
         });
       } );
     });
+  }
+
+  ngOnDestroy():void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

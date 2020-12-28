@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export const EXPIRATION_DELAY:number = 60*60; //one hour = 60 seconds * 60 minutes
@@ -14,8 +14,11 @@ export const EXPIRATION_PADDING:number = 60*5;
 export class OauthService {
 
   private _autoRefresh: number | null = null;
+  private _ready: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private http:HttpClient) {
+    if (this.getReady())
+      this._ready.next(true);
     //window['oauth']=this;
   }
 
@@ -92,6 +95,14 @@ export class OauthService {
     return Date.now() > exp - EXPIRATION_PADDING;
   }
 
+  getReady():boolean {
+    return this.getLoggedIn() && !this.shouldRefresh();
+  }
+
+  isReady():Observable<boolean> {
+    return this._ready.asObservable();
+  }
+
   public fetchToken(code:string):Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -105,14 +116,18 @@ export class OauthService {
     const postdata = `grant_type=${grantType}&code=${code}&redirect_uri=${redirectUri}`;
   
     return this.http.post(environment.tokenEndpoint, postdata, httpOptions).pipe(map( (res:any) => {
-      if (res.error)
+      if (res.error) {
+        this._ready.next(false);
         return <AuthenticationError> res;
-      else
+      }
+      else {
+        this._ready.next(true);
         return <AuthenticationResult> res;
+      }
     }));
   }
 
-  refresh():void {
+  refresh():Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -126,19 +141,23 @@ export class OauthService {
     
     const postdata = `grant_type=${grantType}&refresh_token=${code}&redirect_uri=${redirectUri}`;
   
+    let obs = 
     this.http.post(environment.tokenEndpoint, postdata, httpOptions).pipe(map( (res:any) => {
       if (res.error)
         return <AuthenticationError> res;
       else
         return <AuthenticationResult> res;
-    })).subscribe( (res:AuthenticationResult|AuthenticationError) => {
+    }));
+    obs.subscribe( (res:AuthenticationResult|AuthenticationError) => {
       if ("error" in res) {
         alert(res.error);
       } else {
         res = <AuthenticationResult> res;
-        alert(res.access_token);
+        //alert(res.access_token);
+        this.setToken(res.access_token);
       }
-    })
+    });
+    return obs;
   }
 }
 

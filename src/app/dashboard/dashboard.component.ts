@@ -2,8 +2,8 @@ import { Component, OnInit, AfterViewInit, ChangeDetectorRef, OnDestroy } from '
 import { RedditFeed } from '../reddit/reddit-feed';
 import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
-import { debounceTime } from 'rxjs/operators';
-import { Subscription, Observable } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { Subscription, Observable, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PostModalComponent } from '../view/post-modal/post-modal.component';
 import { Post } from '../reddit/post';
@@ -18,7 +18,7 @@ const scrollDelay:number = 100;
 })
 
 export class DashboardComponent extends RedditFeed implements OnInit,AfterViewInit,OnDestroy {
-  s!:Subscription;
+  ngUnsubscribe = new Subject<void>();
 
   currentPosts:Post[] = [];
 
@@ -33,7 +33,10 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
   
   ngAfterViewInit(): void {
     const content = document.querySelector('.mat-sidenav-content'); 
-    this.s=this.scroll.scrolled().pipe(debounceTime(scrollDelay)).subscribe( (e) => {
+    this.scroll.scrolled()
+    .pipe(debounceTime(scrollDelay))
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( (e) => {
       let y:number = Math.max(window.scrollY,content?content.scrollTop:0);
       if (content && y>content.scrollHeight-window.innerHeight*2) {
         //grab more posts
@@ -48,7 +51,9 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe( (routeParams:any) => {
+    this.route.params
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( (routeParams:any) => {
       this.subreddit = routeParams.subreddit;
       this.fetchMore();
       window.scrollTo(0,0);
@@ -56,7 +61,8 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
   }
 
   ngOnDestroy():void {
-    this.s.unsubscribe();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   openPost(post_id: number) {

@@ -4,8 +4,9 @@ import { OauthService } from './reddit/oauth.service';
 import { MeService } from './reddit/me.service';
 import { Subreddit } from './reddit/subreddit';
 import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import {Event as RouterEvent} from '@angular/router';
+import { Subject } from 'rxjs';
 
 /** @title Responsive sidenav */
 @Component({
@@ -18,6 +19,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild("scrollme") content!:ElementRef;
 
   mobileQuery: MediaQueryList;
+  ngUnsubscribe = new Subject<void>();
 
   passCheck(c:Checkable):boolean {
     console.log(c);
@@ -42,6 +44,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.router.events
           .pipe(filter(  (e:RouterEvent) => {return e instanceof NavigationEnd} ))
+          .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe(() => {
             const content = document.querySelector('.mat-sidenav-content'); 
             if (content)
@@ -50,8 +53,17 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if (this.oauth.getLoggedIn() && this.oauth.shouldRefresh())
-      this.oauth.refresh();
+    this.oauth.isReady()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe( (isReady:boolean) => {
+      if (isReady)
+        this.fetchSubreddits();
+      else
+        this.oauth.refresh();
+    });
+  }
+
+  fetchSubreddits():void {
     this.me.getSubreddits().subscribe ( (data:Subreddit) => {
       let x = {
         text:data.name,
@@ -63,6 +75,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
