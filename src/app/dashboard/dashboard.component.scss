@@ -16,6 +16,27 @@
     display: block;
 }
 
+div.image-container {
+    position: relative;
+}
+
+div.image-container.is-video::after {
+    content: "";
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    width: 70%;
+    height: 70%;
+    
+    max-height: 30vmin;
+
+    background-image: url("/assets/img/play-button-svgrepo-com.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: opacity(0.5) invert(1);
+}
+
 .mat-card-content {
     overflow: hidden;
     max-height:  60vmin;
