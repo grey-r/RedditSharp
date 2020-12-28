@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RedditFeed } from '../reddit/reddit-feed';
 import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
@@ -17,6 +17,7 @@ const scrollDelay:number = 100;
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
@@ -80,6 +81,25 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+  onPostClicked(event:Event) {
+    let target = event.target || event.srcElement || event.currentTarget;
+    if (!target)
+      return;
+    let el = <Element>target;
+    let idAttr = el.getAttribute("data-post-index");
+    while (!idAttr && el.parentElement) {
+      el = el.parentElement;
+      //console.log(el);
+      idAttr = el.getAttribute("data-post-index");
+    }
+    if (!idAttr) return;
+
+    let value:string|null = idAttr;
+    if (!value) return;
+
+    this.openPost(parseInt(value.replace("post-", ""))) ;
+  }
+
 
   clearPosts():void {
     this._posts=[];
@@ -91,6 +111,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   openPost(post_id: number) {
+    console.log(post_id);
     let dialogRef = this.dialog.open(PostModalComponent, {
       width: Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1)/window.innerWidth*100).toString() + "%",
       //height:  "90%",
@@ -114,14 +135,14 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
         .subscribe(
           (p:Post) => { this.addPost(p); },
           e => { alert(e); },
-          () => {this._loading=false;} );
+          () => { this._loading=false; this._posts = [...this._posts]; } );
       });
     } else {
       this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
       .subscribe(
         (p:Post) => { this.addPost(p); },
         e => { alert(e); },
-        () => {this._loading=false;} );
+        () => { this._loading=false; this._posts = [...this._posts]; } );
     }
   }
 
