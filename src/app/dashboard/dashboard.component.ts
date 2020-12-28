@@ -35,7 +35,7 @@ export class DashboardComponent extends RedditFeed implements OnInit,AfterViewIn
     const content = document.querySelector('.mat-sidenav-content'); 
     this.s=this.scroll.scrolled().pipe(debounceTime(scrollDelay)).subscribe( (e) => {
       let y:number = Math.max(window.scrollY,content?content.scrollTop:0);
-      if (y>this.content.nativeElement.scrollHeight-window.innerHeight*2) {
+      if (content && y>content.scrollHeight-window.innerHeight*2) {
         //grab more posts
         if (!this.loading) {
           this.fetchMore();
