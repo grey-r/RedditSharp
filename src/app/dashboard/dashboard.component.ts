@@ -112,8 +112,8 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
 
   openPost(post_id: number) {
     this.ngZone.run( () => {
-      console.log(post_id);
-      console.log(this.posts[post_id]);
+      //console.log(post_id);
+      //console.log(this.posts[post_id]);
       let dialogRef = this.dialog.open(PostModalComponent, {
         width: Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1)/window.innerWidth*100).toString() + "%",
         //height:  "90%",
