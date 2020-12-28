@@ -1,8 +1,8 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { RedditFeed } from '../reddit/reddit-feed';
 import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
-import { debounceTime, combineLatest } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { Subscription, Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PostModalComponent } from '../view/post-modal/post-modal.component';
@@ -18,7 +18,6 @@ const scrollDelay:number = 100;
 })
 
 export class DashboardComponent extends RedditFeed implements OnInit,AfterViewInit,OnDestroy {
-  @ViewChild("dashboardroot") content!:ElementRef;
   s!:Subscription;
 
   currentPosts:Post[] = [];
