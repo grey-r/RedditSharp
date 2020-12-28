@@ -25,9 +25,12 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   private _posts:Post[] = [];
   private _postSet: Set<string> = new Set<string>();
   private _loading=false;
+  private _subscription!:Subscription|null;
 
   public set subreddit(sub:string|null) {
     this._subreddit = sub;
+    this._loading = true;
+    this.cancelFetch();
     this.clearPosts();
     this.fetchPosts();
     this.ui.clearQueue();
@@ -105,6 +108,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   clearPosts():void {
     this._postSet.clear();
     this._posts=[];
+    this.cd.detectChanges();
   }
 
   addPost(p:Post):void {
@@ -129,6 +133,12 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     })
   }
 
+  cancelFetch():void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
+  }
+
   fetchPosts():void {
     this._loading=true;
     if (this.oauth.getLoggedIn()) { //if logged in 
@@ -139,14 +149,14 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
       )
       .subscribe( (ready:boolean) => { //wait until ready
         //fetch posts if ready
-        this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
+        this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
         .subscribe(
           (p:Post) => { this.addPost(p); },
           e => { alert(e); },
           () => { this._loading=false; this._posts = [...this._posts]; } );
       });
     } else {
-      this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
+      this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
       .subscribe(
         (p:Post) => { this.addPost(p); },
         e => { alert(e); },
