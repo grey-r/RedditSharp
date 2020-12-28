@@ -1,15 +1,14 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, OnDestroy, ChangeDetectionStrategy, NgZone } from '@angular/core';
-import { RedditFeed } from '../reddit/reddit-feed';
-import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
-import { debounceTime, takeUntil, first, filter } from 'rxjs/operators';
-import { Subscription, Observable, Subject } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PostModalComponent } from '../view/post-modal/post-modal.component';
-import { Post } from '../reddit/post';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, filter, first, takeUntil } from 'rxjs/operators';
 import { OauthService } from '../reddit/oauth.service';
+import { Post } from '../reddit/post';
+import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { UserInfoService } from '../reddit/user-info.service';
+import { PostModalComponent } from '../view/post-modal/post-modal.component';
 
 const scrollDelay:number = 100;
 
@@ -108,14 +107,14 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   clearPosts():void {
     this._postSet.clear();
     this._posts=[];
-    this.cd.detectChanges();
+    this.cd.markForCheck();
   }
 
   addPost(p:Post):void {
     if (!this._postSet.has(p.id)) {
       this._postSet.add(p.id);
       this.posts.push(p);
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     }
   }
 
