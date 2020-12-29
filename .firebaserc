@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "redditsharp-b7de3": {
+      "hosting": {
+        "reddit-client": [
+          "redditsharp-b7de3"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "redditsharp-b7de3"
+  }
+}
