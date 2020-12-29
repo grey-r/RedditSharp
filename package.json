@@ -8,8 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:prod": "./node_modules/.bin/ng build --prod",
-    "build:firebase": "./node_modules/.bin/ng build --prod --base-href /RedditSharp/",
+    "build:prod": "ng build --prod",
+    "build:firebase": "./node_modules/.bin/ng build --prod",
     "build:ci": "./node_modules/.bin/ng t"
   },
   "private": true,
