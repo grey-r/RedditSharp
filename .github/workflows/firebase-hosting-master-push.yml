@@ -17,7 +17,7 @@ jobs:
         run: npm ci
       - name: Install angular
         run: npm install @angular/cli
-      - name: BUild to Firebase
+      - name: Build for Firebase
         run: npm run build:firebase
       - name: Push to Firebase
         if: success()

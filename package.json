@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:prod": "ng build --prod",
-    "build:firebase": "./node_modules/.bin/ng build --prod",
+    "build:firebase": "./node_modules/.bin/ng build --configuration=firebase",
     "build:ci": "./node_modules/.bin/ng t"
   },
   "private": true,

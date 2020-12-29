@@ -7,9 +7,17 @@ jobs:
   build_and_preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: ng build --prod --base-href /RedditSharp/
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm ci
+      - name: Install angular
+        run: npm install @angular/cli
+      - name: Build for Firebase
+        run: npm run build:firebase
+      - name: Push to Firebase
+        if: success()
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_REDDITSHARP_B7DE3 }}'
