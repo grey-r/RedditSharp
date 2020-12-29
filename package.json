@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "build:prod": "./node_modules/.bin/ng build --prod",
     "build:firebase": "./node_modules/.bin/ng build --prod --base-href /RedditSharp/",
-    "build:ci": "npm run clean && npm run test"
+    "build:ci": "./node_modules/.bin/ng t"
   },
   "private": true,
   "dependencies": {
