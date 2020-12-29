@@ -3,7 +3,11 @@
     <mat-card-header #cardHead (click)="onPostClicked($event)">
       <div *ngIf="post.author && (post.author.avatarUrl$|async)!" mat-card-avatar class="post-header-image" [ngStyle]="{ 'background-image': 'url(' + (post.author.avatarUrl$ | async) + ')'}"></div>
       <mat-card-title> {{post.title}} </mat-card-title>
-      <mat-card-subtitle *ngIf="post.author && post.author.name">{{post.author.name}}</mat-card-subtitle>
+      <mat-card-subtitle>
+        <span *ngIf="post.ago">{{post.ago}} ago by</span>
+        <span *ngIf="post.author && post.author.name"> {{post.author.name}} </span>
+        <span *ngIf="post.subreddit"> via <a [routerLink]="['/view/',post.subreddit]" >r/{{post.subreddit}}</a></span>
+      </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content *ngIf="post.text || post.previewUrl" (click)="onPostClicked($event)">
       <div class="fadeout-container"><div class="fadeout-inner"></div></div>
