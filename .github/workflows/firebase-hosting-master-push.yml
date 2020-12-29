@@ -13,10 +13,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Install angular
+        run: npm install -g @angular/cli
       - name: Install dependencies
         run: npm ci
-      - name: NG Build
-        run: ng build --prod --base-href /RedditSharp/
+      - name: Test
+        run: npm run build:ci
+      - name: BUild to Firebase
+        run: npm run build:firebase
       - name: Push to Firebase
         if: success()
         uses: FirebaseExtended/action-hosting-deploy@v0
