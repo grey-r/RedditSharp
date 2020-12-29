@@ -1,8 +1,8 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 export const EXPIRATION_DELAY:number = 60*60; //one hour = 60 seconds * 60 minutes
 export const EXPIRATION_PADDING:number = 60*5;
@@ -13,7 +13,7 @@ export const EXPIRATION_PADDING:number = 60*5;
 
 export class OauthService {
 
-  private _autoRefresh: number | null = null;
+  private _refreshing: boolean = false;
   private _ready: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private http:HttpClient) {
@@ -52,12 +52,10 @@ export class OauthService {
   }
 
   setToken(token:string, delay:number=EXPIRATION_DELAY) {
+    this._ready.next(true);
     localStorage.setItem("token",token);
     let exp =  Date.now() + delay*1000;
     localStorage.setItem("tokenExpiration", (exp).toString() );
-    if (this._autoRefresh)
-      window.clearTimeout(this._autoRefresh);
-    this._autoRefresh = window.setTimeout(this.refresh, (exp-EXPIRATION_PADDING*1000) - Date.now() );
   }
 
   setRefreshToken(token:string) {
@@ -102,7 +100,7 @@ export class OauthService {
   }
 
   isReady():Observable<boolean> {
-    if (this.getLoggedIn() && this.shouldRefresh()) {
+    if (this.getLoggedIn() && this.shouldRefresh() && !this._refreshing) {
       this.refresh();
     }
     return this._ready.asObservable();
@@ -122,17 +120,18 @@ export class OauthService {
   
     return this.http.post(environment.tokenEndpoint, postdata, httpOptions).pipe(map( (res:any) => {
       if (res.error) {
-        this._ready.next(false);
+        this._ready.next(true);
         return <AuthenticationError> res;
       }
       else {
-        this._ready.next(true);
         return <AuthenticationResult> res;
       }
     }));
   }
 
-  refresh():void {    
+  private refresh():void {   
+    this._refreshing = true;
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -146,21 +145,24 @@ export class OauthService {
     
     const postdata = `grant_type=${grantType}&refresh_token=${code}&redirect_uri=${redirectUri}`;
   
-    let obs = 
     this.http.post(environment.tokenEndpoint, postdata, httpOptions).pipe(map( (res:any) => {
       if (res.error)
         return <AuthenticationError> res;
       else
         return <AuthenticationResult> res;
-    }));
-    obs.subscribe( (res:AuthenticationResult|AuthenticationError) => {
+    })).subscribe( (res:AuthenticationResult|AuthenticationError) => {
+      this._refreshing = false;
       if ("error" in res) {
+        this._ready.next(false);
         alert(res.error);
       } else {
         res = <AuthenticationResult> res;
         //alert(res.access_token);
         this.setToken(res.access_token);
       }
+    }, (err:any)=> {
+      console.log(err);
+      this._refreshing = false;
     });
   }
 }

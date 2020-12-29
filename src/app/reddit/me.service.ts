@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { OauthService } from './oauth.service';
-import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { Subreddit } from './subreddit';
 import { environment } from 'src/environments/environment';
+import { OauthService } from './oauth.service';
+import { Subreddit } from './subreddit';
 
 @Injectable({
   providedIn: 'root'
@@ -29,11 +28,9 @@ export class MeService {
     })
   }
 
-  subredditSubject:Subject<Subreddit> = new Subject();
-
-  getSubreddits(after:string|null=null):Observable<any> {
+  getSubreddits(after:string|null=null, s:Subject<Subreddit> = new Subject<Subreddit>() ):Observable<any> {
     if (!this.oauth.getLoggedIn())
-      return this.subredditSubject;
+      return s;
     
     const httpOptions = {
       headers: new HttpHeaders({
@@ -46,13 +43,15 @@ export class MeService {
       //console.log(res.data.children);
       res.data.children.forEach( (child:any) => {
         //console.log(child);
-        this.subredditSubject.next( new Subreddit(child.data.id, child.kind, child.data.display_name));
+        s.next( new Subreddit(child.data.id, child.kind, child.data.display_name));
       });
       if (res.data.after) {
-        this.getSubreddits(res.data.after);
+        this.getSubreddits(res.data.after,s);
+      } else {
+        s.complete();
       }
     })
 
-    return this.subredditSubject;
+    return s;
   }
 }

@@ -142,10 +142,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     this._loading=true;
     if (this.oauth.getLoggedIn()) { //if logged in 
       this.oauth.isReady()
-      .pipe(
-        filter( (res:boolean) => {return res;}),
-        first()
-      )
+      .pipe( filter( (res:boolean) => {return res;}), first(), takeUntil(this.ngUnsubscribe))
       .subscribe( (ready:boolean) => { //wait until ready
         //fetch posts if ready
         this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
