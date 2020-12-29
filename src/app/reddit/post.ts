@@ -109,7 +109,7 @@ export class Post {
             return Math.floor(secs) + " hour"+(secs>pluralDecision?"s":"");
         secs/=24;
         if (secs<365)
-            return Math.floor(secs) + " hour"+(secs>pluralDecision?"s":"");
+            return Math.floor(secs) + " day"+(secs>pluralDecision?"s":"");
         secs/=365;
         return Math.floor(secs) + " year"+(secs>pluralDecision?"s":"");
     }
