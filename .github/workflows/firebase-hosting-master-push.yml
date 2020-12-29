@@ -6,6 +6,9 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - master
+  workflow_dispatch:
+    tags:
+      description: "test tag"
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
