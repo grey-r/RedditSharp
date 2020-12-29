@@ -3,6 +3,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { OauthService } from './oauth.service';
 import { Post, PostType } from './post';
+import { Subreddit } from './subreddit';
 import { User } from './user';
 import { UserInfoService } from './user-info.service';
 
@@ -110,7 +111,8 @@ export class PostInfoService {
     }
 
     if (json.subreddit && json.subreddit.length > 0) {
-      post.subreddit = json.subreddit;
+      let id = (json.subreddit_id ?? PostType.Subreddit+"_null").replace( PostType.Subreddit+"_","");
+      post.subreddit = new Subreddit(id,PostType.Subreddit,json.subreddit);
     }
 
     switch (post.type) {

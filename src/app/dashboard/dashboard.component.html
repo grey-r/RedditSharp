@@ -6,7 +6,8 @@
       <mat-card-subtitle>
         <span *ngIf="post.ago">{{post.ago}} ago by</span>
         <span *ngIf="post.author && post.author.name"> {{post.author.name}} </span>
-        <span *ngIf="post.subreddit"> via <a [routerLink]="['/view/',post.subreddit]" >r/{{post.subreddit}}</a></span>
+        <span *ngIf="post.subreddit"> via <a [routerLink]="['/view/',post.subreddit.name]" >r/{{post.subreddit.name}}</a></span>
+        <br/><a *ngIf="post.url" [href]="post.url">{{post.url}}</a>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content *ngIf="post.text || post.previewUrl" (click)="onPostClicked($event)">

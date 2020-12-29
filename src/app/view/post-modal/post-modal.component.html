@@ -5,7 +5,7 @@
       <span class="title">{{post.title}}</span>      <br/>
       <span *ngIf="post.ago">{{post.ago}} ago by</span>
       <span *ngIf="post.author && post.author.name"> {{post.author.name}} </span>
-      <span *ngIf="post.subreddit"> via <a [routerLink]="['/view/',post.subreddit]" >r/{{post.subreddit}}</a></span>
+      <span *ngIf="post.subreddit"> via <a [routerLink]="['/view/',post.subreddit.name]" >r/{{post.subreddit.name}}</a></span>
     </div>
   </div>
   <mat-divider></mat-divider>

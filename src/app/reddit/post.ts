@@ -1,3 +1,4 @@
+import { Subreddit } from './subreddit';
 import { User } from './user';
 
 export const enum PostType {
@@ -15,7 +16,7 @@ export class Post {
     private _id: string;
     private _type: PostType;
     private _utc:number|null = null;
-    private _subreddit: string | null = null;
+    private _subreddit: Subreddit | null = null;
     private _author: User| null = null;
     private _title: string | null = null;
     private _url: string | null = null;
@@ -47,7 +48,7 @@ export class Post {
     public get utc():number|null {
         return this._utc;
     }
-    public get subreddit():string|null {
+    public get subreddit():Subreddit|null {
         return this._subreddit;
     }
     public get author():User|null {
@@ -117,7 +118,7 @@ export class Post {
     public set title( title:string|null ) {
         this._title=title;
     }
-    public set subreddit( subreddit:string|null ) {
+    public set subreddit( subreddit:Subreddit|null ) {
         this._subreddit=subreddit;
     }
     public set utc( utc:number|null ) {
