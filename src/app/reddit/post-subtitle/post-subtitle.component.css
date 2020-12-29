@@ -1,0 +1,7 @@
+.post-author {
+    font-weight: bold;
+}
+
+:host {
+    display: inline-block;
+}

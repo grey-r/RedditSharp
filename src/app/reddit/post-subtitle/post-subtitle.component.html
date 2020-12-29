@@ -1,0 +1,4 @@
+<span *ngIf="post.author && post.author.name" class="post-author">{{post.author.name}},</span>
+<span *ngIf="post.ago" class="post-time"> {{post.ago}} ago</span>
+<span *ngIf="post.subreddit" class="post-subreddit"> via <a [routerLink]="['/view/',post.subreddit.name]" >r/{{post.subreddit.name}}</a></span>
+<br/><a *ngIf="post.url && post.url.search('www.reddit.com')==-1" [href]="post.url" class="post-link">{{post.url.length>50?post.url.substring(0,50)+"...":post.url}}</a>

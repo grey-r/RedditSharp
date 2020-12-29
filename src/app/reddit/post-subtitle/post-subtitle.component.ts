@@ -1,0 +1,28 @@
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Post } from '../post';
+
+@Component({
+  selector: 'app-post-subtitle',
+  templateUrl: './post-subtitle.component.html',
+  styleUrls: ['./post-subtitle.component.css']
+})
+export class PostSubtitleComponent implements OnInit, OnChanges {
+  @Input('post') post!: Post; // tslint:disable-line: no-input-rename
+
+  constructor() { }
+
+  ngOnInit(): void {
+    this.checkPost();
+  }
+
+  ngOnChanges(): void {
+    this.checkPost()
+  }
+
+  checkPost() {
+    if(this.post === null) {
+      throw new Error("Attribute 'a' is required");
+   }
+  }
+
+}

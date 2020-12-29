@@ -49,6 +49,7 @@ import { CallbackPipePipe } from './callback-pipe.pipe';
 import { SortPipePipe } from './sort-pipe.pipe';
 import { LoggedInGuard} from './logged-in-guard.guard';
 import { LoggedOutGuard } from './logged-out-guard.guard';
+import { PostSubtitleComponent } from './reddit/post-subtitle/post-subtitle.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { LoggedOutGuard } from './logged-out-guard.guard';
     SafeHTMLPipe,
     AuthenticateComponent,
     CallbackPipePipe,
-    SortPipePipe
+    SortPipePipe,
+    PostSubtitleComponent
   ],
   imports: [
     BrowserModule,

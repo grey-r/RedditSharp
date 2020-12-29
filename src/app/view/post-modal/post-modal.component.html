@@ -3,9 +3,7 @@
     <div class="avatar" [ngStyle]="{ 'background-image': 'url(' + post.author.avatarUrl + ')'}"></div>
     <div class="aside-avatar">
       <span class="title">{{post.title}}</span>      <br/>
-      <span *ngIf="post.ago">{{post.ago}} ago by</span>
-      <span *ngIf="post.author && post.author.name"> {{post.author.name}} </span>
-      <span *ngIf="post.subreddit"> via <a [routerLink]="['/view/',post.subreddit.name]" >r/{{post.subreddit.name}}</a></span>
+      <app-post-subtitle [post]="post"></app-post-subtitle>
     </div>
   </div>
   <mat-divider></mat-divider>
