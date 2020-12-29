@@ -31,6 +31,8 @@ export class Post {
     private _replies: Post[] = [];
     private _mediaEmbed: string | null = null;
 
+    private _depth: number | null = null;
+
     constructor ( id: string, type:PostType) {
         this._id = id;
         this._type = type;
@@ -89,6 +91,9 @@ export class Post {
     }
     public get mediaEmbed():string|null {
         return this._mediaEmbed;
+    }
+    public get depth():number|null {
+        return this._depth;
     }
     public get reference():string {
         return this.type + "_" + this.id;
@@ -159,5 +164,8 @@ export class Post {
     }
     public set mediaEmbed( str:string|null ) {
         this._mediaEmbed=str;
+    }
+    public set depth(num:number|null) {
+        this._depth=num;
     }
 }

@@ -79,6 +79,10 @@ export class PostInfoService {
   }
 
   populateComment(post:Post, json:any) {
+    if (json.depth) {
+      post.depth = +json.depth;
+    }
+    
     if (json.body && json.body.length>0) {
       post.text = json.body;
     }
@@ -128,7 +132,7 @@ export class PostInfoService {
   }
 
   fetchComments(p:Post) {
-    this.http.jsonp(`https://reddit.com/${p.subreddit?"/r/"+p.subreddit:""}/comments/${p.id}/.json?`,"jsonp").pipe(first()).subscribe( (results: any) => {
+    this.http.jsonp(`https://reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,"jsonp").pipe(first()).subscribe( (results: any) => {
       this.commentsFromData(p,results);
       console.log(p.replies);
     }, (err: any) => {
