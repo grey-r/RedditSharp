@@ -64,3 +64,7 @@ video.fluid-embed {
     height:100%;
     max-height:70vh;
 }
+
+div.comments{
+    overflow-x: hidden;
+}

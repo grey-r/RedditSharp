@@ -5,3 +5,12 @@
 :host {
     display: inline-block;
 }
+
+.post-link {
+    display:inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: min(40vw,50vh);
+    width: 40vw;
+}

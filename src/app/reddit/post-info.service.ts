@@ -87,7 +87,7 @@ export class PostInfoService {
       post.text = json.body;
     }
     if (json.body_html && json.body_html.length>0) {
-      post.html = json.body_html;
+      post.html = this.htmlDecode(json.body_html);
     }
   }
 

@@ -1,0 +1,6 @@
+
+<app-post-subtitle [post]="post"></app-post-subtitle>
+<div class="post-content" *ngIf="post.html" [innerHTML]="post.html"></div>
+<div class="reply-container">
+    <app-post-comment *ngFor="let reply of post.replies" [post]="reply"></app-post-comment>
+</div>

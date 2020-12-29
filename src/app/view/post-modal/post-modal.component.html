@@ -17,6 +17,10 @@
     <img #fimg *ngIf="!this.hidden" class="full-image" [src]="post.url" (error)="this.hidden = true" >
   -->
   <div class="selftext" [innerHTML]="post.html"></div>
+  <mat-divider></mat-divider>
+  <div class="comments">
+    <app-post-comment *ngFor="let reply of post.replies" [post]="reply"></app-post-comment>
+  </div>
 </div>
 <div mat-dialog-actions class="dialog-footer">
   <mat-divider></mat-divider>

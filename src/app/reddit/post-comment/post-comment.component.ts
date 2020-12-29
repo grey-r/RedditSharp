@@ -1,13 +1,12 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { Post, PostType } from '../post';
+import { Post } from '../post';
 
 @Component({
-  selector: 'app-post-subtitle',
-  templateUrl: './post-subtitle.component.html',
-  styleUrls: ['./post-subtitle.component.css']
+  selector: 'app-post-comment',
+  templateUrl: './post-comment.component.html',
+  styleUrls: ['./post-comment.component.css']
 })
-export class PostSubtitleComponent implements OnInit, OnChanges {
-  linkType: PostType = PostType.Listing;
+export class PostCommentComponent implements OnInit, OnChanges {
   @Input('post') post!: Post; // tslint:disable-line: no-input-rename
 
   constructor() { }
