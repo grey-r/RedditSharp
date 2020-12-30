@@ -1,0 +1,8 @@
+span.votes {
+    width: 3em;
+    display: inline-block;
+}
+
+div.button-group {
+    display:inline-block;
+}

@@ -24,7 +24,5 @@
 </div>
 <div mat-dialog-actions class="dialog-footer">
   <mat-divider></mat-divider>
-  <div class="button-group"><button mat-button><mat-icon>arrow_upward</mat-icon></button><span class="votes">{{post.upvotes}}</span></div>
-  <div class="button-group"><button mat-button><mat-icon>arrow_downward</mat-icon></button><span class="votes">{{post.downvotes}}</span></div>
-  <div class="button-group"><button mat-button><mat-icon>share</mat-icon></button><span class="votes">Share</span></div>
+  <app-post-footer [post]="post"></app-post-footer>
 </div>

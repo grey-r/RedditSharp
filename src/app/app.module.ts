@@ -51,6 +51,7 @@ import { LoggedInGuard} from './logged-in-guard.guard';
 import { LoggedOutGuard } from './logged-out-guard.guard';
 import { PostSubtitleComponent } from './reddit/post-subtitle/post-subtitle.component';
 import { PostCommentComponent } from './reddit/post-comment/post-comment.component';
+import { PostFooterComponent } from './reddit/post-footer/post-footer.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { PostCommentComponent } from './reddit/post-comment/post-comment.compone
     CallbackPipePipe,
     SortPipePipe,
     PostSubtitleComponent,
-    PostCommentComponent
+    PostCommentComponent,
+    PostFooterComponent
   ],
   imports: [
     BrowserModule,

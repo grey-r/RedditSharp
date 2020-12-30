@@ -20,9 +20,9 @@ export class PostSubtitleComponent implements OnInit, OnChanges {
     this.checkPost()
   }
 
-  checkPost() {
+  checkPost(): void {
     if(this.post === null) {
-      throw new Error("Attribute 'a' is required");
+      throw new Error("Attribute 'post' is required");
    }
   }
 

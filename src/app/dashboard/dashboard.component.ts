@@ -110,7 +110,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     let value:string|null = idAttr;
     if (!value) return;
 
-    this.openPost(parseInt(value.replace("post-", ""))) ;
+    this.openPost(this.posts[parseInt(value.replace("post-", ""))]) ;
   }
 
 
@@ -128,7 +128,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     }
   }
 
-  openPost(post_id: number) {
+  openPost(post: Post) {
     //console.log(post_id);
     //console.log(this.posts[post_id]);
     let dialogRef = this.dialog.open(PostModalComponent, {
@@ -136,7 +136,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
       //height:  "90%",
       autoFocus: false,
       panelClass: "post-modal",
-      data: { post: this.posts[post_id] }
+      data: { post: post }
     });
   }
 
@@ -170,9 +170,5 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
 
   trackById(index:number, post:Post) {
     return post.id;
-  }
-
-  vote(p:Post, dir:number) {
-    this.postInfo.vote(p,dir);
   }
 }
