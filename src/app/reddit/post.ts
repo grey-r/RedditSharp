@@ -108,7 +108,7 @@ export class Post {
     public get fullname():string {
         return this.type + "_" + this.id;
     }
-    public get ago():string|null {
+    public ago():string|null {
         if (!this.utc)
             return null;
         if (!this._ago) {
