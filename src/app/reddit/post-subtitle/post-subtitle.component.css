@@ -1,9 +1,10 @@
 .post-author {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 :host {
     display: inline-block;
+    font-size: 0.8em;
 }
 
 .post-link {
