@@ -19,10 +19,10 @@
       </p>-->
     </mat-card-content>
     <mat-card-actions>
-      <div class="button-group"><button mat-button><mat-icon>arrow_upward</mat-icon></button><span class="votes">{{post.upvotes}}</span></div>
-      <div class="button-group"><button mat-button><mat-icon>arrow_downward</mat-icon></button><span class="votes">{{post.downvotes}}</span></div>
+      <div class="button-group"><button mat-button (click)="vote(post,post.userVote>0?0:1)" [color]="post.userVote>0?'accent':''"><mat-icon>arrow_upward</mat-icon></button><span class="votes">{{post.upvotes}}</span></div>
+      <div class="button-group"><button mat-button (click)="vote(post,post.userVote<0?0:-1)" [color]="post.userVote<0?'accent':''"><mat-icon>arrow_downward</mat-icon></button><span class="votes">{{post.downvotes}}</span></div>
       <div class="button-group"><button mat-button><mat-icon>share</mat-icon></button><span class="votes">Share</span></div>
     </mat-card-actions>
   </mat-card>
 </div>
-<div class="loading" *ngIf="loading"><div class="thing"></div></div>
+<div class="loading" *ngIf="loading$ | async"><div class="thing"></div></div>

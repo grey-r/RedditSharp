@@ -1,11 +1,12 @@
 import { ScrollDispatcher } from '@angular/cdk/overlay';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, filter, first, takeUntil } from 'rxjs/operators';
 import { OauthService } from '../reddit/oauth.service';
 import { Post } from '../reddit/post';
+import { PostInfoService } from '../reddit/post-info.service';
 import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { UserInfoService } from '../reddit/user-info.service';
 import { PostModalComponent } from '../view/post-modal/post-modal.component';
@@ -15,15 +16,13 @@ const scrollDelay:number = 100;
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./dashboard.component.scss']
 })
 
 export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   private _subreddit:string|null=null;
   private _posts:Post[] = [];
   private _postSet: Set<string> = new Set<string>();
-  private _loading=false;
   private _subscription!:Subscription|null;
 
   public set subreddit(sub:string|null) {
@@ -43,13 +42,22 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     return this._subreddit;
   }
 
+  private get _loading():boolean {
+    return this.loading$.getValue();
+  }
+
+  private set _loading(x:boolean) {
+    this.loading$.next(x);
+  }
+
   public get loading():boolean {
     return this._loading;
   }
 
+  loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   ngUnsubscribe = new Subject<void>();
 
-  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute, private oauth:OauthService, private ui:UserInfoService, private ngZone: NgZone) { }
+  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute, private oauth:OauthService, private ui:UserInfoService, private ngZone: NgZone, private postInfo:PostInfoService) { }
   
   ngAfterViewInit(): void {
     this.ui.clearQueue();
@@ -62,7 +70,9 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
       if (content && y>content.scrollHeight-window.innerHeight*2) {
         //grab more posts
         if (!this.loading) {
-          this.fetchPosts();
+          this.ngZone.run( () => {
+            this.fetchPosts();
+          });
         } else {
           //console.log("busy");
         }
@@ -119,17 +129,15 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   openPost(post_id: number) {
-    this.ngZone.run( () => {
-      //console.log(post_id);
-      //console.log(this.posts[post_id]);
-      let dialogRef = this.dialog.open(PostModalComponent, {
-        width: Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1)/window.innerWidth*100).toString() + "%",
-        //height:  "90%",
-        autoFocus: false,
-        panelClass: "post-modal",
-        data: { post: this.posts[post_id] }
-      });
-    })
+    //console.log(post_id);
+    //console.log(this.posts[post_id]);
+    let dialogRef = this.dialog.open(PostModalComponent, {
+      width: Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1)/window.innerWidth*100).toString() + "%",
+      //height:  "90%",
+      autoFocus: false,
+      panelClass: "post-modal",
+      data: { post: this.posts[post_id] }
+    });
   }
 
   cancelFetch():void {
@@ -145,22 +153,26 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
       .pipe( filter( (res:boolean) => {return res;}), first(), takeUntil(this.ngUnsubscribe))
       .subscribe( (ready:boolean) => { //wait until ready
         //fetch posts if ready
-        this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
+        this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].fullname):null)
         .subscribe(
           (p:Post) => { this.addPost(p); },
           e => { alert(e); },
-          () => { this._loading=false; this._posts = [...this._posts]; } );
+          () => { this._loading=false; this._posts = [...this._posts];  } );
       });
     } else {
-      this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].reference):null)
+      this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].fullname):null)
       .subscribe(
         (p:Post) => { this.addPost(p); },
         e => { alert(e); },
-        () => { this._loading=false; this._posts = [...this._posts]; } );
+        () => { this._loading=false; this._posts = [...this._posts];  } );
     }
   }
 
   trackById(index:number, post:Post) {
     return post.id;
+  }
+
+  vote(p:Post, dir:number) {
+    this.postInfo.vote(p,dir);
   }
 }

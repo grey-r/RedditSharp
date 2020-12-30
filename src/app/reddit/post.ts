@@ -33,6 +33,8 @@ export class Post {
 
     private _depth: number | null = null;
 
+    private _userVote:number = 0;
+
     constructor ( id: string, type:PostType) {
         this._id = id;
         this._type = type;
@@ -81,9 +83,13 @@ export class Post {
         return this._previewUrl;
     }
     public get upvotes():number|null {
+        if (this._upvotes)
+            return this._upvotes + Math.max(this._userVote,0);
         return this._upvotes;
     }
     public get downvotes():number|null {
+        if (this._downvotes)
+            return this._downvotes - Math.min(this._userVote,0);
         return this._downvotes;
     }
     public get replies():Post[] {
@@ -95,7 +101,10 @@ export class Post {
     public get depth():number|null {
         return this._depth;
     }
-    public get reference():string {
+    public get userVote():number {
+        return this._userVote;
+    }
+    public get fullname():string {
         return this.type + "_" + this.id;
     }
     public get ago():string|null {
@@ -167,5 +176,8 @@ export class Post {
     }
     public set depth(num:number|null) {
         this._depth=num;
+    }
+    public set userVote(dir:number) {
+        this._userVote = Math.sign(dir);
     }
 }

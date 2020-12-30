@@ -1,6 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { first } from "rxjs/operators";
-import {HttpClient} from '@angular/common/http';
 import { User } from './user';
 
 @Injectable({
@@ -22,13 +22,10 @@ export class UserInfoService {
     this._loading=true;
     let u:User = <User>this.userQueue.shift();
     this.http.jsonp(`https://reddit.com/user/${u.name}/about.json?`,"jsonp").pipe(first()).subscribe( (results: any) => {
-        console.log(results);
-        this.ngZone.run( () => {
-          if (results.data.snoovatar_size)
-            u.avatarUrl=results.data.snoovatar_img;
-          else
-            u.avatarUrl="https://www.redditinc.com/assets/images/site/reddit-logo.png"
-        });
+        if (results.data.snoovatar_size)
+          u.avatarUrl=results.data.snoovatar_img;
+        else
+          u.avatarUrl="https://www.redditinc.com/assets/images/site/reddit-logo.png"
         if (this.userQueue.length>0)
           this.performNextRequest()
         else

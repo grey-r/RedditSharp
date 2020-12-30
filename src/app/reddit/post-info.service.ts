@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { interval, Observable } from 'rxjs';
+import { filter, first } from 'rxjs/operators';
 import { OauthService } from './oauth.service';
 import { Post, PostType } from './post';
 import { Subreddit } from './subreddit';
@@ -12,7 +13,7 @@ import { UserInfoService } from './user-info.service';
 })
 export class PostInfoService {
 
-  constructor(private http: HttpClient, private ngZone:NgZone, private oauth: OauthService, private authorInfo:UserInfoService,) { }
+  constructor(private http: HttpClient, private ngZone:NgZone, private oauth: OauthService, private authorInfo:UserInfoService) { }
 
   private htmlDecode(input:string) {
     var doc = new DOMParser().parseFromString(input, "text/html");
@@ -114,6 +115,10 @@ export class PostInfoService {
       }
     }
 
+    if (json.likes) {
+      post.userVote=+json.likes;
+    }
+
     if (json.subreddit && json.subreddit.length > 0) {
       let id = (json.subreddit_id ?? PostType.Subreddit+"_null").replace( PostType.Subreddit+"_","");
       post.subreddit = new Subreddit(id,PostType.Subreddit,json.subreddit);
@@ -131,12 +136,63 @@ export class PostInfoService {
     }
   }
 
-  fetchComments(p:Post) {
-    this.http.jsonp(`https://reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,"jsonp").pipe(first()).subscribe( (results: any) => {
+  private _processCommentData(p:Post,obs:Observable<any>) {
+    obs.pipe(first()).subscribe( (results: any) => {
       this.commentsFromData(p,results);
       console.log(p.replies);
     }, (err: any) => {
       p.replies=[];
+    });
+  }
+
+  fetchComments(p:Post) {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `bearer ${this.oauth.getToken()}`
+      }),
+    };
+
+    if (this.oauth.getLoggedIn()) {
+      this.oauth.isReady()
+      .pipe(filter( (isReady:boolean) => { return isReady; }))
+      .subscribe( () => {
+        this._processCommentData(p,this.http.get(`https://oauth.reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,httpOptions));
+      });
+    } else {
+      this._processCommentData(p,this.http.jsonp(`https://reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,"jsonp"));
+    }
+  }
+
+  vote(p:Post, voteDir:number, attempts:number = 0):void {
+    if (p.type!=PostType.Link && p.type!=PostType.Comment)
+      return;
+    if (attempts>3)
+      return;
+    
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `bearer ${this.oauth.getToken()}`
+      }),
+    };
+    
+    let dir = Math.sign(voteDir);
+
+    let postdata=`id=${p.fullname}&dir=${dir}`;
+
+    this.oauth.isReady()
+    .pipe(filter( (isReady:boolean) => { return isReady; }))
+    .subscribe( () => {
+      this.http.post(`https://oauth.reddit.com/api/vote/`, postdata, httpOptions).subscribe( (res)=>{
+        p.userVote=dir;
+      }, (err:HttpErrorResponse) => {
+        if (err.status == 429) {//rate limited
+          interval(attempts*1000).pipe(first()).subscribe( () => {this.vote(p,voteDir,attempts+1)} );//wait an increasing amount of time before retrying
+        }
+        console.log(err); //might want to replace this with b
+      });
     });
   }
 }
