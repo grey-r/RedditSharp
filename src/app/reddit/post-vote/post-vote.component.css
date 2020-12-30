@@ -1,4 +1,7 @@
 
+:host {
+    text-align: center;
+}
 * {
     line-height: 1em;
     font-size: 1em;
