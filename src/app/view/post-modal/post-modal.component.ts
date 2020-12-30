@@ -1,6 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DarkModeService } from 'src/app/dark-mode.service';
 import { Post } from 'src/app/reddit/post';
@@ -17,6 +17,19 @@ export interface DialogData {
 })
 export class PostModalComponent implements OnInit, OnDestroy {
 
+  private get _loading():boolean {
+    return this.loading$.getValue();
+  }
+
+  private set _loading(x:boolean) {
+    this.loading$.next(x);
+  }
+
+  public get loading():boolean {
+    return this._loading;
+  }
+
+  loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   post:Post;
 
   ngUnsubscribe = new Subject<void>();
@@ -39,7 +52,10 @@ export class PostModalComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit(): void {
-    this.pi.fetchComments(this.post);
+    this._loading=true;
+    this.pi.fetchComments(this.post).subscribe( () => {
+      this._loading=false;
+    })
   }
 
   ngOnDestroy(): void {

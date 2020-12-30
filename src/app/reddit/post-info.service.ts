@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
-import { interval, Observable } from 'rxjs';
+import { interval, Observable, Subject } from 'rxjs';
 import { filter, first } from 'rxjs/operators';
 import { OauthService } from './oauth.service';
 import { Post, PostType } from './post';
@@ -143,16 +143,25 @@ export class PostInfoService {
     }
   }
 
-  private _processCommentData(p:Post,obs:Observable<any>) {
+  private _processCommentData(p:Post,obs:Observable<any>,s:Subject<any>|null = null) {
     obs.pipe(first()).subscribe( (results: any) => {
       this.commentsFromData(p,results);
-      console.log(p.replies);
+      //console.log(p.replies);
+      if (s) {
+        s.next(results);
+        s.complete();
+      }
     }, (err: any) => {
       p.replies=[];
+      if (s) {
+        s.complete();
+      }
     });
   }
 
-  fetchComments(p:Post) {
+  fetchComments(p:Post):Observable<any> {
+
+    let s:Subject<any> = new Subject<any>();
 
     const httpOptions = {
       headers: new HttpHeaders({
@@ -165,11 +174,13 @@ export class PostInfoService {
       this.oauth.isReady()
       .pipe(filter( (isReady:boolean) => { return isReady; }))
       .subscribe( () => {
-        this._processCommentData(p,this.http.get(`https://oauth.reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,httpOptions));
+        this._processCommentData(p,this.http.get(`https://oauth.reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,httpOptions),s);
       });
     } else {
-      this._processCommentData(p,this.http.jsonp(`https://reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,"jsonp"));
+      this._processCommentData(p,this.http.jsonp(`https://reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,"jsonp"),s);
     }
+
+    return s.asObservable();
   }
 
   vote(p:Post, voteDir:number, attempts:number = 0):void {

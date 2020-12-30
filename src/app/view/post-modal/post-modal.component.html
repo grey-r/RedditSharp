@@ -18,6 +18,7 @@
   -->
   <div class="selftext" [innerHTML]="post.html"></div>
   <mat-divider></mat-divider>
+  <div class="loading" *ngIf="loading$ | async"><div class="thing"></div></div>
   <div class="comments">
     <app-post-comment *ngFor="let reply of post.replies" [post]="reply"></app-post-comment>
   </div>
