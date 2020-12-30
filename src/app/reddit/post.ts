@@ -16,6 +16,7 @@ export class Post {
     private _id: string;
     private _type: PostType;
     private _utc:number|null = null;
+    private _ago:string|null = null;
     private _subreddit: Subreddit | null = null;
     private _author: User| null = null;
     private _title: string | null = null;
@@ -110,23 +111,25 @@ export class Post {
     public get ago():string|null {
         if (!this.utc)
             return null;
+        if (!this._ago) {
+            let pluralDecision = 2-0.0000001;
+            let secs = Math.floor(Date.now()/1000 - this.utc);
 
-        let pluralDecision = 2-0.0000001;
-        let secs = Math.floor(Date.now()/1000 - this.utc);
-
-        if (secs<60)
-            return Math.floor(secs) + " second"+(secs>pluralDecision?"s":"");
-        secs/=60;
-        if (secs<60)
-            return Math.floor(secs) + " minute"+(secs>pluralDecision?"s":"");
-        secs/=60;
-        if (secs<24)
-            return Math.floor(secs) + " hour"+(secs>pluralDecision?"s":"");
-        secs/=24;
-        if (secs<365)
-            return Math.floor(secs) + " day"+(secs>pluralDecision?"s":"");
-        secs/=365;
-        return Math.floor(secs) + " year"+(secs>pluralDecision?"s":"");
+            if (secs<60)
+                return Math.floor(secs) + " second"+(secs>pluralDecision?"s":"");
+            secs/=60;
+            if (secs<60)
+                return Math.floor(secs) + " minute"+(secs>pluralDecision?"s":"");
+            secs/=60;
+            if (secs<24)
+                return Math.floor(secs) + " hour"+(secs>pluralDecision?"s":"");
+            secs/=24;
+            if (secs<365)
+                return Math.floor(secs) + " day"+(secs>pluralDecision?"s":"");
+            secs/=365;
+            return Math.floor(secs) + " year"+(secs>pluralDecision?"s":"");
+        }
+        return this._ago;
     }
     public get votes():number {
         return this.upvotes-this.downvotes;
@@ -139,6 +142,7 @@ export class Post {
         this._subreddit=subreddit;
     }
     public set utc( utc:number|null ) {
+        this._ago=null;
         this._utc=utc;
     }
     public set author( author:User|null ) {
