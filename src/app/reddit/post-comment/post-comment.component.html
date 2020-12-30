@@ -1,8 +1,6 @@
 
 <div class="post-aside">
-    <div class="button-group"><button mat-button (click)="vote(post,post.userVote>0?0:1)" [color]="post.userVote>0?'accent':''"><mat-icon>arrow_upward</mat-icon></button></div>
-   <span class="votes">{{post.votes}}</span>
-    <div class="button-group"><button mat-button (click)="vote(post,post.userVote<0?0:-1)" [color]="post.userVote<0?'accent':''"><mat-icon>arrow_downward</mat-icon></button></div>
+    <app-post-vote [post]="post"></app-post-vote>
 </div>
 <div class="post-main">
     <app-post-subtitle [post]="post"></app-post-subtitle>

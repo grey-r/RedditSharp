@@ -52,6 +52,7 @@ import { LoggedOutGuard } from './logged-out-guard.guard';
 import { PostSubtitleComponent } from './reddit/post-subtitle/post-subtitle.component';
 import { PostCommentComponent } from './reddit/post-comment/post-comment.component';
 import { PostFooterComponent } from './reddit/post-footer/post-footer.component';
+import { PostVoteComponent } from './reddit/post-vote/post-vote.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { PostFooterComponent } from './reddit/post-footer/post-footer.component'
     SortPipePipe,
     PostSubtitleComponent,
     PostCommentComponent,
-    PostFooterComponent
+    PostFooterComponent,
+    PostVoteComponent
   ],
   imports: [
     BrowserModule,

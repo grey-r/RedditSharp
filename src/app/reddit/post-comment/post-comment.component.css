@@ -7,16 +7,6 @@
     font-size: 0.75em;
     padding-top: 0.7em;
 }
-.post-aside * {
-    line-height: 1em;
-    font-size: 1em;
-    min-width: 0em;
-}
-.post-aside .mat-icon {
-    height: auto;
-    width: auto;
-    font-size:1.25em;
-}
 .reply-container {
     /*padding-left: 1rem;*/
     border-left: rgba(128,128,128,0.5) 0.1rem solid;
