@@ -5,6 +5,10 @@
 }
 .mat-dialog-content {
     max-height: 85vh;
+    overflow-y:scroll;
+    overflow-x: hidden;
+    margin-top: -24px;
+    padding-top: 24px;
 }
 .dialog-content .header {
     height: 3em;
