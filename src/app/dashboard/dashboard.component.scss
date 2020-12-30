@@ -3,6 +3,9 @@
     margin-right: 10vw;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    /*hardware accelerate pls*/
+    -webkit-transform: translate3d(0,0,1px); 
+    -webkit-backface-visibility: hidden;
 }
 
 .post-header-image {
