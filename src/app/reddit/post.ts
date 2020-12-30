@@ -29,6 +29,7 @@ export class Post {
     private _upvotes: number | null = null;
     private _downvotes: number | null = null;
     private _replies: Post[] = [];
+    private _numComments:number | null = null;
     private _mediaEmbed: string | null = null;
 
     private _depth: number | null = null;
@@ -104,6 +105,9 @@ export class Post {
     public get userVote():number {
         return this._userVote;
     }
+    public get numComments():number|null {
+        return this._numComments;
+    }
     public get fullname():string {
         return this.type + "_" + this.id;
     }
@@ -170,6 +174,9 @@ export class Post {
     }
     public set replies(posts:Post[]) {
         this._replies = posts;
+    }
+    public set numComments(num:number|null) {
+        this._numComments=num;
     }
     public set mediaEmbed( str:string|null ) {
         this._mediaEmbed=str;

@@ -30,7 +30,10 @@ export class PostInfoService {
     }
     if (!data.data)
       return;
-    if (data.kind === PostType.Listing && data.data.children) {
+    if (data.kind === PostType.Link) {
+      this.populatePostInfo(p,data.data);
+    }
+    else if (data.kind === PostType.Listing && data.data.children) {
       for (let i=0; i<data.data.children.length; i++) {
         let childContainer = data.data.children[i];
         let child = childContainer.data;
@@ -108,10 +111,10 @@ export class PostInfoService {
 
     if (json.ups) {
       if (json.upvote_ratio) {
-        post.setVotes(json.ups,json.upvote_ratio);
+        post.setVotes(+json.ups,+json.upvote_ratio);
       } else {
-        post.upvotes = json.ups;
-        post.downvotes = json.downs;
+        post.upvotes = +json.ups;
+        post.downvotes = +json.downs;
       }
     }
 
@@ -122,6 +125,10 @@ export class PostInfoService {
     if (json.subreddit && json.subreddit.length > 0) {
       let id = (json.subreddit_id ?? PostType.Subreddit+"_null").replace( PostType.Subreddit+"_","");
       post.subreddit = new Subreddit(id,PostType.Subreddit,json.subreddit);
+    }
+
+    if (json.num_comments) {
+      post.numComments=+json.num_comments;
     }
 
     switch (post.type) {
