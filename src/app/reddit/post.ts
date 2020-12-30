@@ -26,8 +26,8 @@ export class Post {
     private _html: string | null = null;
     private _imageUrl: string | null = null;
     private _videoUrl: string | null = null;
-    private _upvotes: number | null = null;
-    private _downvotes: number | null = null;
+    private _upvotes: number = 0;
+    private _downvotes: number = 0;
     private _replies: Post[] = [];
     private _numComments:number | null = null;
     private _mediaEmbed: string | null = null;
@@ -83,15 +83,11 @@ export class Post {
     public get previewUrl():string|null {
         return this._previewUrl;
     }
-    public get upvotes():number|null {
-        if (this._upvotes)
-            return this._upvotes + Math.max(this._userVote,0);
-        return this._upvotes;
+    public get upvotes():number {
+        return this._upvotes + Math.max(this._userVote,0);
     }
-    public get downvotes():number|null {
-        if (this._downvotes)
-            return this._downvotes - Math.min(this._userVote,0);
-        return this._downvotes;
+    public get downvotes():number {
+        return this._downvotes - Math.min(this._userVote,0);
     }
     public get replies():Post[] {
         return this._replies;
@@ -132,6 +128,9 @@ export class Post {
         secs/=365;
         return Math.floor(secs) + " year"+(secs>pluralDecision?"s":"");
     }
+    public get votes():number {
+        return this.upvotes-this.downvotes;
+    }
 
     public set title( title:string|null ) {
         this._title=title;
@@ -166,10 +165,10 @@ export class Post {
     public set html( html:string|null ) {
         this._html=html;
     }
-    public set upvotes(num:number|null) {
+    public set upvotes(num:number) {
         this._upvotes=num;
     }
-    public set downvotes(num:number|null) {
+    public set downvotes(num:number) {
         this._downvotes=num;
     }
     public set replies(posts:Post[]) {

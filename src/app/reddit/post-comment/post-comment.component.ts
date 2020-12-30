@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Post } from '../post';
+import { PostInfoService } from '../post-info.service';
 
 @Component({
   selector: 'app-post-comment',
@@ -9,7 +10,7 @@ import { Post } from '../post';
 export class PostCommentComponent implements OnInit, OnChanges {
   @Input('post') post!: Post; // tslint:disable-line: no-input-rename
 
-  constructor() { }
+  constructor(private postInfo: PostInfoService) { }
 
   ngOnInit(): void {
     this.checkPost();
@@ -23,6 +24,10 @@ export class PostCommentComponent implements OnInit, OnChanges {
     if(this.post === null) {
       throw new Error("Attribute 'post' is required");
    }
+  }
+
+  vote(p:Post, dir:number): void {
+    this.postInfo.vote(p,dir);
   }
 
 }
