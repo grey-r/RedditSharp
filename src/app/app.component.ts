@@ -46,6 +46,14 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     return this.dark.darkMode$;
   }
 
+  public get darkMode() {
+    return this.dark.darkMode;
+  }
+
+  public set darkMode(dark:boolean) {
+    this.dark.darkMode=dark;
+  }
+
   public toggleDark():void {
     this.dark.toggleDark();
   }

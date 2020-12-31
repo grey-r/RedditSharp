@@ -26,9 +26,13 @@
         <span>{{opt.text}}</span>
       </button> <!--Hour-->
     </mat-menu>
-    <button mat-icon-button aria-label="Dark mode icon" (click)="toggleDark();">
+    <button mat-icon-button aria-label="Dark Mode Button" (click)="toggleDark();">
       <mat-icon>dark_mode</mat-icon>
     </button>
+    <mat-slide-toggle
+        [color]="accent"
+        [(ngModel)]="darkMode">
+    </mat-slide-toggle>
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container"
