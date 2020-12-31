@@ -1,5 +1,5 @@
 <span *ngIf="post.author && post.author.name" class="post-author">{{post.author.name}},</span>
 <span *ngIf="post.ago()" class="post-time"> {{post.ago()}} ago</span>
-<span *ngIf="post.subreddit && post.type===linkType" class="post-subreddit"> via <a [routerLink]="['/view/',post.subreddit.name]" >r/{{post.subreddit.name}}</a></span>
+<span *ngIf="post.subreddit && post.type===linkType" class="post-subreddit"> via <a [routerLink]="['/r/',post.subreddit.name]" >r/{{post.subreddit.name}}</a></span>
 <br/>
 <span><a *ngIf="post.url && post.url.search('www.reddit.com')==-1" [href]="post.url" class="post-link">{{post.url}}</a></span>

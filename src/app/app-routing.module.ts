@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { LogoutComponent } from './logout/logout.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { RouterModule, Routes } from '@angular/router';
 import { AuthenticateComponent } from './authenticate/authenticate.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoggedInGuard } from './logged-in-guard.guard';
 import { LoggedOutGuard } from './logged-out-guard.guard';
+import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
+import { SubmitComponent } from './submit/submit.component';
 
 const routes: Routes = [
   { path:'login', component: LoginComponent, canActivate: [ LoggedOutGuard ] },
@@ -13,7 +14,9 @@ const routes: Routes = [
   { path:'logout', component: LogoutComponent, canActivate: [ LoggedInGuard ]  },
   { path:'dashboard', component: DashboardComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path:'view/:subreddit', component: DashboardComponent}
+  { path:'r/:subreddit', component: DashboardComponent},
+  { path:'post', component: SubmitComponent, pathMatch: 'full' },
+  { path:'r/:subreddit/post', component: SubmitComponent}
 ];
 
 @NgModule({

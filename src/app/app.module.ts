@@ -50,6 +50,7 @@ import { PostVoteComponent } from './reddit/post-vote/post-vote.component';
 import { SafeHTMLPipe } from './safe-html.pipe';
 import { SortPipePipe } from './sort-pipe.pipe';
 import { PostModalComponent } from './view/post-modal/post-modal.component';
+import { SubmitComponent } from './submit/submit.component';
 
 
 
@@ -69,7 +70,8 @@ import { PostModalComponent } from './view/post-modal/post-modal.component';
     PostSubtitleComponent,
     PostCommentComponent,
     PostFooterComponent,
-    PostVoteComponent
+    PostVoteComponent,
+    SubmitComponent
   ],
   imports: [
     BrowserModule,

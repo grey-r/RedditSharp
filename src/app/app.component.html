@@ -52,11 +52,14 @@
         <a mat-list-item [routerLink]="['/',nav.url]" *ngFor="let nav of navOptions | callbackPipe:passCheck">{{nav.text}}</a>
         <!--<a mat-list-item (click)="oauth.refresh()" >aaa</a> test refresh -->
         <mat-divider></mat-divider>
-        <a mat-list-item [routerLink]="['/view/',nav.url]" *ngFor="let nav of subredditLink$ | async" class="subreddit">{{nav.text}}</a>
+        <a mat-list-item [routerLink]="['/r/',nav.url]" *ngFor="let nav of subredditLink$ | async" class="subreddit">{{nav.text}}</a>
       </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content cdkScrollable #scrollme>
+      <button *ngIf="getRouterPath().search('/r/')!=-1 || getRouterPath().search('/dashboard')!=-1" mat-fab color="accent" aria-label="Add Post" (click)="addPost();" class="viewport-fab mat-elevation-z4">
+        <mat-icon>post_add</mat-icon>
+      </button>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

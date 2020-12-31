@@ -2,7 +2,7 @@ import { BreakpointState, MediaMatcher } from '@angular/cdk/layout';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Event as RouterEvent, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Event as RouterEvent, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { DarkModeService } from './dark-mode.service';
@@ -97,7 +97,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   ]
 
   constructor(private sortService: SortService, private mobileService: MobileService, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService,
-    private router:Router, private dark: DarkModeService, private overlayContainer: OverlayContainer) {
+    private router:Router, private route:ActivatedRoute, private dark: DarkModeService, private overlayContainer: OverlayContainer) {
 
     this.mobileQuery = this.mobileService.mobileQuery;
     this.darkMode$
@@ -161,7 +161,20 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   addPost():void {
-    
+    if (this.route.children.length<=0) 
+      return;
+    let childRoute = this.route.children[0];
+    let sub:string|null = childRoute.snapshot.paramMap.get("subreddit");
+    if (!sub) {
+      this.router.navigate(["post"]);
+    }
+    else {
+      this.router.navigate(["r",sub,"post"]);
+    }
+  }
+  
+  getRouterPath():string {
+    return this.router.url;
   }
 
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));

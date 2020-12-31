@@ -44,3 +44,11 @@ a.subreddit {
   margin-right: 0.5rem;
   margin-left: 0.5rem;
 }
+
+.viewport-fab {
+  z-index: 4;
+  position: fixed;
+  right: 0px;
+  margin-right: 32px;
+  margin-top: 32px;
+}
