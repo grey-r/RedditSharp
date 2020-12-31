@@ -9,6 +9,7 @@ import { DarkModeService } from './dark-mode.service';
 import { MobileService } from './mobile.service';
 import { MeService } from './reddit/me.service';
 import { OauthService } from './reddit/oauth.service';
+import { FilterModes, SortModes, SortService } from './reddit/sort.service';
 import { Subreddit } from './reddit/subreddit';
 
 /** @title Responsive sidenav */
@@ -59,6 +60,17 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     {text:"Log Out",url:"logout", check: ()=>{return this.oauth.getLoggedIn();}}
   ]
 
+  SortModes = SortModes;
+  FilterModes = FilterModes;
+
+  public get sortMode():SortModes {
+    return this.sortService.sortMode;
+  }
+
+  public get filterMode():FilterModes {
+    return this.sortService.filterMode;
+  }
+
   sortOptions = [
     {mode: SortModes.best,text: "Best",icon: "star_rate"},
     {mode: SortModes.hot,text: "Hot",icon: "local_fire_department"},
@@ -76,12 +88,9 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     {mode: FilterModes.all,text: "All Time",icon: null}
   ]
 
-  SortModes = SortModes;
-  FilterModes = FilterModes;
-  sortMode:SortModes = SortModes.best;
-  filterMode:FilterModes = FilterModes.all;
+  constructor(private sortService: SortService, private mobileService: MobileService, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService,
+    private router:Router, private dark: DarkModeService, private overlayContainer: OverlayContainer) {
 
-  constructor(private mobileService: MobileService, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router, private dark: DarkModeService, private overlayContainer: OverlayContainer) {
     this.mobileQuery = this.mobileService.mobileQuery;
     this.darkMode$
     .pipe(takeUntil(this.ngUnsubscribe))
@@ -113,7 +122,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     this.oauth.isReady()
     .pipe(takeUntil(this.ngUnsubscribe))
     .pipe(filter( (isReady:boolean) => { return isReady; }))
-    .subscribe( () => {
+    .subscribe( (isReady: boolean) => {
+        console.log(isReady);
         this.cd.markForCheck();
         this.fetchSubreddits();
     });
@@ -139,33 +149,11 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   setFeedMode(sortMode: SortModes, filterMode: FilterModes | null = null):void {
-    this.sortMode = sortMode;
-    if (filterMode) {
-      this.filterMode = filterMode;
-    }
+    this.sortService.setSortMode(sortMode, filterMode);
   }
 
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
 }
-
-export enum SortModes {
-  best="best",
-  hot="hot",
-  new="new",
-  top="top",
-  rising="rising"
-}
-
-export enum FilterModes {
-  hour="hour",
-  day="day",
-  week="week",
-  month="month",
-  year="year",
-  all="all"
-}
-
-export const OPEN_TOP_FILTER=-1;
 
 
 interface Link {
