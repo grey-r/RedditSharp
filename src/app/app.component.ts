@@ -1,4 +1,5 @@
 import { BreakpointState, MediaMatcher } from '@angular/cdk/layout';
+import { OverlayContainer } from '@angular/cdk/overlay';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Event as RouterEvent, NavigationEnd, Router } from '@angular/router';
@@ -49,7 +50,6 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   passCheck(c:Checkable):boolean {
-    console.log(c);
     return c.check();
   }
 
@@ -59,8 +59,19 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     {text:"Log Out",url:"logout", check: ()=>{return this.oauth.getLoggedIn();}}
   ]
 
-  constructor(private mobileService: MobileService, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router, private dark: DarkModeService) {
+  constructor(private mobileService: MobileService, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router, private dark: DarkModeService, private overlayContainer: OverlayContainer) {
     this.mobileQuery = this.mobileService.mobileQuery;
+    this.darkMode$
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe((dark: boolean) => {
+      let overlay = overlayContainer.getContainerElement();
+      if (dark && !overlay.classList.contains("dark-theme")) {
+        overlay.classList.add("dark-theme")
+      }
+      if (!dark && overlay.classList.contains("dark-theme")) {
+        overlay.classList.remove("dark-theme")
+      }
+    });
   }
 
   ngAfterViewInit(): void {
