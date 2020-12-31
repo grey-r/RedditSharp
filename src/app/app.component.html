@@ -3,8 +3,29 @@
     <button mat-icon-button aria-label="Menu icon" (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <span>Reddit Client</span>
+    <span>RedditSharp</span>
     <span class="toolbar-spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="sortMenu" aria-label="Sort By Menu">
+      <mat-icon>sort</mat-icon>
+    </button>
+    <mat-menu #sortMenu="matMenu" xPosition="before">
+      <div *ngFor="let opt of sortOptions">
+        <button *ngIf="opt.topfilter" mat-menu-item [matMenuTriggerFor]="topFilter">
+          <mat-icon *ngIf="opt.icon">{{opt.icon}}</mat-icon>
+          <span>{{opt.text}}</span>
+        </button>
+        <button *ngIf="!opt.topfilter" mat-menu-item (click)="setFeedMode(opt.mode);">
+          <mat-icon *ngIf="opt.icon">{{opt.icon}}</mat-icon>
+          <span>{{opt.text}}</span>
+        </button>
+      </div>
+    </mat-menu>
+    <mat-menu #topFilter="matMenu">
+      <button mat-menu-item *ngFor="let opt of filterOptions" (click)="setFeedMode(SortModes.top,opt.mode);">
+        <mat-icon *ngIf="opt.icon">{{opt.icon}}</mat-icon>
+        <span>{{opt.text}}</span>
+      </button> <!--Hour-->
+    </mat-menu>
     <button mat-icon-button aria-label="Dark mode icon" (click)="toggleDark();">
       <mat-icon>dark_mode</mat-icon>
     </button>

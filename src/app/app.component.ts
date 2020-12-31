@@ -59,6 +59,28 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     {text:"Log Out",url:"logout", check: ()=>{return this.oauth.getLoggedIn();}}
   ]
 
+  sortOptions = [
+    {mode: SortModes.best,text: "Best",icon: "star_rate"},
+    {mode: SortModes.hot,text: "Hot",icon: "local_fire_department"},
+    {mode: SortModes.new,text: "New",icon: "schedule"},
+    {mode: SortModes.top,text: "Top",icon: "bar_chart",topfilter:true},
+    {mode: SortModes.rising,text: "Rising",icon: "trending_up"}
+  ]
+
+  filterOptions = [
+    {mode: FilterModes.hour,text: "Now",icon: null},
+    {mode: FilterModes.day,text: "Today",icon: null},
+    {mode: FilterModes.week,text: "This Week",icon: null},
+    {mode: FilterModes.month,text: "This Month",icon: null},
+    {mode: FilterModes.year,text: "This Year",icon: null},
+    {mode: FilterModes.all,text: "All Time",icon: null}
+  ]
+
+  SortModes = SortModes;
+  FilterModes = FilterModes;
+  sortMode:SortModes = SortModes.best;
+  filterMode:FilterModes = FilterModes.all;
+
   constructor(private mobileService: MobileService, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router, private dark: DarkModeService, private overlayContainer: OverlayContainer) {
     this.mobileQuery = this.mobileService.mobileQuery;
     this.darkMode$
@@ -116,8 +138,35 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     this.ngUnsubscribe.complete();
   }
 
+  setFeedMode(sortMode: SortModes, filterMode: FilterModes | null = null):void {
+    this.sortMode = sortMode;
+    if (filterMode) {
+      this.filterMode = filterMode;
+    }
+  }
+
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
 }
+
+export enum SortModes {
+  best="best",
+  hot="hot",
+  new="new",
+  top="top",
+  rising="rising"
+}
+
+export enum FilterModes {
+  hour="hour",
+  day="day",
+  week="week",
+  month="month",
+  year="year",
+  all="all"
+}
+
+export const OPEN_TOP_FILTER=-1;
+
 
 interface Link {
   text: string;
