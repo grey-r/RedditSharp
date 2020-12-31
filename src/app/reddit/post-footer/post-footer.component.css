@@ -23,5 +23,9 @@ div.button-group button .mat-icon {
 :host {
     width: 100%;
     /*text-align: center;*/
-    display:inline-block;
+    display:inline-flex;
+}
+
+.spacer {
+    flex: 1 1 auto;
 }

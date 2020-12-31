@@ -1,14 +1,19 @@
+:host {
+    background: inherit;
+}
+
 .dialog-title h1 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 .mat-dialog-content {
-    max-height: 85vh;
-    overflow-y:scroll;
+    max-height: none;
+    /*min-height: calc(100% - 2rem - 24px);*/
     overflow-x: hidden;
     margin-top: -24px;
     padding-top: 24px;
+    padding-bottom: 2rem;
 }
 .dialog-content .header {
     height: 3em;
@@ -50,9 +55,18 @@
     margin-bottom: 1em;
 }
 
+.dialog-footer {
+    position: sticky;
+    bottom: -25px;
+    left: -24px;
+    padding: 0px;
+    margin: -24px;
+    background: inherit;
+    max-height: 2rem;
+}
+
 .dialog-footer mat-divider {
     width: 100%;
-    margin-bottom: 1em;
 }
 
 img.full-image {

@@ -1,4 +1,4 @@
-<div mat-dialog-content class="dialog-content" [class.dark-theme]="darkMode$ | async">
+<div mat-dialog-content class="dialog-content" [class.dark-theme]="darkMode$ | async" id="dialContent">
   <div class="header" *ngIf="post.author">
     <div class="avatar" [ngStyle]="{ 'background-image': 'url(' + post.author.avatarUrl + ')'}"></div>
     <div class="aside-avatar">
@@ -25,5 +25,5 @@
 </div>
 <div mat-dialog-actions class="dialog-footer">
   <mat-divider></mat-divider>
-  <app-post-footer [post]="post"></app-post-footer>
+  <app-post-footer [post]="post" (onClose)="closeDialog()"></app-post-footer>
 </div>

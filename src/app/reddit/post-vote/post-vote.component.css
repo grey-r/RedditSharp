@@ -14,3 +14,7 @@
     width: auto;
     font-size:1.25em;
 }
+
+.mat-button {
+    padding: 0px;
+}

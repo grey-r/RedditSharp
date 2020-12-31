@@ -5,9 +5,45 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-sidenav.is-desktop {
     width: 20vw;
 }
-@media screen and (min-width: 600px) {
-    .post-modal {
-        margin-left: 10vw;
+
+div .post-modal {  /*center above content and make full height (almost)*/
+    width: 60vw;
+    max-width: 60vw;
+    /*height: calc(100% - 1rem);*/
+    max-height: calc(100% - 5vh);
+    /*
+    width: calc(100% - 1rem);
+    max-width: calc(100% - 1rem);
+    height: calc(100% - 1rem);
+    max-height: calc(100% - 1rem);
+    */
+    display: flex;
+    flex-direction: column;
+}
+
+.mat-dialog-content {
+    max-height: unset !important;
+    flex: 1 0 0;
+}
+
+.post-modal .mat-dialog-container {
+    position: relative;
+}
+
+
+blockquote {
+    border-left: rgba(128,128,128,0.5) 0.1rem solid;
+    margin: 0px;
+    padding-left: 8px;
+}
+
+@media (max-width: 600px) { /* on mobile*/
+    div .post-modal { /*fullscreen*/
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        max-height: 100%;
+        margin: 0px;
     }
 }
 

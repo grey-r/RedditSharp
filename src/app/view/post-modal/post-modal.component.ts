@@ -41,6 +41,7 @@ export class PostModalComponent implements OnInit, OnDestroy {
   constructor(public dialogRef: MatDialogRef<PostModalComponent>, private dark:DarkModeService, private pi:PostInfoService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
       this.post=data.post;
+      document.getElementById("dialContent")?.scrollIntoView();
       this.dark.darkMode$
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe( (isDark:boolean) => {
@@ -61,6 +62,10 @@ export class PostModalComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  closeDialog():void {
+    this.dialogRef.close();
   }
 
 }

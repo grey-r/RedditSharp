@@ -1,10 +1,11 @@
-import { BreakpointObserver, BreakpointState, MediaMatcher } from '@angular/cdk/layout';
+import { BreakpointState, MediaMatcher } from '@angular/cdk/layout';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Event as RouterEvent, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { DarkModeService } from './dark-mode.service';
+import { MobileService } from './mobile.service';
 import { MeService } from './reddit/me.service';
 import { OauthService } from './reddit/oauth.service';
 import { Subreddit } from './reddit/subreddit';
@@ -22,7 +23,6 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
 
   mobileQuery: Observable<BreakpointState>;
   ngUnsubscribe = new Subject<void>();
-  mobile:boolean = false;
 
   private _navSubreddits:Link[] = [];
   private _subredditLink$ = new BehaviorSubject<Link[]>( this._navSubreddits );
@@ -59,13 +59,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     {text:"Log Out",url:"logout", check: ()=>{return this.oauth.getLoggedIn();}}
   ]
 
-  constructor(breakpointObserver: BreakpointObserver, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router, private dark: DarkModeService) {
-    this.mobileQuery = breakpointObserver.observe(['(max-width: 600px)']);
-    this.mobileQuery
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe( (x:BreakpointState) => {
-      this.mobile = x.matches;
-    });
+  constructor(private mobileService: MobileService, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService, private router:Router, private dark: DarkModeService) {
+    this.mobileQuery = this.mobileService.mobileQuery;
   }
 
   ngAfterViewInit(): void {
@@ -73,7 +68,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
           .pipe(filter(  (e:RouterEvent) => {return e instanceof NavigationEnd} ))
           .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe(() => {
-            if (this.snav && this.mobile)
+            if (this.snav && this.mobileService.mobile)
               this.snav.close();
             const content = document.querySelector('.mat-sidenav-content'); 
             if (content)

@@ -1,6 +1,6 @@
 <div class="container" [class.is-mobile]="(mobileQuery | async)!.matches" [class.dark-theme]="darkMode$ | async" >
   <mat-toolbar color="primary" class="toolbar">
-    <button mat-icon-button aria-label="Menu icon" (click)="snav.toggle()" *ngIf="(mobileQuery | async)!.matches">
+    <button mat-icon-button aria-label="Menu icon" (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
     <span>Reddit Client</span>

@@ -5,9 +5,10 @@
 .post-aside {
     font-size: 0.75em;
     padding-top: 0.7em;
+    padding-right: 8px;
 }
 .reply-container {
-    /*padding-left: 1rem;*/
+    padding-left: 8px;
     border-left: rgba(128,128,128,0.5) 0.1rem solid;
 }
 span.votes {
