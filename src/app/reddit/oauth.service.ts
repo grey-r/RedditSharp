@@ -158,7 +158,7 @@ export class OauthService {
       } else {
         res = <AuthenticationResult> res;
         //alert(res.access_token);
-        this.setToken(res.access_token);
+        this.setToken(res.access_token, res.expires_in);
       }
     }, (err:any)=> {
       console.log(err);
