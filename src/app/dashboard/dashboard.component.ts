@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit 
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { debounceTime, filter, first, takeUntil } from 'rxjs/operators';
+import { debounceTime, first, takeUntil } from 'rxjs/operators';
 import { OauthService } from '../reddit/oauth.service';
 import { Post } from '../reddit/post';
 import { PostInfoService } from '../reddit/post-info.service';
@@ -151,8 +151,8 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     this._loading=true;
     if (this.oauth.getLoggedIn()) { //if logged in 
       this.oauth.isReady()
-      .pipe( filter( (res:boolean) => {return res;}), first(), takeUntil(this.ngUnsubscribe))
-      .subscribe( (ready:boolean) => { //wait until ready
+      .pipe( first( (res:boolean) => {return res;}), takeUntil(this.ngUnsubscribe))
+      .subscribe( () => { //wait until ready
         //fetch posts if ready
         this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].fullname):null)
         .subscribe(

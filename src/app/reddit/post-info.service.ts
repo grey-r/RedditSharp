@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { interval, Observable, Subject } from 'rxjs';
-import { filter, first } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { OauthService } from './oauth.service';
 import { Post, PostType } from './post';
 import { Subreddit } from './subreddit';
@@ -172,7 +172,7 @@ export class PostInfoService {
 
     if (this.oauth.getLoggedIn()) {
       this.oauth.isReady()
-      .pipe(filter( (isReady:boolean) => { return isReady; }))
+      .pipe(first( (isReady:boolean) => { return isReady; }))
       .subscribe( () => {
         this._processCommentData(p,this.http.get(`https://oauth.reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,httpOptions),s);
       });
@@ -201,7 +201,7 @@ export class PostInfoService {
     let postdata=`id=${p.fullname}&dir=${dir}`;
 
     this.oauth.isReady()
-    .pipe(filter( (isReady:boolean) => { return isReady; }))
+    .pipe(first( (isReady:boolean) => { return isReady; }))
     .subscribe( () => {
       this.http.post(`https://oauth.reddit.com/api/vote/`, postdata, httpOptions).subscribe( (res)=>{
         p.userVote=dir;
