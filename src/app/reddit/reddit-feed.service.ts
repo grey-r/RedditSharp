@@ -5,6 +5,7 @@ import { flatMap, map } from 'rxjs/operators';
 import { Post } from '../reddit/post';
 import { OauthService } from './oauth.service';
 import { PostInfoService } from './post-info.service';
+import { FilterModes, SortModes } from './sort.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class RedditFeedService {
   constructor(private httpClient: HttpClient, private ngZone:NgZone, private oauth:OauthService, private postInfo: PostInfoService) {
   }
 
-  fetchPosts(subreddit:String|null=null, after:String|null=null, limit=25): Observable<Post> {
+  fetchPosts(subreddit:String|null=null, after:String|null=null, limit:number=25, sortMode:SortModes|null = null, filterMode:FilterModes|null = null): Observable<Post> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -34,7 +35,7 @@ export class RedditFeedService {
 
     let ref:Observable<Post>;
     if (this.oauth.getReady()) {
-      ref = this.httpClient.get(`https://oauth.reddit.com/${subreddit?"r/"+subreddit+"/":""}.json?limit=${limit}${after?"&after="+after:""}`, httpOptions)
+      ref = this.httpClient.get(`https://oauth.reddit.com/${subreddit?"r/"+subreddit+"/":""}${sortMode?sortMode+"/":""}.json?limit=${limit}${after?"&after="+after:""}${filterMode?"&t="+filterMode:""}`, httpOptions)
       .pipe(
         flatMap( (x:any) => {return x.data.children;}),
         map(dataToPost)

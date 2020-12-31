@@ -8,6 +8,7 @@ import { OauthService } from '../reddit/oauth.service';
 import { Post } from '../reddit/post';
 import { PostInfoService } from '../reddit/post-info.service';
 import { RedditFeedService } from '../reddit/reddit-feed.service';
+import { FilterModes, SortModes, SortService } from '../reddit/sort.service';
 import { UserInfoService } from '../reddit/user-info.service';
 import { PostModalComponent } from '../view/post-modal/post-modal.component';
 
@@ -27,11 +28,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
 
   public set subreddit(sub:string|null) {
     this._subreddit = sub;
-    this._loading = true;
-    this.cancelFetch();
-    this.clearPosts();
-    this.fetchPosts();
-    this.ui.clearQueue();
+    this.reload();
   }
 
   public get posts():Post[] {
@@ -54,10 +51,19 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     return this._loading;
   }
 
+  public get sortMode():SortModes {
+    return this.sortService.sortMode;
+  }
+
+  public get filterMode():FilterModes {
+    return this.sortService.filterMode;
+  }
+
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   ngUnsubscribe = new Subject<void>();
 
-  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog, private route: ActivatedRoute, private oauth:OauthService, private ui:UserInfoService, private ngZone: NgZone, private postInfo:PostInfoService) { }
+  constructor (private rs:RedditFeedService, private scroll:ScrollDispatcher, private cd: ChangeDetectorRef, private dialog: MatDialog,
+    private sortService:SortService,private route: ActivatedRoute, private oauth:OauthService, private ui:UserInfoService, private ngZone: NgZone, private postInfo:PostInfoService) { }
   
   ngAfterViewInit(): void {
     this.ui.clearQueue();
@@ -77,6 +83,16 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
           //console.log("busy");
         }
       }
+    });
+
+    this.sortService.sortMode$
+    .pipe(takeUntil(this.ngUnsubscribe)).subscribe( () => {
+      this.reload();
+    });
+
+    this.sortService.filterMode$
+    .pipe(takeUntil(this.ngUnsubscribe)).subscribe( () => {
+      this.reload();
     });
   }
 
@@ -154,14 +170,14 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
       .pipe( first( (res:boolean) => {return res;}), takeUntil(this.ngUnsubscribe))
       .subscribe( () => { //wait until ready
         //fetch posts if ready
-        this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].fullname):null)
+        this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].fullname):null, 25, this.sortMode, this.filterMode)
         .subscribe(
           (p:Post) => { this.addPost(p); },
           e => { alert(e); },
           () => { this._loading=false; this._posts = [...this._posts];  } );
       });
     } else {
-      this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].fullname):null)
+      this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].fullname):null, 25, this.sortMode, this.filterMode)
       .subscribe(
         (p:Post) => { this.addPost(p); },
         e => { alert(e); },
@@ -171,5 +187,13 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
 
   trackById(index:number, post:Post) {
     return post.id;
+  }
+
+  public reload():void {
+    this._loading = true;
+    this.cancelFetch();
+    this.clearPosts();
+    this.fetchPosts();
+    this.ui.clearQueue();
   }
 }
