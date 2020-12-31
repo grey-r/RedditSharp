@@ -5,9 +5,11 @@
     </button>
     <span>RedditSharp</span>
     <span class="toolbar-spacer"></span>
-    <button mat-icon-button [matMenuTriggerFor]="sortMenu" aria-label="Sort By Menu">
-      <mat-icon>sort</mat-icon>
-    </button>
+    <div class="button-group">
+      <button mat-icon-button [matMenuTriggerFor]="sortMenu" aria-label="Sort By Menu">
+        <mat-icon>sort</mat-icon>
+      </button>
+    </div>
     <mat-menu #sortMenu="matMenu" xPosition="before">
       <div *ngFor="let opt of sortOptions">
         <button *ngIf="opt.topfilter" mat-menu-item [matMenuTriggerFor]="topFilter">
@@ -26,11 +28,20 @@
         <span>{{opt.text}}</span>
       </button> <!--Hour-->
     </mat-menu>
-    <button mat-icon-button aria-label="Dark Mode Button" (click)="toggleDark();">
-      <mat-icon>dark_mode</mat-icon>
-    </button>
-    <mat-slide-toggle [(ngModel)]="darkMode">
-    </mat-slide-toggle>
+    <div class="button-group">
+      <button mat-icon-button aria-label="Dark Mode Button" (click)="toggleDark();">
+        <mat-icon>dark_mode</mat-icon>
+      </button>
+      <mat-slide-toggle [(ngModel)]="darkMode">
+      </mat-slide-toggle>
+    </div>
+    <!--
+    <div class="button-group">
+      <button mat-icon-button aria-label="Add Post" (click)="addPost();">
+        <mat-icon>post_add</mat-icon>
+      </button>
+    </div>
+    -->
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container"

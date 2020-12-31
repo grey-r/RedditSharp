@@ -160,6 +160,10 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     this.sortService.setSortMode(sortMode, filterMode);
   }
 
+  addPost():void {
+    
+  }
+
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
 }
 
