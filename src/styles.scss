@@ -95,8 +95,8 @@ $light-primary: mat-palette($mat-indigo);
 $light-accent:  mat-palette($mat-pink, A200, A100, A400);
 $light-theme:   mat-light-theme($light-primary, $light-accent, $angular-warn);
 // Dark theme
-$dark-primary: mat-palette($mat-deep-purple);
-$dark-accent:  mat-palette($mat-pink, A200, A100, A400);
+$dark-primary: mat-palette($mat-pink);
+$dark-accent:  mat-palette($mat-purple, A200, A100, A400);
 $dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $angular-warn);
 
 // Import mixin of sidenav component

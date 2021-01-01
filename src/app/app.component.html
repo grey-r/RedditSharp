@@ -23,7 +23,7 @@
       </div>
     </mat-menu>
     <mat-menu #topFilter="matMenu">
-      <button mat-menu-item *ngFor="let opt of filterOptions" (click)="setFeedMode(SortModes.top,opt.mode);">
+      <button mat-menu-item *ngFor="let opt of filterOptions" (click)="setFeedMode(SortModes.Top,opt.mode);">
         <mat-icon *ngIf="opt.icon">{{opt.icon}}</mat-icon>
         <span>{{opt.text}}</span>
       </button> <!--Hour-->

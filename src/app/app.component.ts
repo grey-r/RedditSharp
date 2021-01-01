@@ -80,20 +80,20 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   sortOptions = [
-    {mode: SortModes.best,text: "Best",icon: "star_rate"},
-    {mode: SortModes.hot,text: "Hot",icon: "local_fire_department"},
-    {mode: SortModes.new,text: "New",icon: "schedule"},
-    {mode: SortModes.top,text: "Top",icon: "bar_chart",topfilter:true},
-    {mode: SortModes.rising,text: "Rising",icon: "trending_up"}
+    {mode: SortModes.Best,text: "Best",icon: "star_rate"},
+    {mode: SortModes.Hot,text: "Hot",icon: "local_fire_department"},
+    {mode: SortModes.New,text: "New",icon: "schedule"},
+    {mode: SortModes.Top,text: "Top",icon: "bar_chart",topfilter:true},
+    {mode: SortModes.Rising,text: "Rising",icon: "trending_up"}
   ]
 
   filterOptions = [
-    {mode: FilterModes.hour,text: "Now",icon: null},
-    {mode: FilterModes.day,text: "Today",icon: null},
-    {mode: FilterModes.week,text: "This Week",icon: null},
-    {mode: FilterModes.month,text: "This Month",icon: null},
-    {mode: FilterModes.year,text: "This Year",icon: null},
-    {mode: FilterModes.all,text: "All Time",icon: null}
+    {mode: FilterModes.Hour,text: "Now",icon: null},
+    {mode: FilterModes.Day,text: "Today",icon: null},
+    {mode: FilterModes.Week,text: "This Week",icon: null},
+    {mode: FilterModes.Month,text: "This Month",icon: null},
+    {mode: FilterModes.Year,text: "This Year",icon: null},
+    {mode: FilterModes.All,text: "All Time",icon: null}
   ]
 
   constructor(private sortService: SortService, private mobileService: MobileService, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService,

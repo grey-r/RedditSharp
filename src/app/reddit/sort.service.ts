@@ -8,8 +8,8 @@ export class SortService {
   SortModes = SortModes;
   FilterModes = FilterModes;
   
-  private _sortMode:SortModes = SortModes.best;
-  private _filterMode:FilterModes = FilterModes.all;
+  private _sortMode:SortModes = SortModes.Best;
+  private _filterMode:FilterModes = FilterModes.All;
   private _sortMode$:BehaviorSubject<SortModes> = new BehaviorSubject<SortModes>(this._sortMode);
   private _filterMode$:BehaviorSubject<FilterModes> = new BehaviorSubject<FilterModes>(this._filterMode);
 
@@ -61,18 +61,18 @@ export class SortService {
 }
 
 export enum SortModes {
-  best="best",
-  hot="hot",
-  new="new",
-  top="top",
-  rising="rising"
+  Best="best",
+  Hot="hot",
+  New="new",
+  Top="top",
+  Rising="rising"
 }
 
 export enum FilterModes {
-  hour="hour",
-  day="day",
-  week="week",
-  month="month",
-  year="year",
-  all="all"
+  Hour="hour",
+  Day="day",
+  Week="week",
+  Month="month",
+  Year="year",
+  All="all"
 }

@@ -1,6 +1,6 @@
 import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -49,12 +49,8 @@ import { PostSubtitleComponent } from './reddit/post-subtitle/post-subtitle.comp
 import { PostVoteComponent } from './reddit/post-vote/post-vote.component';
 import { SafeHTMLPipe } from './safe-html.pipe';
 import { SortPipePipe } from './sort-pipe.pipe';
-import { PostModalComponent } from './view/post-modal/post-modal.component';
 import { SubmitComponent } from './submit/submit.component';
-
-
-
-
+import { PostModalComponent } from './view/post-modal/post-modal.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +72,7 @@ import { SubmitComponent } from './submit/submit.component';
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     HttpClientJsonpModule,
