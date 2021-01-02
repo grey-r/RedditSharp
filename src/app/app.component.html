@@ -57,7 +57,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content cdkScrollable #scrollme>
-      <button *ngIf="getRouterPath().search('/r/')!=-1 || getRouterPath().search('/dashboard')!=-1" mat-fab color="accent" aria-label="Add Post" (click)="addPost();" class="viewport-fab mat-elevation-z4">
+      <button *ngIf="shouldShowPostFAB()" mat-fab color="accent" aria-label="Add Post" (click)="addPost();" class="viewport-fab mat-elevation-z4">
         <mat-icon>post_add</mat-icon>
       </button>
       <router-outlet></router-outlet>
