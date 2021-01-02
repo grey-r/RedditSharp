@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { catchError, debounceTime, map, switchMap, take } from 'rxjs/operators';
+import { catchError, debounceTime, map, startWith, switchMap, take } from 'rxjs/operators';
 import { RedditFeedService } from '../reddit-feed.service';
 
 function isEmpty(value: any): boolean {
@@ -37,6 +37,7 @@ export class SubredditValidatorService {
             }));
             */
             return control.valueChanges.pipe(
+              startWith(""),
               debounceTime(500),
               take(1),
               switchMap( (x:any) => {
@@ -48,7 +49,6 @@ export class SubredditValidatorService {
                       if (data.error) {
                         subError = data.error;
                       }
-                      console.log(data);
                       return subError ? {"sub":subError} : null
                   }));
               }));
