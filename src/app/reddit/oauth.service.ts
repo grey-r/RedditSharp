@@ -101,6 +101,7 @@ export class OauthService {
 
   isReady():Observable<boolean> {
     if (this.getLoggedIn() && this.shouldRefresh() && !this._refreshing) {
+      this._ready.next(false);
       this.refresh();
     }
     return this._ready.asObservable();
