@@ -21,6 +21,7 @@ export class PostInfoService {
   }
 
   private commentsFromData(p:Post, data: any):void {
+    p.replies = [];
     if (Array.isArray(data)) {
       for (let i=0; i<data.length; i++) {
         let listing = data[i];
