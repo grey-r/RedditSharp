@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
+import { RequirementValidatorService } from '../reddit/validators/requirement-validator.service';
 import { SubredditValidatorService } from '../reddit/validators/subreddit-validator.service';
 import { AlphaUnderValidator } from '../validators/alpha-under-validator';
 import { URLValidator } from '../validators/url-validator';
@@ -24,7 +25,7 @@ export class SubmitComponent implements OnInit, OnDestroy {
 
   ngUnsubscribe = new Subject<void>();
 
-  constructor(private _formBuilder:FormBuilder, private _postData:PostDataService, private _subVal:SubredditValidatorService, private _ar:ActivatedRoute) { 
+  constructor(private _formBuilder:FormBuilder, private _postData:PostDataService, private _subVal:SubredditValidatorService, private _reqVal:RequirementValidatorService, private _ar:ActivatedRoute) { 
     this.postData = this._postData;
   }
 
@@ -82,7 +83,7 @@ export class SubmitComponent implements OnInit, OnDestroy {
         formGroup[formControl.controlName] = new FormControl(val,validators,validatorsAsync);
       });
 
-      this.secondFormGroup = new FormGroup(formGroup);
+      this.secondFormGroup = new FormGroup(formGroup,null,this._reqVal.getValidator());
       this.val2=this.secondFormGroup.value; //cache
     });
   }
