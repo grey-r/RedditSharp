@@ -29,13 +29,14 @@ export class PostDataService implements OnDestroy {
   private _linkType = SubmissionType.Link;
   SubmitFormControlMap = {
     [this._textType]: [
-      {controlName:"Title",controlType:"text", validators:{reqduired:true,maxLength:200}, placeholder: "Title (1-200 characters)"},
-      {controlName:"Subreddit",controlType:"text", validators:{reqduired:true, minLength:3, maxLength:21, alphaunder:true, subreddit: true}, placeholder: "Subreddit (3-21 characters)"},
+      {controlName:"Title",controlType:"text", validators:{required:true,maxLength:200}, placeholder: "Title (1-200 characters)"},
+      {controlName:"Subreddit",controlType:"text", validators:{required:true, minLength:3, maxLength:21, alphaunder:true, subreddit: true}, placeholder: "Subreddit (3-21 characters)", parameter: "subreddit"},
       {controlName:"Text",controlType:"textarea", placeholder: "Text (1+ characters)"}
     ],
     [this._linkType]: [
-      {controlName:"Title",controlType:"text", validators:{reqduired:true,maxLength:200}, placeholder: "Title (1-200 characters)"},
-      {controlName:"Subreddit",controlType:"text", validators:{minLength:3, maxLength:21, alphaunder:true, subreddit: true}, placeholder: "Subreddit (3-21 characters)"}
+      {controlName:"Title",controlType:"text", validators:{required:true,maxLength:200}, placeholder: "Title (1-200 characters)"},
+      {controlName:"Subreddit",controlType:"text", validators:{required:true, minLength:3, maxLength:21, alphaunder:true, subreddit: true}, placeholder: "Subreddit (3-21 characters)", parameter: "subreddit"},
+      {controlName:"Link",controlType:"url", validators:{required:true, url:true}, placeholder: "https://google.com/"}
     ]
   }
 
@@ -64,6 +65,7 @@ export interface SubmitFormControl {
   controlType: string;
   default?: string;
   placeholder?: string;
+  parameter?: string; //route parameter
   options?: Array<{
     optionName: string;
     value: string;

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { SubredditValidatorService } from '../reddit/validators/subreddit-validator.service';
 import { AlphaUnderValidator } from '../validators/alpha-under-validator';
@@ -20,7 +21,7 @@ export class SubmitComponent implements OnInit, OnDestroy {
 
   ngUnsubscribe = new Subject<void>();
 
-  constructor(private _formBuilder:FormBuilder, private _postData:PostDataService, private _subVal:SubredditValidatorService) { 
+  constructor(private _formBuilder:FormBuilder, private _postData:PostDataService, private _subVal:SubredditValidatorService, private _ar:ActivatedRoute) { 
     this.postData = this._postData;
   }
 
@@ -36,6 +37,14 @@ export class SubmitComponent implements OnInit, OnDestroy {
       const formGroup:{[name:string]: FormControl} = {};
 
       data.forEach( (formControl) => {
+        let val:string|null = null;
+        if (formControl.parameter) {
+          let param = this._ar.snapshot.paramMap.get(formControl.parameter);
+          if (param) {
+            val = param;
+          }
+        }
+
         let validators:ValidatorFn[] = [];
         let validatorsAsync:AsyncValidatorFn[] = [];
 
@@ -63,7 +72,10 @@ export class SubmitComponent implements OnInit, OnDestroy {
           }
         }
 
-        formGroup[formControl.controlName] = new FormControl('',validators,validatorsAsync);
+        formGroup[formControl.controlName] = new FormControl("",validators,validatorsAsync);
+        if (val) {
+          formGroup[formControl.controlName].setValue(val);
+        }
       });
 
       this.secondFormGroup = new FormGroup(formGroup);
@@ -74,6 +86,9 @@ export class SubmitComponent implements OnInit, OnDestroy {
     let c = fg.get(controlName);
     if (!c) {
       return "Invalid control";
+    }
+    if (c.hasError("required")) {
+      return "Required."
     }
     if (c.hasError("minlength")) {
       return "Too short."

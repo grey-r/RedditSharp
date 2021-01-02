@@ -23,13 +23,14 @@
                 <div *ngSwitchCase="'textarea'">
                     <mat-form-field class="full-width-field">
                         <mat-label>{{input.controlName}}</mat-label>
-                        <textarea matInput formControlName="{{input.controlName}}" placeholder="{{input.placeholder}}" [cdkTextareaAutosize] [cdkAutosizeMinRows]="3" cdkAutosizeMaxRows="6"
+                        <textarea matInput formControlName="{{input.controlName}}" placeholder="{{input.placeholder}}" [cdkTextareaAutosize] [cdkAutosizeMinRows]="6" cdkAutosizeMaxRows="12"
                                 required>
                         </textarea>
+                        <mat-error *ngIf="getErrorMessage(secondFormGroup,input.controlName)">{{getErrorMessage(secondFormGroup,input.controlName)}}</mat-error>
                     </mat-form-field>
                 </div>
                 <div *ngSwitchDefault>
-                    <mat-form-field [class.full-width-field]="input.controlType=='text'">
+                    <mat-form-field [class.full-width-field]="input.controlType=='text' || input.controlType=='url'">
                         <mat-label>{{input.controlName}}</mat-label>
                         <input matInput formControlName="{{input.controlName}}" placeholder="{{input.placeholder}}"
                                 required>
