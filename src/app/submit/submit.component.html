@@ -50,8 +50,8 @@
         <p>Your post is ready to submit.</p>
         <div>
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-        <button mat-button (click)="stepper.reset()">Submit</button>
+        <button mat-button (click)="stepper.reset();resetForms();">Reset</button>
+        <button mat-button (click)="stepper.reset();resetForms();">Submit</button>
         </div>
     </mat-step>
 </mat-vertical-stepper>

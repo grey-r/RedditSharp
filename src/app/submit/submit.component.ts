@@ -19,6 +19,9 @@ export class SubmitComponent implements OnInit, OnDestroy {
   secondFormData!:SubmitFormControl[];
   postData:PostDataService;
 
+  val1:any;
+  val2:any;
+
   ngUnsubscribe = new Subject<void>();
 
   constructor(private _formBuilder:FormBuilder, private _postData:PostDataService, private _subVal:SubredditValidatorService, private _ar:ActivatedRoute) { 
@@ -29,17 +32,19 @@ export class SubmitComponent implements OnInit, OnDestroy {
     this.firstFormGroup = this._formBuilder.group({
       postType: [this.postData.type, Validators.required]
     });
-    this.firstFormGroup.get("postType")?.valueChanges.subscribe( (val:SubmissionType) => {
-      this._postData.type = val;
-      this.secondFormGroup.reset();
-      this.secondFormGroup.markAsPristine();
+    this.val1=this.firstFormGroup.value;
+    this.firstFormGroup.get("postType")?.valueChanges.subscribe( (val:string) => {
+      if ((<any[]>Object.values(SubmissionType)).includes(val)) {
+        this._postData.type = <SubmissionType>val;
+        this.val1=this.firstFormGroup.value;
+      }
     });
     this.postData.submitFormData$.subscribe( (data:SubmitFormControl[]) => {
       this.secondFormData=data;
       const formGroup:{[name:string]: FormControl} = {};
 
       data.forEach( (formControl) => {
-        let val:string|null = null;
+        let val:string = "";
         if (formControl.parameter) {
           let param = this._ar.snapshot.paramMap.get(formControl.parameter);
           if (param) {
@@ -74,13 +79,11 @@ export class SubmitComponent implements OnInit, OnDestroy {
           }
         }
 
-        formGroup[formControl.controlName] = new FormControl("",validators,validatorsAsync);
-        if (val) {
-          formGroup[formControl.controlName].setValue(val);
-        }
+        formGroup[formControl.controlName] = new FormControl(val,validators,validatorsAsync);
       });
 
       this.secondFormGroup = new FormGroup(formGroup);
+      this.val2=this.secondFormGroup.value; //cache
     });
   }
 
@@ -123,6 +126,13 @@ export class SubmitComponent implements OnInit, OnDestroy {
       return ["/r",sub];
     }
     return ["/dashboard"];
+  }
+
+  resetForms():void {
+    this.firstFormGroup.patchValue(this.val1);
+    this.secondFormGroup.patchValue(this.val2);
+    this.firstFormGroup.markAsPristine();
+    this.secondFormGroup.markAsPristine();
   }
 
   ngOnDestroy(): void {
