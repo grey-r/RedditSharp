@@ -3,7 +3,7 @@
         <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Post Type</ng-template>
         <mat-form-field appearance="fill">
-            <mat-label>Select an option</mat-label>
+            <mat-label>Select your post type</mat-label>
             <mat-select formControlName="postType">
                 <mat-option value="{{SubmissionType.Link}}">Link Post</mat-option>
                 <mat-option value="{{SubmissionType.Text}}">Text Post</mat-option>
@@ -16,7 +16,7 @@
         </div>
         </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="Fill out your address">
+    <mat-step [stepControl]="secondFormGroup" label="Post Details">
         <form [formGroup]="secondFormGroup">
         <div *ngFor="let input of secondFormData">
             <div [ngSwitch]="input.controlType">
@@ -33,6 +33,7 @@
                         <mat-label>{{input.controlName}}</mat-label>
                         <input matInput formControlName="{{input.controlName}}" placeholder="{{input.placeholder}}"
                                 required>
+                        <mat-error *ngIf="getErrorMessage(secondFormGroup,input.controlName)">{{getErrorMessage(secondFormGroup,input.controlName)}}</mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -44,7 +45,7 @@
         </form>
     </mat-step>
     <mat-step>
-        <ng-template matStepLabel>Done</ng-template>
+        <ng-template matStepLabel>Submit</ng-template>
         <p>You are now done.</p>
         <div>
         <button mat-button matStepperPrevious>Back</button>

@@ -29,12 +29,13 @@ export class PostDataService implements OnDestroy {
   private _linkType = SubmissionType.Link;
   SubmitFormControlMap = {
     [this._textType]: [
-      {controlName:"Title",controlType:"text"},
-      {controlName:"Text",controlType:"textarea"}
+      {controlName:"Title",controlType:"text", validators:{reqduired:true,maxLength:200}, placeholder: "Title (1-200 characters)"},
+      {controlName:"Subreddit",controlType:"text", validators:{reqduired:true, minLength:3, maxLength:21, alphaunder:true, subreddit: true}, placeholder: "Subreddit (3-21 characters)"},
+      {controlName:"Text",controlType:"textarea", placeholder: "Text (1+ characters)"}
     ],
     [this._linkType]: [
-      {controlName:"Title",controlType:"text"},
-      {controlName:"Subreddit",controlType:"text"}
+      {controlName:"Title",controlType:"text", validators:{reqduired:true,maxLength:200}, placeholder: "Title (1-200 characters)"},
+      {controlName:"Subreddit",controlType:"text", validators:{minLength:3, maxLength:21, alphaunder:true, subreddit: true}, placeholder: "Subreddit (3-21 characters)"}
     ]
   }
 
@@ -61,8 +62,7 @@ export enum SubmissionType {
 export interface SubmitFormControl {
   controlName: string;
   controlType: string;
-  valueType?: string;
-  currentValue?: string;
+  default?: string;
   placeholder?: string;
   options?: Array<{
     optionName: string;
@@ -70,7 +70,11 @@ export interface SubmitFormControl {
   }>;
   validators?: {
     required?: boolean;
-    minlength?: number;
-    maxlength?: number;
+    minLength?: number;
+    maxLength?: number;
+    url?: boolean;
+    email?: boolean;
+    alphaunder?:boolean;
+    subreddit?: boolean;
   };
 }

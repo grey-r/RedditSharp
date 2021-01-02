@@ -9,5 +9,5 @@ export function URLValidator(control: AbstractControl): null | ValidationErrors 
       validUrl = false;
     }
 
-    return validUrl ? null : { invalidUrl: true };
+    return validUrl ? null : { url: true };
 }
