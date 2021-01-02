@@ -17,7 +17,25 @@ export class RequirementValidatorService {
   constructor (private http:HttpClient, private oauth:OauthService) {
       
   }
-  checkPostRequirements(postTitle:string, data:any):string|null {
+  assignError(component:AbstractControl, key:string, value:string):ValidationErrors {
+    let errs = component.errors;
+    if (!errs) {
+      errs = {};
+    }
+    errs[key] = value;
+    component.setErrors(errs);
+    return {key:value};
+  }
+  checkPostRequirements(postTitleComponent:AbstractControl, data:any): ValidationErrors|null {
+    let title = postTitleComponent.value;
+    if (data) {
+      if (data.title_text_min_length && title.length<data.title_text_min_length) {
+        return this.assignError(postTitleComponent,"minlength",`Too short -- must be ${data.title_text_min_length} or longer.`);
+      }
+      if (data.title_text_max_length && title.length>data.title_text_max_length) {
+        return this.assignError(postTitleComponent,"minlength",`Too long -- must be ${data.title_text_max_length} or shorter.`);
+      }
+    }
     return null;
   }
   getValidator():AsyncValidatorFn {
@@ -45,28 +63,20 @@ export class RequirementValidatorService {
                   return that.http.get(`https://oauth.reddit.com/api/v1/${s}/post_requirements.json`,httpOptions).pipe(catchError( (x:any) => {
                     return of({"error":"Subreddit does not exist"});
                   }), take(1), map ( (data:any) => {
-                      let err:string|null = null;
                       if (data.error) {
-                        err = data.error;
+                        let err = data.error;
                         let errs = subreddit.errors;
                         if (!errs) {
                           errs = {};
                         }
                         errs["sub"] = err;
                         subreddit.setErrors(errs);
+                        return {"sub":err};
                       }
-                      else if (title) {
-                        err = that.checkPostRequirements(title.value,data);
-                        if (err) {
-                          let errs = title.errors;
-                          if (!errs) {
-                            errs = {};
-                          }
-                          errs["sub"] = err;
-                          title.setErrors(errs);
-                        }
+                      if (title) {
+                        return that.checkPostRequirements(title,data);
                       }
-                      return err ? {"sub":err} : null
+                      return null;
                   }));
               }));
         }
