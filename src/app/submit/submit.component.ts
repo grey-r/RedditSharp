@@ -31,6 +31,8 @@ export class SubmitComponent implements OnInit, OnDestroy {
     });
     this.firstFormGroup.get("postType")?.valueChanges.subscribe( (val:SubmissionType) => {
       this._postData.type = val;
+      this.secondFormGroup.reset();
+      this.secondFormGroup.markAsPristine();
     });
     this.postData.submitFormData$.subscribe( (data:SubmitFormControl[]) => {
       this.secondFormData=data;
@@ -109,6 +111,18 @@ export class SubmitComponent implements OnInit, OnDestroy {
       return c.getError("sub");
     }
     return "Generic error.";
+  }
+
+  getSubreddit(): string | null {
+    return this._ar.snapshot.paramMap.get("subreddit");
+  }
+
+  getReturnLink(): string[] {
+    let sub:string|null = this.getSubreddit();
+    if (sub) {
+      return ["/r",sub];
+    }
+    return ["/dashboard"];
   }
 
   ngOnDestroy(): void {

@@ -174,7 +174,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   }
   
   shouldShowPostFAB():boolean {
-    return /^\/r\/([a-zA-Z0-9_]+)/.test(this.router.url) || this.router.url==="/dashboard"
+    return /^\/r\/([a-zA-Z0-9_]+$)/.test(this.router.url) || this.router.url==="/dashboard"
   }
 
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));

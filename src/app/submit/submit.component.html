@@ -1,4 +1,4 @@
-<mat-vertical-stepper [linear]="true" #stepper>
+<mat-vertical-stepper [linear]="true" #stepper class="form">
     <mat-step [stepControl]="firstFormGroup">
         <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Post Type</ng-template>
@@ -24,7 +24,7 @@
                     <mat-form-field class="full-width-field">
                         <mat-label>{{input.controlName}}</mat-label>
                         <textarea matInput formControlName="{{input.controlName}}" placeholder="{{input.placeholder}}" [cdkTextareaAutosize] [cdkAutosizeMinRows]="6" cdkAutosizeMaxRows="12"
-                                required>
+                                required autocomplete="off">
                         </textarea>
                         <mat-error *ngIf="getErrorMessage(secondFormGroup,input.controlName)">{{getErrorMessage(secondFormGroup,input.controlName)}}</mat-error>
                     </mat-form-field>
@@ -33,7 +33,7 @@
                     <mat-form-field [class.full-width-field]="input.controlType=='text' || input.controlType=='url'">
                         <mat-label>{{input.controlName}}</mat-label>
                         <input matInput formControlName="{{input.controlName}}" placeholder="{{input.placeholder}}"
-                                required>
+                                required autocomplete="off">
                         <mat-error *ngIf="getErrorMessage(secondFormGroup,input.controlName)">{{getErrorMessage(secondFormGroup,input.controlName)}}</mat-error>
                     </mat-form-field>
                 </div>
@@ -47,10 +47,14 @@
     </mat-step>
     <mat-step>
         <ng-template matStepLabel>Submit</ng-template>
-        <p>You are now done.</p>
+        <p>Your post is ready to submit.</p>
         <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button (click)="stepper.reset()">Submit</button>
         </div>
     </mat-step>
 </mat-vertical-stepper>
+<div class="footer">
+    <button mat-button [routerLink]="getReturnLink()">Back to {{getSubreddit()?"/r/"+getSubreddit():"dashboard"}}</button>
+</div>
