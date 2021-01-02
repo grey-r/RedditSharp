@@ -6,6 +6,6 @@ export const environment = {
     refreshType:"refresh_token",
     tokenEndpoint:"https://www.reddit.com/api/v1/access_token",
     redirectUrl: "https://redditsharp-b7de3.firebaseapp.com/authenticate", //replace
-    scope:"read identity mysubreddits vote"
+    scope:"account edit flair history identity mysubreddits read report save submit subscribe vote wikiread"
   };
   
