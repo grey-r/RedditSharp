@@ -102,6 +102,12 @@ export class SubmitComponent implements OnInit, OnDestroy {
     if (c.hasError("maxlength")) {
       return "Too long."
     }
+    if (c.hasError("blacklist")) {
+      return c.getError("blacklist");
+    }
+    if (c.hasError("whitelist")) {
+      return c.getError("whitelist");
+    }
     if (c.hasError("invalidText")) {
       return "Contains invalid characters";
     }

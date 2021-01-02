@@ -45,11 +45,15 @@ export class RequirementValidatorService {
           }
         }
         if (data.title_required_strings) {
+          let wordCount = 0;
           for (let i=0; i<data.title_required_strings.length; i++) {
             let word = <string>data.title_required_strings[i];
-            if (title.search(word)==-1) {
-              return this.assignError(postTitleComponent,"whitelist",`Lacks whitelisted word -- ${word}.`);
+            if (title.search(word)!=-1) {
+              wordCount++;
             }
+          }
+          if (wordCount==0) {
+            return this.assignError(postTitleComponent,"whitelist",`Contains no whitelisted words.`);
           }
         }
       }
