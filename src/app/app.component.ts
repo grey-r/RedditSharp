@@ -161,16 +161,27 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   addPost():void {
-    if (this.route.children.length<=0) 
+    if (!this.oauth.getLoggedIn()) {
+      this.router.navigate(["/login"]);
       return;
-    let childRoute = this.route.children[0];
-    let sub:string|null = childRoute.snapshot.paramMap.get("subreddit");
-    if (!sub) {
-      this.router.navigate(["post"]);
     }
-    else {
-      this.router.navigate(["r",sub,"post"]);
+    if (this.route.children.length<=0) {
+      return;
     }
+    let that = this;
+    this.oauth.isReady()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .pipe(filter( (isReady:boolean) => { return isReady; }))
+    .subscribe( (isReady: boolean) => {
+        let childRoute = that.route.children[0];
+        let sub:string|null = childRoute.snapshot.paramMap.get("subreddit");
+        if (!sub) {
+          that.router.navigate(["/post"]);
+        }
+        else {
+          that.router.navigate(["/r",sub,"post"]);
+        }
+    });
   }
   
   shouldShowPostFAB():boolean {
