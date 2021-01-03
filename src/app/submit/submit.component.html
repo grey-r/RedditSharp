@@ -45,14 +45,17 @@
         </div>
         </form>
     </mat-step>
-    <mat-step>
-        <ng-template matStepLabel>Submit</ng-template>
-        <p>Your post is ready to submit.</p>
-        <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset();resetForms();">Reset</button>
-        <button mat-button (click)="onSubmit();stepper.reset();resetForms();">Submit</button>
-        </div>
+    <mat-step [stepControl]="thirdFormGroup" label="Tag and Submit">
+        <form [formGroup]="thirdFormGroup">
+            <mat-selection-list formControlName="tags">
+                <!--<mat-list-option [value]="'nsfw'">Mature Content</mat-list-option>-->
+                <mat-list-option [value]="'spoiler'">Spoiler</mat-list-option>
+                <mat-list-option [value]="'sendreplies'">Send Replies to Inbox</mat-list-option>
+            </mat-selection-list>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset();resetForms();">Reset</button>
+            <button mat-button (click)="onSubmit();stepper.reset();resetForms();">Submit</button>
+        </form>
     </mat-step>
 </mat-vertical-stepper>
 <div class="footer">

@@ -19,6 +19,7 @@ export class SubmitComponent implements OnInit, OnDestroy {
   SubmissionType = SubmissionType;
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
+  thirdFormGroup!:FormGroup;
   secondFormData!:SubmitFormControl[];
   postData:PostDataService;
 
@@ -36,6 +37,9 @@ export class SubmitComponent implements OnInit, OnDestroy {
     this.firstFormGroup = this._formBuilder.group({
       postType: [this.postData.type, Validators.required]
     });
+    this.thirdFormGroup = this._formBuilder.group({
+      tags: [""]
+    });
     this.val1=this.firstFormGroup.value;
     this.firstFormGroup.get("postType")?.valueChanges.subscribe( (val:string) => {
       if ((<any[]>Object.values(SubmissionType)).includes(val)) {
@@ -43,6 +47,11 @@ export class SubmitComponent implements OnInit, OnDestroy {
         this.val1=this.firstFormGroup.value;
       }
     });
+    /*
+    this.thirdFormGroup.get("tags")?.valueChanges.subscribe( (val) => {
+      console.log(val);
+    });
+    */
     this.postData.submitFormData$.subscribe( (data:SubmitFormControl[]) => {
       this.secondFormData=data;
       const formGroup:{[name:string]: FormControl} = {};
@@ -189,6 +198,29 @@ export class SubmitComponent implements OnInit, OnDestroy {
           break;
       }
     });
+    let tagComponent = this.thirdFormGroup.get("tags");
+    if (tagComponent) {
+      let val = tagComponent.value;
+      if (Array.isArray(val)) {
+        for (let tag of val) {
+          switch(tag) {
+            case "spoiler":
+              data.spoiler=true;
+              break;
+            case "sendreplies":
+              data.sendreplies=true;
+              break;
+            case "nsfw":
+              data.nsfw=true;
+              break;
+            case "resubmit":
+              data.resubmit=true;
+              break;
+          }
+        }
+      }
+    }
+    data.resubmit=true; //maybe just always resubmit, why not
     if (data.type && data.title && this._oauth.getReady()) {
       this._redditFeed.submitPost(data).subscribe( (res:any) => {
 
