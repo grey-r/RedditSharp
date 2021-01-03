@@ -15,8 +15,10 @@ export class OauthService {
 
   private _refreshing: boolean = false;
   private _ready: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private _token:string|null;
 
   constructor(private http:HttpClient) {
+    this._token = localStorage.getItem("token");
     if (this.getReady())
       this._ready.next(true);
     //window['oauth']=this;
@@ -52,8 +54,9 @@ export class OauthService {
   }
 
   setToken(token:string, delay:number=EXPIRATION_DELAY) {
-    this._ready.next(true);
+    this._token=token;
     localStorage.setItem("token",token);
+    this._ready.next(true);
     let exp =  Date.now() + delay*1000;
     localStorage.setItem("tokenExpiration", (exp).toString() );
   }
@@ -67,7 +70,7 @@ export class OauthService {
   }
 
   getToken():string|null {
-    return localStorage.getItem("token");
+    return this._token;
   }
 
   getRefreshToken():string|null {
@@ -121,7 +124,6 @@ export class OauthService {
   
     return this.http.post(environment.tokenEndpoint, postdata, httpOptions).pipe(map( (res:any) => {
       if (res.error) {
-        this._ready.next(true);
         return <AuthenticationError> res;
       }
       else {
