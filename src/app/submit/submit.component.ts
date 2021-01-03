@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { OauthService } from '../reddit/oauth.service';
@@ -9,6 +10,7 @@ import { SubredditValidatorService } from '../reddit/validators/subreddit-valida
 import { AlphaUnderValidator } from '../validators/alpha-under-validator';
 import { URLValidator } from '../validators/url-validator';
 import { PostDataService, SubmissionType, SubmitFormControl, SubmitFormData } from './postdata.service';
+import { ResultModalComponent } from './result-modal/result-modal.component';
 
 @Component({
   selector: 'app-submit',
@@ -28,7 +30,7 @@ export class SubmitComponent implements OnInit, OnDestroy {
 
   ngUnsubscribe = new Subject<void>();
 
-  constructor(private _formBuilder:FormBuilder, private _postData:PostDataService, private _redditFeed:RedditFeedService, private _oauth:OauthService,
+  constructor(private _formBuilder:FormBuilder, private _postData:PostDataService, private _redditFeed:RedditFeedService, private _oauth:OauthService, private dialog: MatDialog,
     private _subVal:SubredditValidatorService, private _reqVal:RequirementValidatorService, private _ar:ActivatedRoute) { 
     this.postData = this._postData;
   }
@@ -223,7 +225,10 @@ export class SubmitComponent implements OnInit, OnDestroy {
     data.resubmit=true; //maybe just always resubmit, why not
     if (data.type && data.title && this._oauth.getReady()) {
       this._redditFeed.submitPost(data).subscribe( (res:any) => {
-
+        let dialogRef = this.dialog.open(ResultModalComponent, {
+          autoFocus: false,
+          data: res
+        });
       });
     }
   }

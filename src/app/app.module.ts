@@ -49,6 +49,7 @@ import { PostSubtitleComponent } from './reddit/post-subtitle/post-subtitle.comp
 import { PostVoteComponent } from './reddit/post-vote/post-vote.component';
 import { SafeHTMLPipe } from './safe-html.pipe';
 import { SortPipePipe } from './sort-pipe.pipe';
+import { ResultModalComponent } from './submit/result-modal/result-modal.component';
 import { SubmitComponent } from './submit/submit.component';
 import { PostModalComponent } from './view/post-modal/post-modal.component';
 
@@ -67,7 +68,8 @@ import { PostModalComponent } from './view/post-modal/post-modal.component';
     PostCommentComponent,
     PostFooterComponent,
     PostVoteComponent,
-    SubmitComponent
+    SubmitComponent,
+    ResultModalComponent
   ],
   imports: [
     BrowserModule,
