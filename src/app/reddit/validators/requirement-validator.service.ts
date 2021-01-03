@@ -38,7 +38,7 @@ export class RequirementValidatorService {
       if (data.title_text_max_length && title.length>data.title_text_max_length) {
         return this.assignError(postTitleComponent,"minlength",`Too long -- must be ${data.title_text_max_length} or shorter.`);
       }
-      if (data.title_blacklisted_strings) {
+      if (data.title_blacklisted_strings && data.title_blacklisted_strings.length>0) {
         for (let i=0; i<data.title_blacklisted_strings.length; i++) {
           let word = <string>data.title_blacklisted_strings[i];
           if (title.search(word)!=-1) {
@@ -46,7 +46,7 @@ export class RequirementValidatorService {
           }
         }
       }
-      if (data.title_required_strings) {
+      if (data.title_required_strings && data.title_required_strings.length>0) {
         let wordCount = 0;
         for (let i=0; i<data.title_required_strings.length; i++) {
           let word = <string>data.title_required_strings[i];
@@ -70,7 +70,7 @@ export class RequirementValidatorService {
       if (data.body_text_max_length && body.length>data.body_text_max_length) {
         return this.assignError(postBodyComponent,"maxLength",`Too short -- must be ${data.body_text_max_length} or longer.`);
       }
-      if (data.body_blacklisted_strings) {
+      if (data.body_blacklisted_string && data.body_blacklisted_strings.length>0) {
         for (let i=0; i<data.body_blacklisted_strings.length; i++) {
           let word = <string>data.body_blacklisted_strings[i];
           if (body.search(word)!=-1) {
@@ -78,7 +78,7 @@ export class RequirementValidatorService {
           }
         }
       }
-      if (data.body_required_strings) {
+      if (data.body_required_strings && data.body_required_strings.length>0) {
         let wordCount = 0;
         for (let i=0; i<data.body_required_strings.length; i++) {
           let word = <string>data.body_required_strings[i];
