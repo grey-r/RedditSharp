@@ -29,14 +29,14 @@ export class PostDataService implements OnDestroy {
   private _linkType = SubmissionType.Link;
   SubmitFormControlMap = {
     [this._textType]: [
-      {controlName:"Title",controlType:"text", validators:{required:true,maxLength:300}, placeholder: "Title (1-200 characters)"},
-      {controlName:"Subreddit",controlType:"text", validators:{required:true, minLength:3, maxLength:21, alphaunder:true}, placeholder: "Subreddit (3-21 characters)", parameter: "subreddit"},
-      {controlName:"Text",controlType:"textarea", placeholder: "Text (1+ characters)"}
+      {controlName:"Title",controlType:"text", validators:{required:true,maxLength:300}, placeholder: "Title (1-200 characters)", field:"title"},
+      {controlName:"Subreddit",controlType:"text", validators:{required:true, minLength:3, maxLength:21, alphaunder:true}, placeholder: "Subreddit (3-21 characters)", parameter: "subreddit", field:"sr"},
+      {controlName:"Text",controlType:"textarea", placeholder: "Text (Markdown formatted)", field:"text"}
     ],
     [this._linkType]: [
-      {controlName:"Title",controlType:"text", validators:{required:true,maxLength:300}, placeholder: "Title (1-200 characters)"},
-      {controlName:"Subreddit",controlType:"text", validators:{required:true, minLength:3, maxLength:21, alphaunder:true}, placeholder: "Subreddit (3-21 characters)", parameter: "subreddit"},
-      {controlName:"Link",controlType:"url", validators:{required:true, url:true}, placeholder: "https://google.com/"}
+      {controlName:"Title",controlType:"text", validators:{required:true,maxLength:300}, placeholder: "Title (1-200 characters)", field:"title"},
+      {controlName:"Subreddit",controlType:"text", validators:{required:true, minLength:3, maxLength:21, alphaunder:true}, placeholder: "Subreddit (3-21 characters)", parameter: "subreddit", field:"sr"},
+      {controlName:"Link",controlType:"url", validators:{required:true, url:true}, placeholder: "https://google.com/", field:"url"}
     ]
   }
 
@@ -56,7 +56,7 @@ export class PostDataService implements OnDestroy {
 }
 
 export enum SubmissionType {
-  Text = "text",
+  Text = "self",
   Link = "link"
 }
 
@@ -66,6 +66,7 @@ export interface SubmitFormControl {
   default?: string;
   placeholder?: string;
   parameter?: string; //route parameter
+  field?: string; //field in remote queries
   options?: Array<{
     optionName: string;
     value: string;
@@ -79,4 +80,16 @@ export interface SubmitFormControl {
     alphaunder?:boolean;
     subreddit?: boolean;
   };
+}
+
+export interface SubmitFormData {
+  type:SubmissionType;
+  title: string;
+  sr: string;
+  text?: string;
+  url?:string;
+  nsfw?:boolean;
+  resubmit?:boolean;
+  sendreplies?:boolean;
+  spoiler?:boolean;
 }

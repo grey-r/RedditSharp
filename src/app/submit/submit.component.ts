@@ -2,11 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
+import { OauthService } from '../reddit/oauth.service';
+import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { RequirementValidatorService } from '../reddit/validators/requirement-validator.service';
 import { SubredditValidatorService } from '../reddit/validators/subreddit-validator.service';
 import { AlphaUnderValidator } from '../validators/alpha-under-validator';
 import { URLValidator } from '../validators/url-validator';
-import { PostDataService, SubmissionType, SubmitFormControl } from './postdata.service';
+import { PostDataService, SubmissionType, SubmitFormControl, SubmitFormData } from './postdata.service';
 
 @Component({
   selector: 'app-submit',
@@ -25,7 +27,8 @@ export class SubmitComponent implements OnInit, OnDestroy {
 
   ngUnsubscribe = new Subject<void>();
 
-  constructor(private _formBuilder:FormBuilder, private _postData:PostDataService, private _subVal:SubredditValidatorService, private _reqVal:RequirementValidatorService, private _ar:ActivatedRoute) { 
+  constructor(private _formBuilder:FormBuilder, private _postData:PostDataService, private _redditFeed:RedditFeedService, private _oauth:OauthService,
+    private _subVal:SubredditValidatorService, private _reqVal:RequirementValidatorService, private _ar:ActivatedRoute) { 
     this.postData = this._postData;
   }
 
@@ -145,6 +148,52 @@ export class SubmitComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  onSubmit(): void {
+    let data: SubmitFormData = {
+      type: this.firstFormGroup.get("postType")?.value,
+      title: "",
+      sr: ""
+    };
+    this.secondFormData.forEach( (v:SubmitFormControl) => {
+      let ctrl = this.secondFormGroup.get(v.controlName);
+      if (!ctrl) return;
+      switch (v.field) {
+        case "title":
+          data.title = ctrl?.value;
+          break;
+        case "sr":
+          data.sr = ctrl?.value;
+          break;
+        case "type":
+          data.type = ctrl?.value;
+          break;
+        case "text":
+          data.text = ctrl?.value;
+          break;
+        case "url":
+          data.url = ctrl?.value;
+          break;
+        case "nsfw":
+          data.nsfw = ctrl?.value;
+          break;
+        case "resubmit":
+          data.resubmit = ctrl?.value;
+          break;
+        case "sendreplies":
+          data.sendreplies = ctrl?.value;
+          break;
+        case "spoiler":
+          data.spoiler = ctrl?.value;
+          break;
+      }
+    });
+    if (data.type && data.title && this._oauth.getReady()) {
+      this._redditFeed.submitPost(data).subscribe( (res:any) => {
+
+      });
+    }
   }
 
 }

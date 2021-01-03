@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import { Post } from '../reddit/post';
+import { SubmitFormData } from '../submit/postdata.service';
 import { OauthService } from './oauth.service';
 import { PostInfoService } from './post-info.service';
 import { FilterModes, SortModes } from './sort.service';
@@ -16,6 +17,9 @@ export class RedditFeedService {
   private _lastID:string|null=null;
   private _lastType:string|null=null;
   //client: HttpClient;
+
+  ngUnsubscribe = new Subject<void>();
+  
   constructor(private httpClient: HttpClient, private ngZone:NgZone, private oauth:OauthService, private postInfo: PostInfoService) {
   }
 
@@ -50,5 +54,41 @@ export class RedditFeedService {
     }
 
     return ref;
+  }
+
+  submitPost(data: SubmitFormData):Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `bearer ${this.oauth.getToken()}`
+      }),
+    };
+    let body = `api_type=json&kind=${data.type}&sr=${data.sr}&title=${data.title}`;
+    //append on type-specific params
+    if (data.text) {
+      body+=`&text=${data.text}`;
+    }
+    if (data.url) {
+      body+=`&url=${data.url}`;
+    }
+    if (data.resubmit) {
+      body+=`&resubmit=${data.resubmit}`;
+    }
+    if (data.nsfw) {
+      body+=`&nsfw=${data.nsfw}`;
+    }
+    if (data.sendreplies) {
+      body+=`&sendreplies=${data.sendreplies}`;
+    }
+    if (data.spoiler) {
+      body+=`&spoiler=${data.spoiler}`;
+    }
+    let obs = this.httpClient.post("https://oauth.reddit.com/api/submit",body,httpOptions)
+    return obs;
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
