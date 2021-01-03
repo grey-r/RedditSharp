@@ -227,7 +227,11 @@ export class SubmitComponent implements OnInit, OnDestroy {
       this._redditFeed.submitPost(data).subscribe( (res:any) => {
         let dialogRef = this.dialog.open(ResultModalComponent, {
           autoFocus: false,
-          data: res
+          data: {
+            results: res,
+            subreddit: this.getSubreddit(),
+            returnLink: this.getReturnLink()
+          }
         });
       });
     }

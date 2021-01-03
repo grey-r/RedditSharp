@@ -1,9 +1,9 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DarkModeService } from 'src/app/dark-mode.service';
-import { PostInfoService } from 'src/app/reddit/post-info.service';
 
 @Component({
   selector: 'app-result-modal',
@@ -19,7 +19,7 @@ export class ResultModalComponent implements OnInit, OnDestroy {
     return this.dark.darkMode$;
   }
 
-  constructor(public dialogRef: MatDialogRef<ResultModalComponent>, private dark:DarkModeService, private pi:PostInfoService,
+  constructor(public dialogRef: MatDialogRef<ResultModalComponent>, private dark:DarkModeService, private router:Router,
     @Inject(MAT_DIALOG_DATA) public inputData: any) {
       this.data = inputData;
       document.getElementById("dialContent")?.scrollIntoView();
@@ -44,5 +44,21 @@ export class ResultModalComponent implements OnInit, OnDestroy {
   closeDialog():void {
     this.dialogRef.close();
   }
+
+  return():void {
+    if (this.data.returnLink) {
+      this.router.navigate(this.data.returnLink);
+      this.closeDialog();
+    }
+  }
+
+  getReturnString():string {
+    if (!this.data.subreddit) {
+      return "Dashboard";
+    }
+    else {
+      return "/r/" + this.data.subreddit;
+    }
+  } 
 
 }

@@ -1,1 +1,11 @@
-<p>result-modal works!</p>
+<h2 mat-dialog-title>Submission {{ (data.errors && data.errors.length>0) ? "Failure" : "Success" }}!</h2>
+<mat-dialog-content class="mat-typography">
+<!--
+<h3>Develop across all platforms</h3>
+<p>Learn one way to build applications with Angular and reuse your code and abilities to build
+apps for any deployment target. For web, mobile web, native mobile and native desktop.</p>-->
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Close</button>
+  <button mat-button (click)="return()" cdkFocusInitial>Return to {{getReturnString()}}</button>
+</mat-dialog-actions>
