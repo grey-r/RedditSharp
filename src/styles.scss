@@ -10,6 +10,7 @@ div .post-modal {  /*center above content and make full height (almost)*/
     width: 60vw;
     max-width: 60vw;
     /*height: calc(100% - 1rem);*/
+    max-height: 95%; /*fallback for no calc*/
     max-height: calc(100% - 5vh);
     /*
     width: calc(100% - 1rem);
