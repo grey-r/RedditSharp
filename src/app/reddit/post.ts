@@ -13,6 +13,7 @@ export const enum PostType {
 }
 
 export class Post {
+    private _initDate:number = Date.now();
     private _id: string;
     private _type: PostType;
     private _utc:number|null = null;
@@ -113,7 +114,7 @@ export class Post {
             return null;
         if (!this._ago) {
             let pluralDecision = 2-0.0000001;
-            let secs = Math.floor(Date.now()/1000 - this.utc);
+            let secs = Math.floor(this._initDate/1000 - this.utc);
 
             if (secs<60)
                 return Math.floor(secs) + " second"+(secs>pluralDecision?"s":"");
