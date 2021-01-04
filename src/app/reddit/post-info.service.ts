@@ -90,6 +90,9 @@ export class PostInfoService {
     }
     if (json.url_overridden_by_dest && !json.url && !json.text) { //fallback if no text and url
       post.url = json.url_overridden_by_dest;
+      if (!environment.production) {
+        console.log("falling back to" + json.url_overridden_by_dest);
+      }
     }
   }
 
