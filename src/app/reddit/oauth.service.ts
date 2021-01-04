@@ -164,7 +164,9 @@ export class OauthService {
         this.setToken(res.access_token, res.expires_in);
       }
     }, (err:any)=> {
-      console.log(err);
+      if (!environment.production) {
+        console.log(err);
+      }
       this._refreshing = false;
     });
   }

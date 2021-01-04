@@ -5,6 +5,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { ActivatedRoute, Event as RouterEvent, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { DarkModeService } from './dark-mode.service';
 import { MobileService } from './mobile.service';
 import { MeService } from './reddit/me.service';
@@ -131,7 +132,9 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
     .pipe(takeUntil(this.ngUnsubscribe))
     .pipe(filter( (isReady:boolean) => { return isReady; }))
     .subscribe( (isReady: boolean) => {
-        console.log(isReady);
+        if (!environment.production) {
+          console.log(isReady);
+        }
         this.cd.markForCheck();
         this.fetchSubreddits();
     });
@@ -145,7 +148,11 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
         url:data.name.toLowerCase()
       };
       tempSubs.push(x);
-    }, (err) => {console.log(err);}, () => {
+    }, (err) => {
+      if (!environment.production) {
+        console.log(err);
+      }
+    }, () => {
       tempSubs.sort((a, b) => a.text.localeCompare(b.text));
       this.navSubreddits=tempSubs;
     });

@@ -22,20 +22,6 @@ export class SubredditValidatorService {
         if (isEmpty(control.value)) {
             return of(null);
         } else {
-          /*
-            return control.valueChanges.pipe(
-            debounceTime(500),
-            take(1),
-            switchMap( (x:any) => {
-              console.log(that);
-                let s = <string>x;
-                return that.http.jsonp(`https://reddit.com/r/${s}/.json`,"jsonp").pipe( map ( (data:any) => {
-                    return data.error ? {"subredditError":data.message} : null
-                }), catchError( (x:any) => {
-                  return of({"subredditError":"Subreddit does not exist"});
-                }));
-            }));
-            */
             return control.valueChanges.pipe(
               startWith(""),
               debounceTime(500),

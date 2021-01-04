@@ -79,8 +79,6 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
           this.ngZone.run( () => {
             this.fetchPosts();
           });
-        } else {
-          //console.log("busy");
         }
       }
     });
@@ -122,7 +120,6 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     let idAttr = el.getAttribute("data-post-index");
     while (!idAttr && el.parentElement) {
       el = el.parentElement;
-      //console.log(el);
       idAttr = el.getAttribute("data-post-index");
     }
     if (!idAttr) return;
@@ -149,8 +146,6 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   openPost(post: Post) {
-    //console.log(post_id);
-    //console.log(this.posts[post_id]);
     let dialogRef = this.dialog.open(PostModalComponent, {
       maxWidth: "none",
       //width: Math.round(Math.min(window.innerWidth*0.8,window.innerHeight*1)/window.innerWidth*100).toString() + "%",

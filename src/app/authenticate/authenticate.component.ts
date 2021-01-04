@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { OauthService, AuthenticationResult, AuthenticationError } from '../reddit/oauth.service';
-import { Observer, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { AuthenticationError, AuthenticationResult, OauthService } from '../reddit/oauth.service';
 
 @Component({
   selector: 'app-authenticate',
@@ -29,7 +30,9 @@ export class AuthenticateComponent implements OnInit, OnDestroy {
           if ("error" in data) {
             data=<AuthenticationError> data;
             this.error=data.error;
-            console.log(`AUTH ERROR: ${data.error}`);
+            if (!environment.production) {
+              console.log(`AUTH ERROR: ${data.error}`);
+            }
           }
           else {
             data=<AuthenticationResult> data;

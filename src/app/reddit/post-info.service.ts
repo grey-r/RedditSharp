@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable, NgZone } from '@angular/core';
 import { interval, Observable, Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { OauthService } from './oauth.service';
 import { Post, PostType } from './post';
 import { Subreddit } from './subreddit';
@@ -47,7 +48,9 @@ export class PostInfoService {
         else if (child.id === p.id && overwriteData) {
           this.populatePostInfo(p,child);
         } else {
-          console.log(child.id + " orphaned.");
+          if (!environment.production) {
+            console.log(child.id + " orphaned.");
+          }
         }
       }
     }
@@ -79,7 +82,6 @@ export class PostInfoService {
     }
     if (json.thumbnail)
       post.thumbnailUrl = this.htmlDecode(json.thumbnail);
-    //console.log(json.media_embed.content);
     if (json.media_embed && json.media_embed.content)
       post.mediaEmbed = this.htmlDecode(json.media_embed.content);
     if (json.secure_media && json.secure_media.reddit_video) {
@@ -152,7 +154,6 @@ export class PostInfoService {
   private _processCommentData(p:Post,obs:Observable<any>,s:Subject<any>|null = null, overwriteData: boolean=false) {
     obs.pipe(first()).subscribe( (results: any) => {
       this.postFromData(p,results,overwriteData);
-      //console.log(p.replies);
       if (s) {
         s.next(results);
         s.complete();
@@ -215,7 +216,9 @@ export class PostInfoService {
         if (err.status == 429) {//rate limited
           interval(attempts*1000).pipe(first()).subscribe( () => {this.vote(p,voteDir,attempts+1)} );//wait an increasing amount of time before retrying
         }
-        console.log(err); //might want to replace this with b
+        if (!environment.production) {
+          console.log(err); //might want to replace this with b
+        }
       });
     });
   }

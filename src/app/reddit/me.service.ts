@@ -24,7 +24,9 @@ export class MeService {
     };
   
     this.http.get("https://oauth.reddit.com/api/v1/me", httpOptions).subscribe( (data) => {
-      console.log(data);
+      if (!environment.production) {
+        console.log(data);
+      }
     })
   }
 
@@ -40,9 +42,7 @@ export class MeService {
     };
   
     this.http.get(`https://oauth.reddit.com/subreddits/mine/subscriber?limit=${environment.subredditLimit}${after?"&after="+after:""}`, httpOptions).subscribe( (res:any) => {
-      //console.log(res.data.children);
       res.data.children.forEach( (child:any) => {
-        //console.log(child);
         s.next( new Subreddit(child.data.id, child.kind, child.data.display_name));
       });
       if (res.data.after) {

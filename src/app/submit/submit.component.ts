@@ -49,11 +49,6 @@ export class SubmitComponent implements OnInit, OnDestroy {
         this.val1=this.firstFormGroup.value;
       }
     });
-    /*
-    this.thirdFormGroup.get("tags")?.valueChanges.subscribe( (val) => {
-      console.log(val);
-    });
-    */
     this.postData.submitFormData$.subscribe( (data:SubmitFormControl[]) => {
       this.secondFormData=data;
       const formGroup:{[name:string]: FormControl} = {};
