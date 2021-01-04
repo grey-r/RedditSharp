@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, first, takeUntil } from 'rxjs/operators';
 import { OauthService } from '../reddit/oauth.service';
-import { Post } from '../reddit/post';
+import { Post, PostType } from '../reddit/post';
 import { PostInfoService } from '../reddit/post-info.service';
 import { RedditFeedService } from '../reddit/reddit-feed.service';
 import { FilterModes, SortModes, SortService } from '../reddit/sort.service';
@@ -101,6 +101,10 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( (routeParams:any) => {
       this.subreddit = routeParams.subreddit;
+      let postid:string|null = routeParams.postid;
+      if (routeParams.postid && this.subreddit) {
+        this.openPost(new Post(routeParams.postid,PostType.Link));
+      }
       window.scrollTo(0,0);
     });
   }
