@@ -20,12 +20,12 @@ export class PostInfoService {
     return doc.documentElement.textContent;
   }
 
-  private commentsFromData(p:Post, data: any):void {
+  private postFromData(p:Post, data: any, overwriteData:boolean = false):void {
     p.replies = [];
     if (Array.isArray(data)) {
       for (let i=0; i<data.length; i++) {
         let listing = data[i];
-        this.commentsFromData(p,listing);
+        this.postFromData(p, listing, overwriteData);
       }
       return;
     }
@@ -41,8 +41,13 @@ export class PostInfoService {
         if (childContainer.kind === PostType.Comment) {
           let post = new Post(child.id,childContainer.kind);
           this.populatePostInfo(post,child);
-          this.commentsFromData(post,child.replies);
+          this.postFromData(post,child.replies,overwriteData);
           p.replies.push(post);
+        }
+        else if (child.id === p.id && overwriteData) {
+          this.populatePostInfo(p,child);
+        } else {
+          console.log(child.id + " orphaned.");
         }
       }
     }
@@ -144,9 +149,9 @@ export class PostInfoService {
     }
   }
 
-  private _processCommentData(p:Post,obs:Observable<any>,s:Subject<any>|null = null) {
+  private _processCommentData(p:Post,obs:Observable<any>,s:Subject<any>|null = null, overwriteData: boolean=false) {
     obs.pipe(first()).subscribe( (results: any) => {
-      this.commentsFromData(p,results);
+      this.postFromData(p,results,overwriteData);
       //console.log(p.replies);
       if (s) {
         s.next(results);
@@ -175,10 +180,10 @@ export class PostInfoService {
       this.oauth.isReady()
       .pipe(first( (isReady:boolean) => { return isReady; }))
       .subscribe( () => {
-        this._processCommentData(p,this.http.get(`https://oauth.reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,httpOptions),s);
+        this._processCommentData(p,this.http.get(`https://oauth.reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,httpOptions), s, true);
       });
     } else {
-      this._processCommentData(p,this.http.jsonp(`https://reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,"jsonp"),s);
+      this._processCommentData(p,this.http.jsonp(`https://reddit.com/${p.subreddit?"/r/"+p.subreddit.name:""}/comments/${p.id}/.json?`,"jsonp"), s, true);
     }
 
     return s.asObservable();
