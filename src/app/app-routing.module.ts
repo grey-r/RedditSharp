@@ -9,16 +9,17 @@ import { LogoutComponent } from './logout/logout.component';
 import { SubmitComponent } from './submit/submit.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path:'login', component: LoginComponent, canActivate: [ LoggedOutGuard ] },
-  { path:'authenticate', component: AuthenticateComponent},
+  { path:'authenticate', component: AuthenticateComponent, canActivate: [ LoggedOutGuard ]},
   { path:'logout', component: LogoutComponent, canActivate: [ LoggedInGuard ]  },
   { path:'dashboard', component: DashboardComponent },
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path:'post', component: SubmitComponent, pathMatch: 'full', canActivate: [ LoggedInGuard ] },
   { path:'r/:subreddit', component: DashboardComponent},
-  { path:'r/:subreddit/post', component: SubmitComponent},
+  { path:'r/:subreddit/post', component: SubmitComponent, canActivate: [ LoggedInGuard] },
   { path:'r/:subreddit/:postid', component: DashboardComponent},
   { path:'r/:subreddit/comments/:postid/:postname', component: DashboardComponent, pathMatch: 'full' },//copy reddit's exact syntax for users who copypaste
-  { path:'post', component: SubmitComponent, pathMatch: 'full' }
+  { path: '**', redirectTo: '/dashboard'}
 ];
 
 @NgModule({
