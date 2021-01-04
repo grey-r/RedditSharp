@@ -88,6 +88,9 @@ export class PostInfoService {
       let v = json.secure_media.reddit_video;
       post.videoUrl = v.fallback_url;
     }
+    if (json.url_overridden_by_dest && !json.url && !json.text) { //fallback if no text and url
+      post.url = json.url_overridden_by_dest;
+    }
   }
 
   populateComment(post:Post, json:any) {
