@@ -40,8 +40,8 @@ export class RequirementValidatorService {
       }
       if (data.title_blacklisted_strings && data.title_blacklisted_strings.length>0) {
         for (let i=0; i<data.title_blacklisted_strings.length; i++) {
-          let word = <string>data.title_blacklisted_strings[i];
-          if (title.search(word)!=-1) {
+          let word = <string>data.title_blacklisted_strings[i].toLowerCase();
+          if (title.toLowerCase().search(word)!=-1) {
             return this.assignError(postTitleComponent,"blacklist",`Contains blacklisted word -- ${word}.`);
           }
         }
@@ -49,8 +49,8 @@ export class RequirementValidatorService {
       if (data.title_required_strings && data.title_required_strings.length>0) {
         let wordCount = 0;
         for (let i=0; i<data.title_required_strings.length; i++) {
-          let word = <string>data.title_required_strings[i];
-          if (title.search(word)!=-1) {
+          let word = <string>data.title_required_strings[i].toLowerCase();
+          if (title.toLowerCase().search(word)!=-1) {
             wordCount++;
           }
         }
@@ -72,8 +72,8 @@ export class RequirementValidatorService {
       }
       if (data.body_blacklisted_string && data.body_blacklisted_strings.length>0) {
         for (let i=0; i<data.body_blacklisted_strings.length; i++) {
-          let word = <string>data.body_blacklisted_strings[i];
-          if (body.search(word)!=-1) {
+          let word = <string>data.body_blacklisted_strings[i].toLowerCase();
+          if (body.toLowerCase().search(word)!=-1) {
             return this.assignError(postBodyComponent,"blacklist",`Contains blacklisted word -- ${word}.`);
           }
         }
@@ -81,8 +81,8 @@ export class RequirementValidatorService {
       if (data.body_required_strings && data.body_required_strings.length>0) {
         let wordCount = 0;
         for (let i=0; i<data.body_required_strings.length; i++) {
-          let word = <string>data.body_required_strings[i];
-          if (body.search(word)!=-1) {
+          let word = <string>data.body_required_strings[i].toLowerCase();
+          if (body.toLowerCase().search(word)!=-1) {
             wordCount++;
           }
         }
