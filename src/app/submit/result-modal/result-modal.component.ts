@@ -61,4 +61,16 @@ export class ResultModalComponent implements OnInit, OnDestroy {
     }
   } 
 
+  redditToRouter(redditUrl: string):string[] {
+    if (redditUrl.endsWith("/")) {
+      redditUrl=redditUrl.substr(0, redditUrl.length - 1);
+    }
+    let x:string[] = redditUrl.slice(redditUrl.search("/r/")).split("/");
+    if (x.length>0) {
+      x[0]="/"+x[0];
+      let lastString = x[x.length-1];
+    }
+    return x;
+  }
+
 }

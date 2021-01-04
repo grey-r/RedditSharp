@@ -17,6 +17,7 @@ const routes: Routes = [
   { path:'r/:subreddit', component: DashboardComponent},
   { path:'r/:subreddit/post', component: SubmitComponent},
   { path:'r/:subreddit/:postid', component: DashboardComponent},
+  { path:'r/:subreddit/comments/:postid/:postname', component: DashboardComponent, pathMatch: 'full' },//copy reddit's exact syntax for users who copypaste
   { path:'post', component: SubmitComponent, pathMatch: 'full' }
 ];
 

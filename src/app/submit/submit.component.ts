@@ -228,7 +228,7 @@ export class SubmitComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(ResultModalComponent, {
           autoFocus: false,
           data: {
-            results: res,
+            results: res.json,
             subreddit: this.getSubreddit(),
             returnLink: this.getReturnLink()
           }
