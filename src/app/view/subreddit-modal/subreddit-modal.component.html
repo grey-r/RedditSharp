@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Go to Subreddit</h2>
+<mat-dialog-content class="mat-typography">
+    <form #myForm="ngForm" id="ngForm" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <mat-label>Subreddit</mat-label>
+            <input matInput formControlName="subreddit" placeholder="art, news, ..."
+                    required autocomplete="off">
+            <mat-error *ngIf="getErrorMessage(formGroup,'subreddit')">{{getErrorMessage(formGroup, 'subreddit')}}</mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Close</button>
+  <button mat-button form="ngForm" [disabled]="!myForm.valid" (click)="navigate()">Navigate</button>
+</mat-dialog-actions>

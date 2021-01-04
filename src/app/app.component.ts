@@ -1,6 +1,7 @@
 import { BreakpointState, MediaMatcher } from '@angular/cdk/layout';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ActivatedRoute, Event as RouterEvent, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -12,6 +13,7 @@ import { MeService } from './reddit/me.service';
 import { OauthService } from './reddit/oauth.service';
 import { FilterModes, SortModes, SortService } from './reddit/sort.service';
 import { Subreddit } from './reddit/subreddit';
+import { SubredditModalComponent } from './view/subreddit-modal/subreddit-modal.component';
 
 /** @title Responsive sidenav */
 @Component({
@@ -65,6 +67,11 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
 
   navOptions = [
     {text: "Dashboard",url:"dashboard", check: ()=>{return true;}},
+    {text: "Go to Subreddit", check: ()=>{return true;}, click:() => {
+      let dialogRef = this.dialog.open(SubredditModalComponent, {
+        data: {}
+      });
+    }},
     {text:"Log In",url:"login",  check: ()=>{return !this.oauth.getLoggedIn();}},
     {text:"Log Out",url:"logout", check: ()=>{return this.oauth.getLoggedIn();}}
   ]
@@ -98,7 +105,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   ]
 
   constructor(private sortService: SortService, private mobileService: MobileService, private cd:ChangeDetectorRef, private media: MediaMatcher, private oauth:OauthService, private me: MeService,
-    private router:Router, private route:ActivatedRoute, private dark: DarkModeService, private overlayContainer: OverlayContainer) {
+    private router:Router, private route:ActivatedRoute, private dark: DarkModeService, private overlayContainer: OverlayContainer, private dialog:MatDialog) {
 
     this.mobileQuery = this.mobileService.mobileQuery;
     this.darkMode$
@@ -193,6 +200,12 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   
   shouldShowPostFAB():boolean {
     return (this.router.url.startsWith("/r/") && !this.router.url.endsWith("/post")) || this.router.url==="/dashboard"
+  }
+
+  clickNav(navSelector:any) {
+    if (navSelector.click) {
+      navSelector.click();
+    }
   }
 
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));

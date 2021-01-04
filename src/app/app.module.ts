@@ -52,6 +52,7 @@ import { SortPipePipe } from './sort-pipe.pipe';
 import { ResultModalComponent } from './submit/result-modal/result-modal.component';
 import { SubmitComponent } from './submit/submit.component';
 import { PostModalComponent } from './view/post-modal/post-modal.component';
+import { SubredditModalComponent } from './view/subreddit-modal/subreddit-modal.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { PostModalComponent } from './view/post-modal/post-modal.component';
     PostFooterComponent,
     PostVoteComponent,
     SubmitComponent,
-    ResultModalComponent
+    ResultModalComponent,
+    SubredditModalComponent
   ],
   imports: [
     BrowserModule,

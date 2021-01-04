@@ -24,7 +24,7 @@ export class SubredditValidatorService {
         } else {
             return control.valueChanges.pipe(
               startWith(""),
-              debounceTime(500),
+              debounceTime(200),
               take(1),
               switchMap( (x:any) => {
                   let s = <string>x;
