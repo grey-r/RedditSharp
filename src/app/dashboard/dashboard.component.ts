@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, first, takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { OauthService } from '../reddit/oauth.service';
 import { Post, PostType } from '../reddit/post';
 import { PostInfoService } from '../reddit/post-info.service';
@@ -172,14 +173,22 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
         this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].fullname):null, 25, this.sortMode, this.filterMode)
         .subscribe(
           (p:Post) => { this.addPost(p); },
-          e => { alert(e); },
+          e => {
+            if (!environment.production) {
+              console.log(e);
+            }
+          },
           () => { this._loading=false; this._posts = [...this._posts];  } );
       });
     } else {
       this._subscription=this.rs.fetchPosts(this.subreddit, (this.posts.length>0)?(this.posts[this.posts.length-1].fullname):null, 25, this.sortMode, this.filterMode)
       .subscribe(
         (p:Post) => { this.addPost(p); },
-        e => { alert(e); },
+        e => {
+          if (!environment.production) {
+            console.log(e);
+          }
+        },
         () => { this._loading=false; this._posts = [...this._posts];  } );
     }
   }
