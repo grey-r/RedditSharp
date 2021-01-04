@@ -126,8 +126,8 @@ export class PostInfoService {
       }
     }
 
-    if (json.likes) {
-      post.userVote=+json.likes;
+    if (json.likes!=null) {
+      post.userVote=json.likes?1:-1;
     }
 
     if (json.subreddit && json.subreddit.length > 0) {
