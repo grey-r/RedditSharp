@@ -15,9 +15,9 @@ const routes: Routes = [
   { path:'dashboard', component: DashboardComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path:'r/:subreddit', component: DashboardComponent},
+  { path:'r/:subreddit/post', component: SubmitComponent},
   { path:'r/:subreddit/:postid', component: DashboardComponent},
-  { path:'post', component: SubmitComponent, pathMatch: 'full' },
-  { path:'r/:subreddit/post', component: SubmitComponent}
+  { path:'post', component: SubmitComponent, pathMatch: 'full' }
 ];
 
 @NgModule({
