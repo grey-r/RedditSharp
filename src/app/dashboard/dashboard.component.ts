@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit 
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { debounceTime, first, takeUntil } from 'rxjs/operators';
+import { debounceTime, first, skip, takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { OauthService } from '../reddit/oauth.service';
 import { Post, PostType } from '../reddit/post';
@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe( (e) => {
       let y:number = Math.max(window.scrollY,content?content.scrollTop:0);
-      if (content && y>content.scrollHeight-window.innerHeight*2) {
+      if (content && y>content.scrollHeight-window.innerHeight*2 && y>window.innerHeight) {
         //grab more posts
         if (!this.loading) {
           this.ngZone.run( () => {
@@ -85,12 +85,12 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
     });
 
     this.sortService.sortMode$
-    .pipe(takeUntil(this.ngUnsubscribe)).subscribe( () => {
+    .pipe(takeUntil(this.ngUnsubscribe), skip(1)).subscribe( () => {
       this.reload();
     });
 
     this.sortService.filterMode$
-    .pipe(takeUntil(this.ngUnsubscribe)).subscribe( () => {
+    .pipe(takeUntil(this.ngUnsubscribe), skip(1)).subscribe( () => {
       this.reload();
     });
   }
