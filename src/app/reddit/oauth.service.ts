@@ -56,9 +56,9 @@ export class OauthService {
   setToken(token:string, delay:number=EXPIRATION_DELAY) {
     this._token=token;
     localStorage.setItem("token",token);
-    this._ready.next(true);
     let exp =  Date.now() + delay*1000;
     localStorage.setItem("tokenExpiration", (exp).toString() );
+    this._ready.next(true);
   }
 
   setRefreshToken(token:string) {
