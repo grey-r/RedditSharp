@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { Post } from '../reddit/post';
 import { SubmitFormData } from '../submit/postdata.service';
 import { OauthService } from './oauth.service';
@@ -41,14 +41,14 @@ export class RedditFeedService {
     if (this.oauth.getReady()) {
       ref = this.httpClient.get(`https://oauth.reddit.com/${subreddit?"r/"+subreddit+"/":""}${sortMode?sortMode+"/":""}.json?limit=${limit}${after?"&after="+after:""}${filterMode?"&t="+filterMode:""}`, httpOptions)
       .pipe(
-        flatMap( (x:any) => {return x.data.children;}),
+        mergeMap( (x:any) => {return x.data.children;}),
         map(dataToPost)
       );
     }
     else {
       ref = this.httpClient.jsonp(`https://reddit.com/${subreddit?"r/"+subreddit+"/":""}.json?limit=${limit}${after?"&after="+after:""}`,"jsonp")
       .pipe(
-        flatMap( (x:any) => {return x.data.children;}),
+        mergeMap( (x:any) => {return x.data.children;}),
         map(dataToPost)
       );
     }
