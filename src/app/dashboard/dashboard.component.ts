@@ -2,7 +2,7 @@ import { ScrollDispatcher } from '@angular/cdk/overlay';
 import { AfterViewInit, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, merge, Subject, Subscription } from 'rxjs';
 import { debounceTime, first, skip, takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { OauthService } from '../reddit/oauth.service';
@@ -84,13 +84,16 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
       }
     });
 
-    this.sortService.sortMode$
-    .pipe(takeUntil(this.ngUnsubscribe), skip(1)).subscribe( () => {
-      this.reload();
-    });
+    const sortObservable = this.sortService.sortMode$
+    .pipe(takeUntil(this.ngUnsubscribe), skip(1));
 
-    this.sortService.filterMode$
-    .pipe(takeUntil(this.ngUnsubscribe), skip(1)).subscribe( () => {
+    const filterObservable = this.sortService.filterMode$
+    .pipe(takeUntil(this.ngUnsubscribe), skip(1));
+
+    const mergedObservable = merge(sortObservable,filterObservable);
+    mergedObservable
+    .pipe(debounceTime(50))
+    .subscribe( () => {
       this.reload();
     });
   }
