@@ -46,7 +46,7 @@ export class RedditFeedService {
       );
     }
     else {
-      ref = this.httpClient.jsonp(`https://reddit.com/${subreddit?"r/"+subreddit+"/":""}.json?limit=${limit}${after?"&after="+after:""}`,"jsonp")
+      ref = this.httpClient.jsonp(`https://reddit.com/${subreddit?"r/"+subreddit+"/":""}${sortMode?sortMode+"/":""}.json?limit=${limit}${after?"&after="+after:""}${filterMode?"&t="+filterMode:""}`, "jsonp")
       .pipe(
         mergeMap( (x:any) => {return x.data.children;}),
         map(dataToPost)
