@@ -92,6 +92,7 @@ export class DashboardComponent implements OnInit,AfterViewInit,OnDestroy {
 
     const mergedObservable = merge(sortObservable,filterObservable);
     mergedObservable
+    .pipe(debounceTime(50))
     .subscribe( () => {
       this.reload();
     });
