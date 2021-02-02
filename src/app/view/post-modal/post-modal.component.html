@@ -1,16 +1,30 @@
-<div mat-dialog-content class="dialog-content" [class.dark-theme]="darkMode$ | async" id="dialContent">
+<div
+  mat-dialog-content
+  class="dialog-content"
+  [class.dark-theme]="darkMode$ | async"
+  id="dialContent"
+>
   <div class="header" *ngIf="post.author">
-    <div class="avatar" [ngStyle]="{ 'background-image': 'url(' + post.author.avatarUrl + ')'}"></div>
+    <div
+      class="avatar"
+      [ngStyle]="{
+        'background-image': 'url(' + post.author.avatarUrl + ')'
+      }"
+    ></div>
     <div class="aside-avatar">
-      <span class="title">{{post.title}}</span>      <br/>
+      <span class="title">{{ post.title }}</span> <br />
       <app-post-subtitle [post]="post"></app-post-subtitle>
     </div>
   </div>
   <mat-divider></mat-divider>
-  <img *ngIf="post.imageUrl" class="full-image" [src]="post.imageUrl" >
-  <div *ngIf="post.mediaEmbed" [innerHTML]="post.mediaEmbed | safeHTML" class="embed-fluid"></div>
+  <img *ngIf="post.imageUrl" class="full-image" [src]="post.imageUrl" />
+  <div
+    *ngIf="post.mediaEmbed"
+    [innerHTML]="post.mediaEmbed | safeHTML"
+    class="embed-fluid"
+  ></div>
   <video *ngIf="post.videoUrl" class="fluid-embed" controls autoplay muted loop>
-    <source [src]="post.videoUrl" type="video/mp4">
+    <source [src]="post.videoUrl" type="video/mp4" />
   </video>
   <!--
     Bruteforces image if it can display at all
@@ -18,9 +32,14 @@
   -->
   <div class="selftext" [innerHTML]="post.html"></div>
   <mat-divider></mat-divider>
-  <div class="loading" *ngIf="loading$ | async"><div class="thing"></div></div>
+  <div class="loading" *ngIf="loading$ | async">
+    <div class="thing"></div>
+  </div>
   <div class="comments">
-    <app-post-comment *ngFor="let reply of post.replies" [post]="reply"></app-post-comment>
+    <app-post-comment
+      *ngFor="let reply of post.replies"
+      [post]="reply"
+    ></app-post-comment>
   </div>
 </div>
 <div mat-dialog-actions class="dialog-footer">

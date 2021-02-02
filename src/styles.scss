@@ -1,89 +1,96 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 .mat-sidenav.is-desktop {
-    width: 20vw;
+  width: 20vw;
 }
 
-div .post-modal {  /*center above content and make full height (almost)*/
-    width: 60vw;
-    max-width: 60vw;
-    /*height: calc(100% - 1rem);*/
-    max-height: 95%; /*fallback for no calc*/
-    max-height: calc(100% - 5vh);
-    /*
+div .post-modal {
+  /*center above content and make full height (almost)*/
+  width: 60vw;
+  max-width: 60vw;
+  /*height: calc(100% - 1rem);*/
+  max-height: 95%; /*fallback for no calc*/
+  max-height: calc(100% - 5vh);
+  /*
     width: calc(100% - 1rem);
     max-width: calc(100% - 1rem);
     height: calc(100% - 1rem);
     max-height: calc(100% - 1rem);
     */
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .mat-dialog-content {
-    max-height: unset !important;
-    flex: 1 0 0;
+  max-height: unset !important;
+  flex: 1 0 0;
 }
 
 .post-modal .mat-dialog-container {
-    position: relative;
+  position: relative;
 }
-
 
 blockquote {
-    border-left: rgba(128,128,128,0.5) 0.1rem solid;
-    margin: 0px;
-    padding-left: 8px;
+  border-left: rgba(128, 128, 128, 0.5) 0.1rem solid;
+  margin: 0px;
+  padding-left: 8px;
 }
 
-@media (max-width: 600px) { /* on mobile*/
-    div .post-modal { /*fullscreen*/
-        width: 100%;
-        max-width: 100%;
-        height: 100%;
-        max-height: 100%;
-        margin: 0px;
-    }
+@media (max-width: 600px) {
+  /* on mobile*/
+  div .post-modal {
+    /*fullscreen*/
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin: 0px;
+  }
 }
 
 .embed-fluid {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
-    height: 0;
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
 }
 .embed-fluid iframe,
 .embed-fluid object,
 .embed-fluid embed {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    bottom: 0;
-    outline: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  bottom: 0;
+  outline: 0;
 }
 
-
 div.loading {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border: none;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: none;
 }
 
 div.loading .thing {
-    border-radius: 100px;
-    width: 200px;
-    height: 200px;
-    border: none;
-    background: url("/assets/img/load.svg");
+  border-radius: 100px;
+  width: 200px;
+  height: 200px;
+  border: none;
+  background: url("/assets/img/load.svg");
 }
 
 @import "~@angular/material/theming";
@@ -93,12 +100,12 @@ $angular-warn: mat-palette($mat-deep-orange);
 
 // Light theme
 $light-primary: mat-palette($mat-indigo);
-$light-accent:  mat-palette($mat-pink, A200, A100, A400);
-$light-theme:   mat-light-theme($light-primary, $light-accent, $angular-warn);
+$light-accent: mat-palette($mat-pink, A200, A100, A400);
+$light-theme: mat-light-theme($light-primary, $light-accent, $angular-warn);
 // Dark theme
 $dark-primary: mat-palette($mat-pink);
-$dark-accent:  mat-palette($mat-purple, A200, A100, A400);
-$dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $angular-warn);
+$dark-accent: mat-palette($mat-purple, A200, A100, A400);
+$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $angular-warn);
 
 // Import mixin of sidenav component
 @import "app/dashboard/scrollbar.mixin";
@@ -106,21 +113,21 @@ $dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $angular-warn);
 @import "app/dashboard/dashcard.mixin";
 
 //Gradients
-@mixin gradient($direction, $list) { 
-    background: -webkit-linear-gradient($direction, $list);
-    background: -moz-linear-gradient($direction, $list);
-    background: -o-linear-gradient($direction, $list);
-    background: linear-gradient($direction, $list);  
+@mixin gradient($direction, $list) {
+  background: -webkit-linear-gradient($direction, $list);
+  background: -moz-linear-gradient($direction, $list);
+  background: -o-linear-gradient($direction, $list);
+  background: linear-gradient($direction, $list);
 }
 
 // Custom themable components
 @mixin custom-components-theme($theme) {
-    @include sidenav-theme($theme);
-    @include dashcard-theme($theme);
-    @include scrollbar-theme($theme);
-    a {
-        color: mat-color(map-get($theme, accent));
-    }
+  @include sidenav-theme($theme);
+  @include dashcard-theme($theme);
+  @include scrollbar-theme($theme);
+  a {
+    color: mat-color(map-get($theme, accent));
+  }
   // Include other custom component mixins here...
 }
 
@@ -128,6 +135,6 @@ $dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $angular-warn);
 @include custom-components-theme($light-theme);
 
 .dark-theme {
-    @include angular-material-theme($dark-theme);
-    @include custom-components-theme($dark-theme);
+  @include angular-material-theme($dark-theme);
+  @include custom-components-theme($dark-theme);
 }

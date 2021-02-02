@@ -1,4 +1,8 @@
-<div class="container" [class.is-mobile]="(mobileQuery | async)!.matches" [class.dark-theme]="darkMode$ | async" >
+<div
+  class="container"
+  [class.is-mobile]="(mobileQuery | async)!.matches"
+  [class.dark-theme]="darkMode$ | async"
+>
   <mat-toolbar color="primary" class="toolbar">
     <button mat-icon-button aria-label="Menu icon" (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
@@ -6,34 +10,54 @@
     <span>RedditSharp</span>
     <span class="toolbar-spacer"></span>
     <div class="button-group">
-      <button mat-icon-button [matMenuTriggerFor]="sortMenu" aria-label="Sort By Menu">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="sortMenu"
+        aria-label="Sort By Menu"
+      >
         <mat-icon>sort</mat-icon>
       </button>
     </div>
     <mat-menu #sortMenu="matMenu" xPosition="before">
       <div *ngFor="let opt of sortOptions">
-        <button *ngIf="opt.topfilter" mat-menu-item [matMenuTriggerFor]="topFilter">
-          <mat-icon *ngIf="opt.icon">{{opt.icon}}</mat-icon>
-          <span>{{opt.text}}</span>
+        <button
+          *ngIf="opt.topfilter"
+          mat-menu-item
+          [matMenuTriggerFor]="topFilter"
+        >
+          <mat-icon *ngIf="opt.icon">{{ opt.icon }}</mat-icon>
+          <span>{{ opt.text }}</span>
         </button>
-        <button *ngIf="!opt.topfilter" mat-menu-item (click)="setFeedMode(opt.mode);">
-          <mat-icon *ngIf="opt.icon">{{opt.icon}}</mat-icon>
-          <span>{{opt.text}}</span>
+        <button
+          *ngIf="!opt.topfilter"
+          mat-menu-item
+          (click)="setFeedMode(opt.mode)"
+        >
+          <mat-icon *ngIf="opt.icon">{{ opt.icon }}</mat-icon>
+          <span>{{ opt.text }}</span>
         </button>
       </div>
     </mat-menu>
     <mat-menu #topFilter="matMenu">
-      <button mat-menu-item *ngFor="let opt of filterOptions" (click)="setFeedMode(SortModes.Top,opt.mode);">
-        <mat-icon *ngIf="opt.icon">{{opt.icon}}</mat-icon>
-        <span>{{opt.text}}</span>
-      </button> <!--Hour-->
+      <button
+        mat-menu-item
+        *ngFor="let opt of filterOptions"
+        (click)="setFeedMode(SortModes.Top, opt.mode)"
+      >
+        <mat-icon *ngIf="opt.icon">{{ opt.icon }}</mat-icon>
+        <span>{{ opt.text }}</span>
+      </button>
+      <!--Hour-->
     </mat-menu>
     <div class="button-group">
-      <button mat-icon-button aria-label="Dark Mode Button" (click)="toggleDark();">
+      <button
+        mat-icon-button
+        aria-label="Dark Mode Button"
+        (click)="toggleDark()"
+      >
         <mat-icon>dark_mode</mat-icon>
       </button>
-      <mat-slide-toggle [(ngModel)]="darkMode">
-      </mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="darkMode"> </mat-slide-toggle>
     </div>
     <!--
     <div class="button-group">
@@ -44,23 +68,53 @@
     -->
   </mat-toolbar>
 
-  <mat-sidenav-container class="sidenav-container"
-                         [style.marginTop.px]="(mobileQuery | async)!.matches ? 56 : 0">
-    <mat-sidenav #snav [mode]="(mobileQuery | async)!.matches ? 'over' : 'side'"
-                 [fixedInViewport]="(mobileQuery | async)!.matches" fixedTopGap="56" [opened]="!(mobileQuery | async)!.matches" [disableClose]="!(mobileQuery | async)!.matches" [class.is-desktop]="!(mobileQuery | async)!.matches">
+  <mat-sidenav-container
+    class="sidenav-container"
+    [style.marginTop.px]="(mobileQuery | async)!.matches ? 56 : 0"
+  >
+    <mat-sidenav
+      #snav
+      [mode]="(mobileQuery | async)!.matches ? 'over' : 'side'"
+      [fixedInViewport]="(mobileQuery | async)!.matches"
+      fixedTopGap="56"
+      [opened]="!(mobileQuery | async)!.matches"
+      [disableClose]="!(mobileQuery | async)!.matches"
+      [class.is-desktop]="!(mobileQuery | async)!.matches"
+    >
       <mat-nav-list>
-        <div *ngFor="let nav of navOptions | callbackPipe:passCheck" >
-          <a mat-list-item *ngIf="nav.url" [routerLink]="['/',nav.url]" (click)="clickNav(nav)">{{nav.text}}</a>
-          <a mat-list-item *ngIf="!nav.url"  (click)="clickNav(nav)">{{nav.text}}</a>
+        <div *ngFor="let nav of navOptions | callbackPipe: passCheck">
+          <a
+            mat-list-item
+            *ngIf="nav.url"
+            [routerLink]="['/', nav.url]"
+            (click)="clickNav(nav)"
+            >{{ nav.text }}</a
+          >
+          <a mat-list-item *ngIf="!nav.url" (click)="clickNav(nav)">{{
+            nav.text
+          }}</a>
         </div>
         <!--<a mat-list-item (click)="oauth.refresh()" >aaa</a> test refresh -->
         <mat-divider></mat-divider>
-        <a mat-list-item [routerLink]="['/r/',nav.url]" *ngFor="let nav of subredditLink$ | async" class="subreddit">{{nav.text}}</a>
+        <a
+          mat-list-item
+          [routerLink]="['/r/', nav.url]"
+          *ngFor="let nav of subredditLink$ | async"
+          class="subreddit"
+          >{{ nav.text }}</a
+        >
       </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content cdkScrollable #scrollme>
-      <button *ngIf="shouldShowPostFAB()" mat-fab color="accent" aria-label="Add Post" (click)="addPost();" class="viewport-fab mat-elevation-z4">
+      <button
+        *ngIf="shouldShowPostFAB()"
+        mat-fab
+        color="accent"
+        aria-label="Add Post"
+        (click)="addPost()"
+        class="viewport-fab mat-elevation-z4"
+      >
         <mat-icon>post_add</mat-icon>
       </button>
       <router-outlet></router-outlet>

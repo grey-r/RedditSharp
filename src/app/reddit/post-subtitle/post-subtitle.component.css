@@ -1,20 +1,20 @@
 .post-author {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 :host {
-    display: inline-block;
-    font-size: 0.8em;
+  display: inline-block;
+  font-size: 0.8em;
 }
 
 .post-link {
-    display:inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /*
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /*
     width: min(40vw,50vh);
     width: 40vw;
     */
-    width: 50vw;
+  width: 50vw;
 }

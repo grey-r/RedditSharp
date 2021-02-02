@@ -1,8 +1,7 @@
-import { TestBed } from '@angular/core/testing';
-import { LoggedInGuard } from './logged-in-guard.guard';
+import { TestBed } from "@angular/core/testing";
+import { LoggedInGuard } from "./logged-in-guard.guard";
 
-
-describe('LoggedInGuard', () => {
+describe("LoggedInGuard", () => {
   let guard: LoggedInGuard;
 
   beforeEach(() => {
@@ -10,7 +9,7 @@ describe('LoggedInGuard', () => {
     guard = TestBed.inject(LoggedInGuard);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(guard).toBeTruthy();
   });
 });

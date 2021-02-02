@@ -1,20 +1,19 @@
-
 :host {
-    text-align: center;
-    display:block;
+  text-align: center;
+  display: block;
 }
 
 * {
-    line-height: 1em;
-    font-size: 1em;
-    min-width: 0em;
+  line-height: 1em;
+  font-size: 1em;
+  min-width: 0em;
 }
 .mat-icon {
-    height: auto;
-    width: auto;
-    font-size:1.25em;
+  height: auto;
+  width: auto;
+  font-size: 1.25em;
 }
 
 .mat-button {
-    padding: 0px;
+  padding: 0px;
 }

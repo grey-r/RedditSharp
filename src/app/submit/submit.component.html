@@ -1,63 +1,96 @@
 <mat-vertical-stepper [linear]="true" #stepper class="form">
-    <mat-step [stepControl]="firstFormGroup">
-        <form [formGroup]="firstFormGroup">
-        <ng-template matStepLabel>Post Type</ng-template>
-        <mat-form-field appearance="fill">
-            <mat-label>Select your post type</mat-label>
-            <mat-select formControlName="postType">
-                <mat-option value="{{SubmissionType.Link}}">Link Post</mat-option>
-                <mat-option value="{{SubmissionType.Text}}">Text Post</mat-option>
-            </mat-select>
-            <!--<mat-icon matSuffix>create</mat-icon>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Post Type</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Select your post type</mat-label>
+        <mat-select formControlName="postType">
+          <mat-option value="{{ SubmissionType.Link }}">Link Post</mat-option>
+          <mat-option value="{{ SubmissionType.Text }}">Text Post</mat-option>
+        </mat-select>
+        <!--<mat-icon matSuffix>create</mat-icon>
             <mat-hint>Text or link post?</mat-hint>-->
-        </mat-form-field>
-        <div>
-            <button mat-button matStepperNext>Next</button>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" label="Post Details">
+    <form [formGroup]="secondFormGroup">
+      <div *ngFor="let input of secondFormData">
+        <div [ngSwitch]="input.controlType">
+          <div *ngSwitchCase="'textarea'">
+            <mat-form-field class="full-width-field">
+              <mat-label>{{ input.controlName }}</mat-label>
+              <textarea
+                matInput
+                formControlName="{{ input.controlName }}"
+                placeholder="{{ input.placeholder }}"
+                [cdkTextareaAutosize]
+                [cdkAutosizeMinRows]="6"
+                cdkAutosizeMaxRows="12"
+                required
+                autocomplete="off"
+              >
+              </textarea>
+              <mat-error
+                *ngIf="getErrorMessage(secondFormGroup, input.controlName)"
+                >{{
+                  getErrorMessage(secondFormGroup, input.controlName)
+                }}</mat-error
+              >
+            </mat-form-field>
+          </div>
+          <div *ngSwitchDefault>
+            <mat-form-field
+              [class.full-width-field]="
+                input.controlType == 'text' || input.controlType == 'url'
+              "
+            >
+              <mat-label>{{ input.controlName }}</mat-label>
+              <input
+                matInput
+                formControlName="{{ input.controlName }}"
+                placeholder="{{ input.placeholder }}"
+                required
+                autocomplete="off"
+              />
+              <mat-error
+                *ngIf="getErrorMessage(secondFormGroup, input.controlName)"
+                >{{
+                  getErrorMessage(secondFormGroup, input.controlName)
+                }}</mat-error
+              >
+            </mat-form-field>
+          </div>
         </div>
-        </form>
-    </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="Post Details">
-        <form [formGroup]="secondFormGroup">
-        <div *ngFor="let input of secondFormData">
-            <div [ngSwitch]="input.controlType">
-                <div *ngSwitchCase="'textarea'">
-                    <mat-form-field class="full-width-field">
-                        <mat-label>{{input.controlName}}</mat-label>
-                        <textarea matInput formControlName="{{input.controlName}}" placeholder="{{input.placeholder}}" [cdkTextareaAutosize] [cdkAutosizeMinRows]="6" cdkAutosizeMaxRows="12"
-                                required autocomplete="off">
-                        </textarea>
-                        <mat-error *ngIf="getErrorMessage(secondFormGroup,input.controlName)">{{getErrorMessage(secondFormGroup,input.controlName)}}</mat-error>
-                    </mat-form-field>
-                </div>
-                <div *ngSwitchDefault>
-                    <mat-form-field [class.full-width-field]="input.controlType=='text' || input.controlType=='url'">
-                        <mat-label>{{input.controlName}}</mat-label>
-                        <input matInput formControlName="{{input.controlName}}" placeholder="{{input.placeholder}}"
-                                required autocomplete="off">
-                        <mat-error *ngIf="getErrorMessage(secondFormGroup,input.controlName)">{{getErrorMessage(secondFormGroup,input.controlName)}}</mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-        </div>
-        <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
-        </div>
-        </form>
-    </mat-step>
-    <mat-step [stepControl]="thirdFormGroup" label="Tag and Submit">
-        <form [formGroup]="thirdFormGroup">
-            <mat-selection-list formControlName="tags">
-                <!--<mat-list-option [value]="'nsfw'">Mature Content</mat-list-option>-->
-                <mat-list-option [value]="'spoiler'">Spoiler</mat-list-option>
-                <mat-list-option [value]="'sendreplies'">Send Replies to Inbox</mat-list-option>
-            </mat-selection-list>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button (click)="stepper.reset();resetForms();">Reset</button>
-            <button mat-button (click)="onSubmit();stepper.reset();resetForms();">Submit</button>
-        </form>
-    </mat-step>
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup" label="Tag and Submit">
+    <form [formGroup]="thirdFormGroup">
+      <mat-selection-list formControlName="tags">
+        <!--<mat-list-option [value]="'nsfw'">Mature Content</mat-list-option>-->
+        <mat-list-option [value]="'spoiler'">Spoiler</mat-list-option>
+        <mat-list-option [value]="'sendreplies'"
+          >Send Replies to Inbox</mat-list-option
+        >
+      </mat-selection-list>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset(); resetForms()">Reset</button>
+      <button mat-button (click)="onSubmit(); stepper.reset(); resetForms()">
+        Submit
+      </button>
+    </form>
+  </mat-step>
 </mat-vertical-stepper>
 <div class="footer">
-    <button mat-button [routerLink]="getReturnLink()">Back to {{getSubreddit()?"/r/"+getSubreddit():"dashboard"}}</button>
+  <button mat-button [routerLink]="getReturnLink()">
+    Back to {{ getSubreddit() ? "/r/" + getSubreddit() : "dashboard" }}
+  </button>
 </div>

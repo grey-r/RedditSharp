@@ -1,69 +1,69 @@
 .post-card {
-    margin-left: 10vw;
-    margin-right: 10vw;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    /*hardware accelerate pls*/
-    -webkit-transform: translate3d(0,0,1px); 
-    -webkit-backface-visibility: hidden;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  /*hardware accelerate pls*/
+  -webkit-transform: translate3d(0, 0, 1px);
+  -webkit-backface-visibility: hidden;
 }
 
 .post-header-image {
-    background-size: cover;
+  background-size: cover;
 }
 
 .post-card img {
-    width:100%;
-    margin:0 auto;
-    max-width: 60vmin;
-    display: block;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 60vmin;
+  display: block;
 }
 
 div.image-container {
-    position: relative;
+  position: relative;
 }
 
 div.image-container.is-video::after {
-    content: "";
-    position: absolute;
-    top: 15%;
-    left: 15%;
-    width: 70%;
-    height: 70%;
-    
-    max-height: 30vmin;
+  content: "";
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  width: 70%;
+  height: 70%;
 
-    background-image: url("/assets/img/play-button-svgrepo-com.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    filter: opacity(0.5) invert(1);
+  max-height: 30vmin;
+
+  background-image: url("/assets/img/play-button-svgrepo-com.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: opacity(0.5) invert(1);
 }
 
 .mat-card-content {
-    overflow: hidden;
-    max-height:  60vmin;
+  overflow: hidden;
+  max-height: 60vmin;
 }
 
 .mat-card-content .fadeout-container {
-    position:relative;
+  position: relative;
 }
 
 .mat-card-content .fadeout-inner {
-    position:absolute;
-    height:70vmin;
-    width:100%;
-    z-index: 1;
+  position: absolute;
+  height: 70vmin;
+  width: 100%;
+  z-index: 1;
 }
 
 .is-text > .mat-card-content {
-    max-height:  10rem;
+  max-height: 10rem;
 }
 
 .is-text > .mat-card-content .fadeout-inner {
-    height: 10rem;
+  height: 10rem;
 }
 
 .clicky {
-    cursor: pointer;
+  cursor: pointer;
 }

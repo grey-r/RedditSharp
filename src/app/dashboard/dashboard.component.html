@@ -1,16 +1,39 @@
 <div #dashboardroot>
-  <mat-card class="post-card" *ngFor="let post of posts; trackBy: trackById; index as i" [attr.data-post-index]="i" [class.is-text]="(!post.previewUrl)">
+  <mat-card
+    class="post-card"
+    *ngFor="let post of posts; trackBy: trackById; index as i"
+    [attr.data-post-index]="i"
+    [class.is-text]="!post.previewUrl"
+  >
     <mat-card-header #cardHead class="clicky" (click)="onPostClicked($event)">
-      <div *ngIf="post.author && (post.author.avatarUrl$|async)!" mat-card-avatar class="post-header-image" [ngStyle]="{ 'background-image': 'url(' + (post.author.avatarUrl$ | async) + ')'}"></div>
-      <mat-card-title> {{post.title}} </mat-card-title>
+      <div
+        *ngIf="post.author && (post.author.avatarUrl$ | async)!"
+        mat-card-avatar
+        class="post-header-image"
+        [ngStyle]="{
+          'background-image': 'url(' + (post.author.avatarUrl$ | async) + ')'
+        }"
+      ></div>
+      <mat-card-title> {{ post.title }} </mat-card-title>
       <mat-card-subtitle>
         <app-post-subtitle [post]="post"></app-post-subtitle>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content *ngIf="post.text || post.previewUrl" class="clicky" (click)="onPostClicked($event)">
-      <div class="fadeout-container"><div class="fadeout-inner"></div></div>
+    <mat-card-content
+      *ngIf="post.text || post.previewUrl"
+      class="clicky"
+      (click)="onPostClicked($event)"
+    >
+      <div class="fadeout-container">
+        <div class="fadeout-inner"></div>
+      </div>
       <div class="image-container" [class.is-video]="post.videoUrl">
-        <img *ngIf="post.previewUrl " mat-card-image src="{{post.previewUrl}}" alt="{{post.title}}"  >
+        <img
+          *ngIf="post.previewUrl"
+          mat-card-image
+          src="{{ post.previewUrl }}"
+          alt="{{ post.title }}"
+        />
       </div>
       <div [innerHTML]="post.html"></div>
       <!--
@@ -19,7 +42,10 @@
       </p>-->
     </mat-card-content>
     <mat-card-actions>
-      <app-post-footer [post]="post" (onComment)="openPost($event)"></app-post-footer>
+      <app-post-footer
+        [post]="post"
+        (onComment)="openPost($event)"
+      ></app-post-footer>
     </mat-card-actions>
   </mat-card>
 </div>

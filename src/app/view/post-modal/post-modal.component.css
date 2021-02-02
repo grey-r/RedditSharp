@@ -1,88 +1,88 @@
 :host {
-    background: inherit;
+  background: inherit;
 }
 
 .dialog-title h1 {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .mat-dialog-content {
-    max-height: none;
-    /*min-height: calc(100% - 2rem - 24px);*/
-    overflow-x: hidden;
-    margin-top: -24px;
-    padding-top: 24px;
-    padding-bottom: 2rem;
+  max-height: none;
+  /*min-height: calc(100% - 2rem - 24px);*/
+  overflow-x: hidden;
+  margin-top: -24px;
+  padding-top: 24px;
+  padding-bottom: 2rem;
 }
 .dialog-content .header {
-    height: 3em;
+  height: 3em;
 }
 
 .dialog-content .header .column {
-    float: left;
+  float: left;
 }
 
 .dialog-content .header .avatar {
-    width: 3em;
-    height: 3em;
-    background-size: 3em;
-    border-radius: 1.5em;
-    float:left;
+  width: 3em;
+  height: 3em;
+  background-size: 3em;
+  border-radius: 1.5em;
+  float: left;
 }
 
 .dialog-content .header .aside-avatar {
-    float: none;
-    padding-left: 4em;
+  float: none;
+  padding-left: 4em;
 }
 
 .dialog-content .header .title {
-    font-size: 2em;
+  font-size: 2em;
 }
 
 .dialog-content .header {
-    content: "";
-    clear: both;
-    display: table;
+  content: "";
+  clear: both;
+  display: table;
 }
 
 .selftext {
-    overflow-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .dialog-content mat-divider {
-    margin-top: 1em;
-    margin-bottom: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .dialog-footer {
-    position: sticky;
-    bottom: -25px;
-    left: -24px;
-    padding: 0px;
-    margin: -24px;
-    background: inherit;
-    max-height: 2rem;
+  position: sticky;
+  bottom: -25px;
+  left: -24px;
+  padding: 0px;
+  margin: -24px;
+  background: inherit;
+  max-height: 2rem;
 }
 
 .dialog-footer mat-divider {
-    width: 100%;
+  width: 100%;
 }
 
 img.full-image {
-    object-fit: contain;
-    width:100%;
-    height:100%;
-    max-height:70vh;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  max-height: 70vh;
 }
 
 video.fluid-embed {
-    object-fit: contain;
-    width:100%;
-    height:100%;
-    max-height:70vh;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  max-height: 70vh;
 }
 
-div.comments{
-    overflow-x: hidden;
+div.comments {
+  overflow-x: hidden;
 }

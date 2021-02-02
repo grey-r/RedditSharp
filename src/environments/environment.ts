@@ -5,12 +5,13 @@
 export const environment = {
   production: false,
   subredditLimit: 25,
-  clientId:"IbfzyNrDp0uyog",
-  authorizationType:"authorization_code",
-  refreshType:"refresh_token",
-  tokenEndpoint:"https://www.reddit.com/api/v1/access_token",
+  clientId: "IbfzyNrDp0uyog",
+  authorizationType: "authorization_code",
+  refreshType: "refresh_token",
+  tokenEndpoint: "https://www.reddit.com/api/v1/access_token",
   redirectUrl: "http://localhost:4200/authenticate",
-  scope:"account edit flair history identity mysubreddits read report save submit subscribe vote wikiread"
+  scope:
+    "account edit flair history identity mysubreddits read report save submit subscribe vote wikiread"
 };
 
 /*

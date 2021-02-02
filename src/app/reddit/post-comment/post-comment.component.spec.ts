@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PostCommentComponent } from './post-comment.component';
+import { PostCommentComponent } from "./post-comment.component";
 
-describe('PostCommentComponent', () => {
+describe("PostCommentComponent", () => {
   let component: PostCommentComponent;
   let fixture: ComponentFixture<PostCommentComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PostCommentComponent ]
-    })
-    .compileComponents();
+      declarations: [PostCommentComponent]
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('PostCommentComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PostModalComponent } from './post-modal.component';
+import { PostModalComponent } from "./post-modal.component";
 
-describe('PostModalComponent', () => {
+describe("PostModalComponent", () => {
   let component: PostModalComponent;
   let fixture: ComponentFixture<PostModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PostModalComponent ]
-    })
-    .compileComponents();
+      declarations: [PostModalComponent]
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('PostModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,31 +1,31 @@
 span.votes {
-    width: 3em;
-    display: inline-block;
+  width: 3em;
+  display: inline-block;
 }
 
 div.button-group {
-    display:inline-block;
-    /*margin: auto;*/
-    text-align: left;
+  display: inline-block;
+  /*margin: auto;*/
+  text-align: left;
 }
 
 div.button-group button {
-    min-width: 0em;
-    padding: 0em 0.5em;
-    min-height: 0em;
-    height: auto;
+  min-width: 0em;
+  padding: 0em 0.5em;
+  min-height: 0em;
+  height: auto;
 }
 
 div.button-group button .mat-icon {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 
 :host {
-    width: 100%;
-    /*text-align: center;*/
-    display:inline-flex;
+  width: 100%;
+  /*text-align: center;*/
+  display: inline-flex;
 }
 
 .spacer {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }

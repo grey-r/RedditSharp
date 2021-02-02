@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SubredditModalComponent } from './subreddit-modal.component';
+import { SubredditModalComponent } from "./subreddit-modal.component";
 
-describe('SubredditModalComponent', () => {
+describe("SubredditModalComponent", () => {
   let component: SubredditModalComponent;
   let fixture: ComponentFixture<SubredditModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SubredditModalComponent ]
-    })
-    .compileComponents();
+      declarations: [SubredditModalComponent]
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('SubredditModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { SubredditValidatorService } from './subreddit-validator.service';
+import { SubredditValidatorService } from "./subreddit-validator.service";
 
-describe('SubredditValidatorService', () => {
+describe("SubredditValidatorService", () => {
   let service: SubredditValidatorService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('SubredditValidatorService', () => {
     service = TestBed.inject(SubredditValidatorService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

@@ -1,12 +1,28 @@
-<h2 mat-dialog-title>Submission {{ (data.results.errors && data.results.errors.length>0) ? "Failure" : "Success" }}!</h2>
+<h2 mat-dialog-title>
+  Submission
+  {{
+    data.results.errors && data.results.errors.length > 0
+      ? "Failure"
+      : "Success"
+  }}!
+</h2>
 <mat-dialog-content class="mat-typography">
-<p *ngIf="data.results.data && data.results.data.url">Your post is now viewable at <a [routerLink]="redditToRouter(data.results.data.url)" (click)="closeDialog()">{{data.results.data.url}}</a></p>
-<!--
+  <p *ngIf="data.results.data && data.results.data.url">
+    Your post is now viewable at
+    <a
+      [routerLink]="redditToRouter(data.results.data.url)"
+      (click)="closeDialog()"
+      >{{ data.results.data.url }}</a
+    >
+  </p>
+  <!--
 <h3>Develop across all platforms</h3>
 <p>Learn one way to build applications with Angular and reuse your code and abilities to build
 apps for any deployment target. For web, mobile web, native mobile and native desktop.</p>-->
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button (click)="closeDialog()">Close</button>
-  <button mat-button (click)="return()" cdkFocusInitial>Return to {{getReturnString()}}</button>
+  <button mat-button (click)="return()" cdkFocusInitial>
+    Return to {{ getReturnString() }}
+  </button>
 </mat-dialog-actions>
