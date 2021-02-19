@@ -32,12 +32,12 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "0.1101.2",
+    "@angular-devkit/architect": "0.1102.1",
     "@angular-devkit/build-angular": "~0.1102.0",
     "@angular/cli": "^11.2.1",
     "@angular/compiler-cli": "~11.1.1",
     "@types/jasmine": "~3.6.3",
-    "@types/node": "^14.14.25",
+    "@types/node": "^14.14.30",
     "codelyzer": "^6.0.0",
     "firebase-tools": "^9.4.0",
     "fuzzy": "^0.1.3",
@@ -45,17 +45,17 @@
     "inquirer-autocomplete-prompt": "^1.0.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~6.0.0",
-    "karma": "~6.1.0",
+    "karma": "~6.1.1",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "open": "^7.4.0",
+    "open": "^7.4.2",
     "prettier": "2.2.1",
     "protractor": "~7.0.0",
     "ts-node": "~9.1.1",
     "tslint": "~6.1.0",
-    "typescript": "~4.1.3"
+    "typescript": "~4.1.5"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.2"
