@@ -39,7 +39,7 @@
     "@types/jasmine": "~3.6.3",
     "@types/node": "^14.14.30",
     "codelyzer": "^6.0.0",
-    "firebase-tools": "^9.4.0",
+    "firebase-tools": "^9.6.1",
     "fuzzy": "^0.1.3",
     "inquirer": "^7.3.3",
     "inquirer-autocomplete-prompt": "^1.0.1",
